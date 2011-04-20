@@ -56,10 +56,12 @@ import android.util.Log;
 
 public class TelusWebScraper {
 	@SuppressWarnings("serial")
-	public static class ScrapException extends Exception {
-	}
+	public static class ScrapException extends Exception { }
+	
+	@SuppressWarnings("serial")
+	public static class InvalidCredentialsException extends Exception { }
 
-	public static UsageData retriveUsageSummaryData(String email, String password) throws IOException, ParserConfigurationException, SAXException, ScrapException {
+	public static UsageData retriveUsageSummaryData(String email, String password) throws IOException, ParserConfigurationException, SAXException, ScrapException, InvalidCredentialsException {
 		Document doc = retriveUsageSummaryDocument(email, password);
 		UsageData usageSummaryData = new UsageData();
 		
@@ -87,13 +89,17 @@ public class TelusWebScraper {
 		return usageSummaryData;
 	}
 
-	private static Document retriveUsageSummaryDocument(final String email, final String password) throws IOException, ParserConfigurationException, SAXException {
+	private static Document retriveUsageSummaryDocument(final String email, final String password) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		enableAuto302Redirects(httpclient);
 		String summaryHtml = fetchUsageSummaryPage(httpclient, email, password);
 		
+		if (summaryHtml.contains("<div class=\"errs\">The email or password you entered is invalid.  Please try again.</div>")) {
+			throw new InvalidCredentialsException();
+		}
+		
 		// Log out to avoid session limit
-		// Using background thread to avoid extra delay
+		// on background thread to avoid extra delay
 		new Thread(new Runnable() {	public void run() {
 			try {
 				fetchLogOutPage(httpclient);

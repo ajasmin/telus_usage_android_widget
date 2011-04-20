@@ -78,7 +78,7 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 				int appWidgetId = extra.getInt(context.getPackageName() + ".appWidgetId");
 				
 				// Build the widget update for this account
-				RemoteViews updateViews = buildUpdate(this, email, password);
+				RemoteViews updateViews = buildUpdate(this, appWidgetId, email, password);
 	
 				// Push update for this widget to the home screen
 				AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -89,14 +89,28 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 		/**
 		 * Build a widget update to show the current usage Will block until the
 		 * online API returns.
+		 * @param appWidgetId 
 		 * @param password 
 		 * @param email 
 		 */
-		public RemoteViews buildUpdate(Context context, String email, String password) {
+		public RemoteViews buildUpdate(Context context, int appWidgetId, String email, String password) {
         	UsageData data = null;
             try {
                 // Try fetching data from https://mobile.telus.com
             	data = TelusWebScraper.retriveUsageSummaryData(email, password );
+            } catch (TelusWebScraper.InvalidCredentialsException e) {
+            	Log.e("TelusWebScraper", "Invalid credentials for " + email, e);
+            	
+            	RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_invalid_credentials_error);
+            	
+            	Intent defineIntent = new Intent(context, ConfigureActivity.class);
+            	defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            	defineIntent.putExtra(context.getPackageName() + ".email", email);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* no requestCode */, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+                return updateViews;
+            	
             } catch (Exception e) {
                 Log.e("TelusWebScraper", "Couldn't scrap mobile.telus.com for " + email, e);
                 return new RemoteViews(context.getPackageName(), R.layout.widget_error);

@@ -36,6 +36,8 @@ THE SOFTWARE.
         
     <string name="widget_loading">Scrapping http://mobile.telus.com</string>
     <string name="widget_error">Error retrieving Telus data</string>
+    <string name="widget_invalid_credentials_error">Invalid email or password</string>
+    <string name="widget_invalid_credentials_tap">Tap to change</string>
     
     <string name="enter_credentials">Enter the email address and password that you use to log on to the Telus Mobility website.</string>
     <string name="email_address">Email Address</string>

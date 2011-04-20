@@ -30,9 +30,14 @@ THE SOFTWARE.
     <style name="Text">
     </style>
     
-    <style name="Text.Loading">
+    <style name="Text.Message">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="Text.Tap">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">#0000ff</item>
     </style>
 
     <style name="Text.WidgetTitle">

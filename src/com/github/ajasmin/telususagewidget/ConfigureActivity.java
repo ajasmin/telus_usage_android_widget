@@ -22,6 +22,8 @@
 
 package com.github.ajasmin.telususagewidget;
 
+import java.util.Set;
+
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -30,6 +32,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,12 +54,13 @@ public class ConfigureActivity extends Activity {
         // out of the widget placement if the back button is pressed.
         setResult(RESULT_CANCELED);
 
-        obtainAppWidgetId();
         
         setContentView(R.layout.configure);
         emailView = (EditText) findViewById(R.id.email);
         passwordView = (EditText) findViewById(R.id.password);
         addButton = (Button) findViewById(R.id.add_button);
+        
+        obtainIntentExtras();
           
         addButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -97,17 +101,22 @@ public class ConfigureActivity extends Activity {
         validateFields();
 	}
 
-	private void obtainAppWidgetId() {
-		// Find the widget id from the intent. 
+	private void obtainIntentExtras() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+        String email = null;
         if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            email = extras.getString(this.getPackageName() + ".email");
         }
 
         // If they gave us an intent without the widget id, just bail.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
+        }
+        
+        if (email != null) {
+        	emailView.setText(email);
         }
 	}
 
