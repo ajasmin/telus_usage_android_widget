@@ -25,6 +25,6 @@ THE SOFTWARE.
     android:minWidth="72dip"
     android:minHeight="146dip"
     android:updatePeriodMillis="86400000"
-    android:initialLayout="@layout/widget_message"
+    android:initialLayout="@layout/widget_loading_message"
     android:configure="com.github.ajasmin.telususagewidget.ConfigureActivity" 
     />

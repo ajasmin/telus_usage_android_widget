@@ -76,14 +76,17 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 				String email = extra.getString(context.getPackageName() + ".email");
 				String password = extra.getString(context.getPackageName() + ".password");
 				int appWidgetId = extra.getInt(context.getPackageName() + ".appWidgetId");
-				
-				// Build the widget update for this account
-				RemoteViews updateViews = buildUpdate(this, appWidgetId, email, password);
-	
-				// Push update for this widget to the home screen
+
 				AppWidgetManager manager = AppWidgetManager.getInstance(this);
+				showLoadingMessage(context, appWidgetId, manager);
+				RemoteViews updateViews = buildUpdate(this, appWidgetId, email, password);
 				manager.updateAppWidget(appWidgetId, updateViews);
 			}
+		}
+
+		private void showLoadingMessage(Context context, int appWidgetId, AppWidgetManager manager) {
+			RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading_message);
+			manager.updateAppWidget(appWidgetId, updateViews);
 		}
 		
 		/**
