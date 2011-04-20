@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2011 by Alexandre Jasmin <alexandre.jasmin@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<resources>
+    <string name="app_name">Telus usage summary widget</string>
+    <string name="widget_name">Telus usage summary</string>
+    
+    <string name="widget_title">TELUS USAGE</string>
+    
+    <string name="voice_label">\u2022 MINUTES</string>
+    <string name="airtime_remaining">%1$s/%2$s left</string>
+    <string name="airtime_chargeable">Chargeable: %s</string>
+    <string name="data_label">\u2022 DATA</string>
+    <string name="text_label">\u2022 TEXT</string>
+        
+        
+    <string name="widget_loading">Scrapping http://mobile.telus.com</string>
+    <string name="widget_error">Error retrieving Telus data</string>
+    
+    <string name="enter_credentials">Enter the email address and password that you use to log on to the Telus Mobility website.</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="small_print">Your email address and password are never sent to the widget author.&lt;br&gt;&lt;br&gt;The widget will fetch and display data from &lt;a href=\"http://mobile.telus.com\"&gt;mobile.telus.com&lt;/a&gt;. Data from that website may not always be up to date.&lt;br&gt;&lt;br&gt;Changes to the Telus website may prevent the widget from working correctly. Installing updates from the Android Market should fix any such issues.</string>
+    <string name="add_widget">Add Widget</string>
+</resources>
