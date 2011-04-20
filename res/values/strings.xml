@@ -34,7 +34,7 @@ THE SOFTWARE.
     <string name="text_label">\u2022 TEXT</string>
         
         
-    <string name="widget_loading">Scrapping http://mobile.telus.com</string>
+    <string name="widget_loading">Fetching Data...</string>
     <string name="widget_error">Error retrieving Telus data</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
