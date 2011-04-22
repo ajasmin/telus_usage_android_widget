@@ -22,6 +22,8 @@
 
 package com.github.ajasmin.telususagewidget;
 
+import java.util.Map;
+
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -97,7 +99,7 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 		 * @param email 
 		 */
 		public RemoteViews buildUpdate(Context context, int appWidgetId, String email, String password) {
-        	UsageData data = null;
+        	Map<String, Map<String, String>> data = null;
             try {
                 // Try fetching data from https://mobile.telus.com
             	data = TelusWebScraper.retriveUsageSummaryData(email, password );
@@ -123,31 +125,38 @@ public class TelusWidgetProvider extends AppWidgetProvider {
             RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             
             {
+            	Map<String, String> airtimeUsage = data.get("Airtime Usage");
+    			String includedMinutes = airtimeUsage.get("Included Minutes");
+    			String remainingMinutes = airtimeUsage.get("Remaining Minutes");
+    			String chargeableMinutes = airtimeUsage.get("Chargeable Minutes");
+            	
 	            String airtimeRemainingMinutes = getString(R.string.airtime_remaining);
-	            airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, data.airtimeRemainingMinutes, data.airtimeIncludedMinutes);
+	            airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, remainingMinutes, includedMinutes);
 	            updateViews.setTextViewText(R.id.airtime_remaining, airtimeRemainingMinutes);
-            }
 
-            {
 	            String airtimeChargeableMinutes=getString(R.string.airtime_chargeable);
-	            airtimeChargeableMinutes = String.format(airtimeChargeableMinutes, data.airtimeChargeableMinutes);
+	            airtimeChargeableMinutes = String.format(airtimeChargeableMinutes, chargeableMinutes);
 	            updateViews.setTextViewText(R.id.airtime_chargeable, airtimeChargeableMinutes);
             }
-            
-            {
-	            updateViews.setTextViewText(R.id.data, data.dataUsage);
-            }
-            
-            {
-	            updateViews.setTextViewText(R.id.data_amount, data.dataAmount);
-            }
-            
-            {
-	            updateViews.setTextViewText(R.id.text, data.textUsage);
-            }
 
             {
-	            updateViews.setTextViewText(R.id.text_amount, data.textAmount);
+            	Map<String, String> dataUsage = data.get("Data Usage");
+    			String usage = dataUsage.get("Usage");
+    			usage = usage.replace("Kilobytes", "K");
+    			String amount = dataUsage.get("Amount");
+    			
+	            updateViews.setTextViewText(R.id.data, usage);
+	            updateViews.setTextViewText(R.id.data_amount, amount);
+            }
+            
+            {
+            	Map<String, String> textUsage = data.get("Text Usage");
+    			String usage = textUsage.get("Usage");
+    			usage = usage.replace("Messages", "Msg");
+    			String amount = textUsage.get("Amount");
+    			
+	            updateViews.setTextViewText(R.id.text, usage);
+	            updateViews.setTextViewText(R.id.text_amount, amount);
             }
 
             // When user clicks on widget, visit mobile.telus.com

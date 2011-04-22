@@ -23,15 +23,29 @@
 package com.github.ajasmin.telususagewidget;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.SequenceInputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,10 +63,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.ext.EntityResolver2;
+import org.xml.sax.helpers.DefaultHandler;
 
+import com.github.ajasmin.telususagewidget.repackaged.opencsv.CSVWriter;
+import com.github.ajasmin.telususagewidget.repackaged.replacestream.ReplaceFilterInputStream;
+
+import android.sax.ElementListener;
+import android.sax.EndElementListener;
+import android.sax.EndTextElementListener;
+import android.sax.RootElement;
+import android.sax.StartElementListener;
+import android.sax.TextElementListener;
 import android.util.Log;
+import android.util.Xml;
 
 public class TelusWebScraper {
 	@SuppressWarnings("serial")
@@ -61,6 +88,7 @@ public class TelusWebScraper {
 	@SuppressWarnings("serial")
 	public static class InvalidCredentialsException extends Exception { }
 
+	/*
 	public static UsageData retriveUsageSummaryData(String email, String password) throws IOException, ParserConfigurationException, SAXException, ScrapException, InvalidCredentialsException {
 		Document doc = retriveUsageSummaryDocument(email, password);
 		UsageData usageSummaryData = new UsageData();
@@ -87,14 +115,31 @@ public class TelusWebScraper {
 		}
 		
 		return usageSummaryData;
-	}
+	}*/
 
-	private static Document retriveUsageSummaryDocument(final String email, final String password) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
+	public static Map<String, Map<String, String>> retriveUsageSummaryData(final String email, final String password) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		enableAuto302Redirects(httpclient);
-		String summaryHtml = fetchUsageSummaryPage(httpclient, email, password);
+		InputStream summaryHtmlStream = fetchUsageSummaryPage(httpclient, email, password);
 		
-		if (summaryHtml.contains("<div class=\"errs\">The email or password you entered is invalid.  Please try again.</div>")) {
+		// Remove bad unterminated XML entity from input
+		Map<byte[], byte[]> replacements = new HashMap<byte[],byte[]>();
+		replacements.put("&\"/>".getBytes("US-ASCII"), "\"/>".getBytes("US-ASCII"));
+		InputStream replacementStream = new ReplaceFilterInputStream(summaryHtmlStream, replacements);
+		
+		InputStream doctypeStream = MyApp.getContext().getResources().openRawResource(R.raw.xhtml_entities_doctype);
+		InputStream sequenceStream = new SequenceInputStream(doctypeStream, replacementStream);
+		
+		
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		Log.i("SPF", ""+spf.getFeature("http://xml.org/sax/features/use-entity-resolver2"));
+		SAXParser parser = spf.newSAXParser();
+		TelusSaxHandler handler = new TelusSaxHandler();
+		InputSource inputSource = new InputSource(sequenceStream);
+		inputSource.setEncoding("UTF-8");
+		parser.parse(inputSource, handler);
+		
+		if (handler.isLoginError()) {
 			throw new InvalidCredentialsException();
 		}
 		
@@ -109,11 +154,7 @@ public class TelusWebScraper {
 			}
 		}}).run();
 
-		// Remove unterminated XML entity
-		summaryHtml = summaryHtml.replace("href=\"style.css?pageType=&\"", "");
-
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		return builder.parse(new InputSource(new StringReader(summaryHtml)));
+		return handler.getData();
 	}
 
 	private static void enableAuto302Redirects(DefaultHttpClient httpclient) {
@@ -135,7 +176,7 @@ public class TelusWebScraper {
 		});
 	}
 
-	private static String fetchUsageSummaryPage(DefaultHttpClient httpclient, String username, String password) throws IOException {
+	private static InputStream fetchUsageSummaryPage(DefaultHttpClient httpclient, String username, String password) throws IOException {
 		final String url = "https://mobile.telus.com/login.htm";
 		HttpPost httpPost = new HttpPost(url);
 
@@ -151,7 +192,7 @@ public class TelusWebScraper {
 		HttpResponse response = httpclient.execute(httpPost);
 		HttpEntity responseEntity = response.getEntity();
 
-		return EntityUtils.toString(responseEntity, "UTF-8");
+		return responseEntity.getContent();
 	}
 	
 	private static void fetchLogOutPage(DefaultHttpClient httpclient) throws IOException {
@@ -162,52 +203,5 @@ public class TelusWebScraper {
 		HttpEntity responseEntity = response.getEntity();
 		// fetch the contents
 		responseEntity.getContent().close();
-	}
-
-	// find the HTML table with the given heading
-	private static Element findTableWithHeading(Document doc, String headingName) throws ScrapException {
-		NodeList divList = doc.getElementsByTagName("div");
-		for (int i = 0; i < divList.getLength(); i++) {
-			{
-				Element div = (Element) divList.item(i);
-				if (!"headingBB".equals(div.getAttribute("class")))
-					continue;
-				Element b = (Element) div.getElementsByTagName("b").item(0);
-				if (!headingName.equals(((Text) b.getFirstChild()).getNodeValue().trim()))
-					continue;
-			}
-
-			{
-				Element div = (Element) divList.item(++i);
-				if (!div.getAttribute("class").equals("labelValueBG"))
-					throw new ScrapException();
-				Element table = (Element) div.getElementsByTagName("table").item(0);
-				return table;
-			}
-		}
-		throw new ScrapException();
-	}
-
-	// Retrieve a value inside the HTML table
-	private static String findTableValue(Element table, String name) throws ScrapException {
-		NodeList tdList = table.getElementsByTagName("td");
-		for (int i = 0; i < tdList.getLength(); i++) {
-			{
-				Element td = (Element) tdList.item(i);
-				if (!td.getAttribute("class").trim().equals("labelValueLabel"))
-					continue;
-				if (!((Text) td.getFirstChild()).getNodeValue().trim().equals(name))
-					continue;
-			}
-
-			{
-				Element td = (Element) tdList.item(++i);
-				if (!td.getAttribute("class").trim().equals("labelValueValue"))
-					throw new ScrapException();
-				return ((Text) td.getFirstChild()).getNodeValue().trim();
-			}
-
-		}
-		throw new ScrapException();
 	}
 }
