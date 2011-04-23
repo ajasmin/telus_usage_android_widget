@@ -29,7 +29,7 @@ THE SOFTWARE.
     
     <string name="voice_label">\u2022 MINUTES</string>
     <string name="airtime_remaining">%1$s/%2$s left</string>
-    <string name="airtime_chargeable">Chargeable: %s</string>
+    <string name="airtime_chargeable">Charged: %s</string>
     <string name="data_label">\u2022 DATA</string>
     <string name="text_label">\u2022 TEXT</string>
         
