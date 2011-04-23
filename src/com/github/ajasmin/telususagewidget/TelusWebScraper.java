@@ -24,25 +24,12 @@ package com.github.ajasmin.telususagewidget;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.SequenceInputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -58,28 +45,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.ext.EntityResolver2;
-import org.xml.sax.helpers.DefaultHandler;
 
-import com.github.ajasmin.telususagewidget.repackaged.opencsv.CSVWriter;
-import com.github.ajasmin.telususagewidget.repackaged.replacestream.ReplaceFilterInputStream;
-
-import android.sax.ElementListener;
-import android.sax.EndElementListener;
-import android.sax.EndTextElementListener;
-import android.sax.RootElement;
-import android.sax.StartElementListener;
-import android.sax.TextElementListener;
 import android.util.Log;
-import android.util.Xml;
 
 public class TelusWebScraper {
 	@SuppressWarnings("serial")
@@ -122,20 +91,15 @@ public class TelusWebScraper {
 		enableAuto302Redirects(httpclient);
 		InputStream summaryHtmlStream = fetchUsageSummaryPage(httpclient, email, password);
 		
-		// Remove bad unterminated XML entity from input
-		Map<byte[], byte[]> replacements = new HashMap<byte[],byte[]>();
-		replacements.put("&\"/>".getBytes("US-ASCII"), "\"/>".getBytes("US-ASCII"));
-		InputStream replacementStream = new ReplaceFilterInputStream(summaryHtmlStream, replacements);
-		
-		InputStream doctypeStream = MyApp.getContext().getResources().openRawResource(R.raw.xhtml_entities_doctype);
-		InputStream sequenceStream = new SequenceInputStream(doctypeStream, replacementStream);
-		
+		// Just strip ampersands from input. We don't care about the
+		// parts of the document containing character entities anyways
+		InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
 		
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		Log.i("SPF", ""+spf.getFeature("http://xml.org/sax/features/use-entity-resolver2"));
 		SAXParser parser = spf.newSAXParser();
 		TelusSaxHandler handler = new TelusSaxHandler();
-		InputSource inputSource = new InputSource(sequenceStream);
+		InputSource inputSource = new InputSource(stripAmpersandsInputStream);
 		inputSource.setEncoding("UTF-8");
 		parser.parse(inputSource, handler);
 		

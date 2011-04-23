@@ -22,7 +22,6 @@
 
 package com.github.ajasmin.telususagewidget;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
-import org.xml.sax.helpers.DefaultHandler;
 
 import com.github.ajasmin.telususagewidget.repackaged.opencsv.CSVWriter;
 
