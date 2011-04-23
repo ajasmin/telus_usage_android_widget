@@ -120,43 +120,9 @@ public class TelusWidgetProvider extends AppWidgetProvider {
                 return new RemoteViews(context.getPackageName(), R.layout.widget_error);
             }
             
-            // Build an update that holds the updated widget contents
-            RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-            
-            {
-            	Map<String, String> airtimeUsage = data.get("Airtime Usage");
-    			String includedMinutes = airtimeUsage.get("Included Minutes");
-    			String remainingMinutes = airtimeUsage.get("Remaining Minutes");
-    			String chargeableMinutes = airtimeUsage.get("Chargeable Minutes");
-            	
-	            String airtimeRemainingMinutes = getString(R.string.airtime_remaining);
-	            airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, remainingMinutes, includedMinutes);
-	            updateViews.setTextViewText(R.id.airtime_remaining, airtimeRemainingMinutes);
-
-	            String airtimeChargeableMinutes=getString(R.string.airtime_chargeable);
-	            airtimeChargeableMinutes = String.format(airtimeChargeableMinutes, chargeableMinutes);
-	            updateViews.setTextViewText(R.id.airtime_chargeable, airtimeChargeableMinutes);
-            }
-
-            {
-            	Map<String, String> dataUsage = data.get("Data Usage");
-    			String usage = dataUsage.get("Usage");
-    			usage = usage.replace("Kilobytes", "K");
-    			String amount = dataUsage.get("Amount");
-    			
-	            updateViews.setTextViewText(R.id.data, usage);
-	            updateViews.setTextViewText(R.id.data_amount, amount);
-            }
-            
-            {
-            	Map<String, String> textUsage = data.get("Text Usage");
-    			String usage = textUsage.get("Usage");
-    			usage = usage.replace("Messages", "Msg");
-    			String amount = textUsage.get("Amount");
-    			
-	            updateViews.setTextViewText(R.id.text, usage);
-	            updateViews.setTextViewText(R.id.text_amount, amount);
-            }
+            RemoteViews updateViews;
+            DataPresenter dataPresenter = DataPresenter.getPresenterFor(data);
+			updateViews = dataPresenter.buildUpdate(context, data);
 
             // When user clicks on widget, visit mobile.telus.com
             String uriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
