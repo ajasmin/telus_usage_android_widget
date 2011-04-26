@@ -27,18 +27,24 @@ THE SOFTWARE.
     
     <string name="widget_title">TELUS USAGE</string>
     
+    <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>
     <string name="airtime_remaining">%1$s/%2$s left</string>
     <string name="airtime_chargeable">Charged: %s</string>
     <string name="data_label">\u2022 DATA</string>
     <string name="text_label">\u2022 TEXT</string>
-        
-        
+    
+   <!-- Calling cards layout -->
+   <string name="current_balance_label">\u2022 Balance</string>
+   <string name="balance_expires_label">\u2022 Expires</string>
+    
+    <!-- Messages -->
     <string name="widget_loading">Fetching Data...</string>
     <string name="widget_error">Error retrieving Telus data</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
     
+    <!-- Configure Activity -->
     <string name="enter_credentials">Enter the email address and password that you use to log on to the Telus Mobility website.</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
