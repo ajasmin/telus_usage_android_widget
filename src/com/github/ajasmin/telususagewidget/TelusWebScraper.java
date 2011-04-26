@@ -57,35 +57,6 @@ public class TelusWebScraper {
 	@SuppressWarnings("serial")
 	public static class InvalidCredentialsException extends Exception { }
 
-	/*
-	public static UsageData retriveUsageSummaryData(String email, String password) throws IOException, ParserConfigurationException, SAXException, ScrapException, InvalidCredentialsException {
-		Document doc = retriveUsageSummaryDocument(email, password);
-		UsageData usageSummaryData = new UsageData();
-		
-		{
-			Element table = findTableWithHeading(doc, "Data Usage");
-			usageSummaryData.dataUsage = findTableValue(table, "Usage");
-			usageSummaryData.dataUsage = usageSummaryData.dataUsage.replace("Kilobytes", "K");
-			usageSummaryData.dataAmount = findTableValue(table, "Amount");
-		}
-		
-		{
-			Element table = findTableWithHeading(doc, "Text Usage");
-			usageSummaryData.textUsage = findTableValue(table, "Usage");
-			usageSummaryData.textUsage = usageSummaryData.textUsage.replace("Messages", "Msg");
-			usageSummaryData.textAmount = findTableValue(table, "Amount");
-		}
-
-		{
-			Element table = findTableWithHeading(doc, "Airtime Usage");
-			usageSummaryData.airtimeIncludedMinutes = findTableValue(table, "Included Minutes");
-			usageSummaryData.airtimeRemainingMinutes = findTableValue(table, "Remaining Minutes");
-			usageSummaryData.airtimeChargeableMinutes = findTableValue(table, "Chargeable Minutes");
-		}
-		
-		return usageSummaryData;
-	}*/
-
 	public static Map<String, Map<String, String>> retriveUsageSummaryData(final String email, final String password) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		enableAuto302Redirects(httpclient);
@@ -96,7 +67,6 @@ public class TelusWebScraper {
 		InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
 		
 		SAXParserFactory spf = SAXParserFactory.newInstance();
-		Log.i("SPF", ""+spf.getFeature("http://xml.org/sax/features/use-entity-resolver2"));
 		SAXParser parser = spf.newSAXParser();
 		TelusSaxHandler handler = new TelusSaxHandler();
 		InputSource inputSource = new InputSource(stripAmpersandsInputStream);
