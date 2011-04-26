@@ -33,6 +33,26 @@ public class StripAmpersandInputStream extends InputStream {
 	}
 	
 	@Override
+	public int available() throws IOException {
+		return is.available();
+	}
+	
+	@Override
+	public void close() throws IOException {
+		is.close();
+	}
+	
+	@Override
+	public void mark(int readlimit) {
+		is.mark(readlimit);
+	}
+	
+	@Override
+	public boolean markSupported() {
+		return is.markSupported();
+	}
+	
+	@Override
 	public int read() throws IOException {
 		int ch = is.read();
 		return ch == '&' ? ' ' : ch;
@@ -54,5 +74,15 @@ public class StripAmpersandInputStream extends InputStream {
 			if (b[i] == '&')
 				b[i] = ' ';
 		return count;
+	}
+	
+	@Override
+	public synchronized void reset() throws IOException {
+		is.reset();
+	}
+	
+	@Override
+	public long skip(long byteCount) throws IOException {
+		return is.skip(byteCount);
 	}
 }
