@@ -39,13 +39,13 @@ THE SOFTWARE.
         <!-- Service to perform web API queries -->        
         <service android:name="TelusWidgetUpdateService" />
         
-	    <activity android:name="ConfigureActivity">
+	    <activity android:name="ConfigureActivity" android:noHistory="true">
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
 		    </intent-filter>
 		</activity>
 		
-	    <activity android:name="ReportAccountErrorActivity"/>
+	    <activity android:name="ReportAccountErrorActivity" android:noHistory="true"/>
     </application>
     
 	

@@ -74,7 +74,6 @@ public class TelusWidgetUpdateService extends IntentService {
 	 * @param email 
 	 */
 	public RemoteViews buildUpdate(PreferencesData prefData) {
-		
     	Map<String, Map<String, String>> data = null;
         try {
             // Try fetching data from https://mobile.telus.com
@@ -82,14 +81,7 @@ public class TelusWidgetUpdateService extends IntentService {
         } catch (TelusWebScraper.InvalidCredentialsException e) {
         	Log.e("TelusWebScraper", "Invalid credentials for " + prefData.email, e);
         	
-        	RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_invalid_credentials_error);
-        	
-        	Intent defineIntent = new Intent(this, ConfigureActivity.class);
-        	defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* no requestCode */, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
-            return updateViews;
+        	return configRemoteViews(prefData);
         } catch (IOException e) {
         	Log.e("TelusWebScraper", "IOException scraping mobile.telus.com for " + prefData.email, e);
         	return new RemoteViews(getPackageName(), R.layout.widget_network_error);
@@ -116,14 +108,27 @@ public class TelusWidgetUpdateService extends IntentService {
         return updateViews;
     }
 
+    private RemoteViews configRemoteViews(PreferencesData prefData) {
+        RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_invalid_credentials_error);
+        
+        Intent defineIntent = new Intent(this, ConfigureActivity.class);
+        defineIntent.setAction(getPackageName()+".CONFIG_"+prefData.appWidgetId);
+        defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+        return updateViews;
+    }
+
 	private RemoteViews unrecognizedDataRemoteViews(PreferencesData prefData) {
 		RemoteViews updateViews;
 		updateViews = new RemoteViews(getPackageName(), R.layout.widget_unrecognized_data_error);
 		
 		// Submit error report on touch
 		Intent defineIntent = new Intent(this, ReportAccountErrorActivity.class);
+		defineIntent.setAction(getPackageName()+".REPORT_"+prefData.appWidgetId);
 		defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* no requestCode */, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, defineIntent, 0);
 		updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
 		return updateViews;

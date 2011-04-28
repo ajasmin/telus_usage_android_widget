@@ -32,13 +32,14 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class ConfigureActivity extends Activity {
-	int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+	int appWidgetId;
 	
 	EditText emailView;
 	EditText passwordView;
@@ -53,41 +54,54 @@ public class ConfigureActivity extends Activity {
         // out of the widget placement if the back button is pressed.
         setResult(RESULT_CANCELED);
 
+        retriveAppWidgetId();
         
         setContentView(R.layout.configure);
-        emailView = (EditText) findViewById(R.id.email);
-        passwordView = (EditText) findViewById(R.id.password);
-        addButton = (Button) findViewById(R.id.add_button);
+        findViews();
         
-        obtainIntentExtras();
-          
-        addButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				ConfigureActivity.this.addButtonClicked();
-			}
-        });
-        		
+        prefillEmail();
+        configureEventHandlers();
         setupValidation();
         prepareSmallPrintTextWithLink();
     }
 
+    private void retriveAppWidgetId() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+        if (extras != null) {
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+        
+        // Finish the activity if we don't receive an appWidgetId
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID)
+            finish();
+    }
 
-	private void addButtonClicked() {
-    	String email = emailView.getText().toString();
-    	String password = passwordView.getText().toString();
+    private void findViews() {
+        emailView = (EditText) findViewById(R.id.email);
+        passwordView = (EditText) findViewById(R.id.password);
+        addButton = (Button) findViewById(R.id.add_button);
+    }
 
-        TelusWidgetPreferences.savePreferences(appWidgetId, email, password);
-        TelusWidgetUpdateService.updateWidget(ConfigureActivity.this, appWidgetId);
+    private void prefillEmail() {
+        PreferencesData prefs = TelusWidgetPreferences.getPreferences(appWidgetId);
+        String email = prefs.email;
+        if (email != null) {
+            emailView.setText(email);
+        }
+    }
+    
+    private void configureEventHandlers() {
+        addButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				addButtonClicked();
+			}
+        });
+    }
 
-        // Make sure we pass back the original appWidgetId
-        Intent resultValue = new Intent();
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        setResult(RESULT_OK, resultValue);
-        finish();		
-	}
-
-	private void setupValidation() {
-		TextWatcher validationTextWatcher = new TextWatcher() {
+    private void setupValidation() {
+        TextWatcher validationTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 validateFields();
             }
@@ -98,34 +112,30 @@ public class ConfigureActivity extends Activity {
         emailView.addTextChangedListener(validationTextWatcher);
         passwordView.addTextChangedListener(validationTextWatcher);
         validateFields();
-	}
-
-	private void obtainIntentExtras() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-
-        // If they gave us an intent without the widget id, just bail.
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-        }
-
-        PreferencesData prefs = TelusWidgetPreferences.getPreferences(appWidgetId);
-		String email = prefs.email;
-        if (email != null) {
-        	emailView.setText(email);
-        }
-	}
-
-	private void prepareSmallPrintTextWithLink() {
-		TextView smallPrint = (TextView) findViewById(R.id.small_print_text);
-        smallPrint.setText(Html.fromHtml(getString(R.string.small_print)));
-        smallPrint.setMovementMethod(LinkMovementMethod.getInstance());
-	}
+    }
     
     private void validateFields() {
-    	addButton.setEnabled(emailView.getText().length() != 0 && passwordView.getText().length() != 0);
+        addButton.setEnabled(emailView.getText().length() != 0 && passwordView.getText().length() != 0);
     }
+
+    private void prepareSmallPrintTextWithLink() {
+        TextView smallPrint = (TextView) findViewById(R.id.small_print_text);
+        smallPrint.setText(Html.fromHtml(getString(R.string.small_print)));
+        smallPrint.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+    
+	private void addButtonClicked() {
+    	String email = emailView.getText().toString();
+    	String password = passwordView.getText().toString();
+
+        TelusWidgetPreferences.savePreferences(appWidgetId, email, password);
+        TelusWidgetUpdateService.updateWidget(ConfigureActivity.this, appWidgetId);
+
+        // Make sure we pass back the original appWidgetId for RESULT_OK
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        setResult(RESULT_OK, resultValue);
+        
+        finish();		
+	}
 }

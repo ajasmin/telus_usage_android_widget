@@ -26,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -42,6 +44,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -65,21 +68,27 @@ public class ReportAccountErrorActivity extends Activity {
 			final DefaultHttpClient httpclient = new DefaultHttpClient();
 			HttpPost httpPost = new HttpPost("http://192.168.0.2:4444");
 			httpPost.setEntity(new InputStreamEntity(dataStream, -1));
+			
+			int r = POST_COMPLETE;
 			try {
 				httpclient.execute(httpPost);
 			} catch (Exception e) {
-				result.set(POST_ERROR);
-				postCompletedHandler.get().sendEmptyMessage(0);
-				return;
+			    r = POST_ERROR;
 			}
-			result.set(POST_COMPLETE);
-			postCompletedHandler.get().sendEmptyMessage(0);
+			
+			result.set(r);
+			Handler handler = postCompletedHandler.get();
+			if (handler != null)
+			    handler.sendEmptyMessage(0);
 		}
 	}
 	
-	private int appWidgetId;
 	
-	private static PostDataThread postDataThread;
+	private static Map<Integer, PostDataThread> postDataThreadsMap
+	        = new HashMap<Integer, PostDataThread>();
+	
+	private int appWidgetId;
+	private PostDataThread postDataThread;
 	
 	private ProgressDialog progressDialog;
 	private AlertDialog errorDialog;
@@ -89,27 +98,26 @@ public class ReportAccountErrorActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-        obtainIntentExtras();
-        
+		retriveAppWidgetId();
+		
         setContentView(R.layout.report_account_error);        
         
 		configureEventHandlers();
+		setupWebView();
 	}
-
-
-	private void obtainIntentExtras() {
-		Intent intent = getIntent();
+	
+    private void retriveAppWidgetId() {
+        Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
         if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
-
-        // If they gave us an intent without the widget id, just bail.
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        
+        // Finish the activity if we don't receive an appWidgetId
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID)
             finish();
-        }
-	}
+    }
 	
 	private void configureEventHandlers() {
 		final Button sendButton = (Button) findViewById(R.id.button_send);
@@ -129,47 +137,47 @@ public class ReportAccountErrorActivity extends Activity {
 		}});
 	}
 	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
-        // Load cached usage report in the WebView
-        WebView webview = (WebView) findViewById(R.id.web_view);
-        try {
-			URL url = getFileStreamPath(""+appWidgetId).toURL();
-			webview.loadUrl(url.toString());
-		} catch (MalformedURLException e) {
-			throw new Error(e);
-		}
-        
-        // Prevent links in the WebView from being used
-        webview.setWebViewClient(new WebViewClient() {
-        	public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        		return true;
-        	}
-        });
-	}
-	
-	@Override
-	protected void onPause() {
-		dismissDialogs();
-		super.onPause();
-	}
-	
+	   private void setupWebView() {
+	        // Load cached usage report in the WebView
+	        WebView webview = (WebView) findViewById(R.id.web_view);
+	        try {
+	            URL url = getFileStreamPath(""+appWidgetId).toURL();
+	            webview.loadUrl(url.toString());
+	        } catch (MalformedURLException e) {
+	            throw new Error(e);
+	        }
+	        
+	        // Prevent links in the WebView from being used
+	        webview.setWebViewClient(new WebViewClient() {
+	            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	                return true;
+	            }
+	        });
+	    }
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
+		postDataThread = postDataThreadsMap.get(appWidgetId);
         if (postDataThread != null) {
         	registerPostCompletedHandler();
         	showPostState();
         }
 	}
-	
+
+	@Override
+	protected void onPause() {
+	    dismissDialogs();
+	    unregisterPostCompletedHandler();
+	    super.onPause();
+	}
+   
 	private void initiateDataPost() throws Error {
 		postDataThread = new PostDataThread();
+		postDataThreadsMap.put(appWidgetId, postDataThread);
 		try {
-			postDataThread.dataStream = ReportAccountErrorActivity.this.openFileInput(""+appWidgetId);
+			postDataThread.dataStream = this.openFileInput(""+appWidgetId);
 		} catch (FileNotFoundException e) {
 			throw new Error(e);
 		}
@@ -188,6 +196,11 @@ public class ReportAccountErrorActivity extends Activity {
 		postDataThread.postCompletedHandler.set(handler);
 	}
 
+	private void unregisterPostCompletedHandler() {
+	    if (postDataThread != null)
+	        postDataThread.postCompletedHandler.set(null);
+	}
+	
 	private void showPostState() {
 		switch (postDataThread.result.get()) {
 			case POST_IN_PROGRESS:
@@ -202,6 +215,7 @@ public class ReportAccountErrorActivity extends Activity {
 						.setMessage("Report sent")
 						.setCancelable(false)
 						.setPositiveButton("Okay", new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
+						    postDataThreadsMap.remove(appWidgetId);
 							finish();
 						}})
 						.show();
@@ -214,7 +228,7 @@ public class ReportAccountErrorActivity extends Activity {
 						.setMessage("Unable to send data")
 						.setCancelable(false)
 						.setPositiveButton("Okay", new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
-							postDataThread = null;
+						    postDataThreadsMap.remove(appWidgetId);
 							dismissDialogs();
 						}})
 						.show();
@@ -237,5 +251,4 @@ public class ReportAccountErrorActivity extends Activity {
 			errorDialog = null;
 		}
 	}
-
 }
