@@ -43,6 +43,8 @@ THE SOFTWARE.
     <string name="widget_error">Error retrieving Telus data</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
+    <string name="widget_parse_credentials_error">Unable to display your usage data.</string>
+    <string name="widget_parse_credentials_tap">Tap for more info</string>
     
     <!-- Configure Activity -->
     <string name="enter_credentials">Enter the email address and password that you use to log on to the Telus Mobility website.</string>
@@ -50,4 +52,6 @@ THE SOFTWARE.
     <string name="password">Password</string>
     <string name="small_print">Your email address and password are never sent to the widget author.&lt;br&gt;&lt;br&gt;The widget will fetch and display data from &lt;a href=\"http://mobile.telus.com\"&gt;mobile.telus.com&lt;/a&gt;. Data from that website may not always be up to date.&lt;br&gt;&lt;br&gt;Changes to the Telus website may prevent the widget from working correctly. Installing updates from the Android Market should fix any such issues.</string>
     <string name="add_widget">Add Widget</string>
+    
+    <string name="report_account_error">The data from your Telus account page was not recognized. This is probably because the widget author didn\'t have access to an usage report of this type or because Telus changed its site.\n\nYou can opt to securely send the information displayed bellow to the widget author to help improve this widget. The widget author will not disclose personal informations contained in this report to anyone.\n\nScroll down to accept.</string>
 </resources>

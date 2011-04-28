@@ -30,15 +30,14 @@ import android.content.Context;
 import android.widget.RemoteViews;
 
 public abstract class DataPresenter {
-	private static final DataPresenter[] presenters = {new SmartPhonePresenter(), new CallingCardsPresenter()};
+	private static final DataPresenter[] presenters = { new SmartPhonePresenter(), new CallingCardsPresenter()};
 	
 	public static DataPresenter getPresenterFor(Map<String, Map<String, String>> data) {
 		for (DataPresenter p : presenters) {
 			if (p.appliesTo(data))
 				return p;
 		}
-		// TODO: What to do if none applies
-		throw new Error("No presenter found");
+		return null;
 	}
 	
 	private boolean appliesTo(Map<String, Map<String, String>> data) {

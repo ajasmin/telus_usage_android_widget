@@ -22,6 +22,7 @@
 
 package com.github.ajasmin.telususagewidget;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -48,7 +49,10 @@ import org.apache.http.protocol.HttpContext;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWebScraper {
 	@SuppressWarnings("serial")
@@ -57,10 +61,10 @@ public class TelusWebScraper {
 	@SuppressWarnings("serial")
 	public static class InvalidCredentialsException extends Exception { }
 
-	public static Map<String, Map<String, String>> retriveUsageSummaryData(final String email, final String password) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
+	public static Map<String, Map<String, String>> retriveUsageSummaryData(final PreferencesData prefs) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		enableAuto302Redirects(httpclient);
-		InputStream summaryHtmlStream = fetchUsageSummaryPage(httpclient, email, password);
+		InputStream summaryHtmlStream = fetchUsageSummaryPage(httpclient, prefs);
 		
 		// Just strip ampersands from input. We don't care about the
 		// parts of the document containing character entities anyways
@@ -82,9 +86,9 @@ public class TelusWebScraper {
 		new Thread(new Runnable() {	public void run() {
 			try {
 				fetchLogOutPage(httpclient);
-				Log.i("TelusWebScraper", "Logged out " + email);
+				Log.i("TelusWebScraper", "Logged out " + prefs.email);
 			} catch (IOException e) {
-				Log.e("TelusWebScraper", "Couldn't fetch logout page for " + email, e);
+				Log.e("TelusWebScraper", "Couldn't fetch logout page for " + prefs.email, e);
 			}
 		}}).run();
 
@@ -110,13 +114,13 @@ public class TelusWebScraper {
 		});
 	}
 
-	private static InputStream fetchUsageSummaryPage(DefaultHttpClient httpclient, String username, String password) throws IOException {
+	private static InputStream fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws IOException {
 		final String url = "https://mobile.telus.com/login.htm";
 		HttpPost httpPost = new HttpPost(url);
 
 		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-		formparams.add(new BasicNameValuePair("username", username));
-		formparams.add(new BasicNameValuePair("password", password));
+		formparams.add(new BasicNameValuePair("username", prefs.email));
+		formparams.add(new BasicNameValuePair("password", prefs.password));
 		formparams.add(new BasicNameValuePair("_rememberMe", "on"));
 		formparams.add(new BasicNameValuePair("forwardAction", "/index.htm?lang=en"));
 
@@ -126,7 +130,14 @@ public class TelusWebScraper {
 		HttpResponse response = httpclient.execute(httpPost);
 		HttpEntity responseEntity = response.getEntity();
 
-		return responseEntity.getContent();
+		// Save the page so that we can report errors later on
+		String fileName = Integer.toString(prefs.appWidgetId);
+		FileOutputStream fileOutput = MyApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+		responseEntity.writeTo(fileOutput);
+		fileOutput.close();
+		
+		InputStream fileInput = MyApp.getContext().openFileInput(fileName);
+		return fileInput;
 	}
 	
 	private static void fetchLogOutPage(DefaultHttpClient httpclient) throws IOException {

@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 
 public class TelusWidgetPreferences {
 	public static class PreferencesData {
+		public int appWidgetId;
 		public String email;
 		public String password;
 	}
@@ -36,6 +37,7 @@ public class TelusWidgetPreferences {
 		
 		Context context = MyApp.getContext();
         SharedPreferences prefs = context.getSharedPreferences("widget", 0);
+        prefData.appWidgetId = appWidgetId;
         prefData.email = prefs.getString(appWidgetId + "_email", null);
         prefData.password = prefs.getString(appWidgetId + "_password", null);
 		return prefData;

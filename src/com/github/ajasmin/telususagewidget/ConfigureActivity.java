@@ -75,7 +75,7 @@ public class ConfigureActivity extends Activity {
     	String password = passwordView.getText().toString();
 
         TelusWidgetPreferences.savePreferences(appWidgetId, email, password);
-        TelusWidgetProvider.updateWidget(ConfigureActivity.this, appWidgetId, email, password);
+        TelusWidgetUpdateService.updateWidget(ConfigureActivity.this, appWidgetId);
 
         // Make sure we pass back the original appWidgetId
         Intent resultValue = new Intent();

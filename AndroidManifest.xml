@@ -37,7 +37,7 @@ THE SOFTWARE.
         </receiver>
         
         <!-- Service to perform web API queries -->        
-        <service android:name="TelusWidgetProvider$UpdateService" />
+        <service android:name="TelusWidgetUpdateService" />
         
 	    <activity android:name="ConfigureActivity">
 		    <intent-filter>
@@ -45,6 +45,7 @@ THE SOFTWARE.
 		    </intent-filter>
 		</activity>
 		
+	    <activity android:name="ReportAccountErrorActivity"/>
     </application>
     
 	

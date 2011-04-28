@@ -22,118 +22,16 @@
 
 package com.github.ajasmin.telususagewidget;
 
-import java.util.Map;
-
-import android.app.IntentService;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.RemoteViews;
-
-import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		for (int appWidgetId : appWidgetIds) {
-			PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
-			updateWidget(context, appWidgetId, prefData.email, prefData.password);
+			TelusWidgetUpdateService.updateWidget(context, appWidgetId);
 		}
-	}
-
-	public static void updateWidget(Context context, int appWidgetId, String email, String password) {
-		if (email == null || password == null)
-			return;
-		
-		Log.i("TelusWidget", "UPDATING " + email);
-		// To prevent any ANR timeouts, we perform the update in a service
-		Intent intent = new Intent(context, UpdateService.class);
-		intent.setAction(UpdateService.ACTION_UPDATE_WIDGET);
-		intent.putExtra(context.getPackageName() + ".email", email);
-		intent.putExtra(context.getPackageName() + ".password", password);
-		intent.putExtra(context.getPackageName() + ".appWidgetId", appWidgetId);
-		context.startService(intent);
-	}
-
-	public static class UpdateService extends IntentService {
-		public static final String ACTION_UPDATE_WIDGET = "UPDATE_WIDGET";
-
-		public UpdateService() {
-			super(UpdateService.class.getName());
-		}
-		
-		@Override
-		protected void onHandleIntent(Intent intent) {
-			if (intent.getAction().equals(ACTION_UPDATE_WIDGET)) {
-				Context context = MyApp.getContext();
-				
-				// Get intent extras
-				Bundle extra = intent.getExtras();
-				String email = extra.getString(context.getPackageName() + ".email");
-				String password = extra.getString(context.getPackageName() + ".password");
-				int appWidgetId = extra.getInt(context.getPackageName() + ".appWidgetId");
-
-				AppWidgetManager manager = AppWidgetManager.getInstance(this);
-				showLoadingMessage(context, appWidgetId, manager);
-				RemoteViews updateViews = buildUpdate(this, appWidgetId, email, password);
-				manager.updateAppWidget(appWidgetId, updateViews);
-			}
-		}
-
-		private void showLoadingMessage(Context context, int appWidgetId, AppWidgetManager manager) {
-			RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading_message);
-			manager.updateAppWidget(appWidgetId, updateViews);
-		}
-		
-		/**
-		 * Build a widget update to show the current usage Will block until the
-		 * online API returns.
-		 * @param appWidgetId 
-		 * @param password 
-		 * @param email 
-		 */
-		public RemoteViews buildUpdate(Context context, int appWidgetId, String email, String password) {
-        	Map<String, Map<String, String>> data = null;
-            try {
-                // Try fetching data from https://mobile.telus.com
-            	data = TelusWebScraper.retriveUsageSummaryData(email, password );
-            } catch (TelusWebScraper.InvalidCredentialsException e) {
-            	Log.e("TelusWebScraper", "Invalid credentials for " + email, e);
-            	
-            	RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_invalid_credentials_error);
-            	
-            	Intent defineIntent = new Intent(context, ConfigureActivity.class);
-            	defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            	defineIntent.putExtra(context.getPackageName() + ".email", email);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* no requestCode */, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
-                return updateViews;
-            	
-            } catch (Exception e) {
-                Log.e("TelusWebScraper", "Couldn't scrap mobile.telus.com for " + email, e);
-                return new RemoteViews(context.getPackageName(), R.layout.widget_error);
-            }
-            
-            RemoteViews updateViews;
-            DataPresenter dataPresenter = DataPresenter.getPresenterFor(data);
-			updateViews = dataPresenter.buildUpdate(context, data);
-
-            // When user clicks on widget, visit mobile.telus.com
-            String uriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
-            String uri = String.format(uriTemplate, Uri.encode(email), Uri.encode(password));
-            Log.i("TELUS_URL", uri);
-            Intent defineIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* no requestCode */, defineIntent, 0 /* no flags */);
-            updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
-            return updateViews;
-        }
 	}
 
 	@Override
