@@ -86,7 +86,6 @@ public class TelusWidgetUpdateService extends IntentService {
         	
         	Intent defineIntent = new Intent(this, ConfigureActivity.class);
         	defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-        	defineIntent.putExtra(getPackageName() + ".email", prefData.email);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* no requestCode */, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 

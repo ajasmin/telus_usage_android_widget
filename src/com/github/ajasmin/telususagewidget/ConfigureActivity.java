@@ -22,6 +22,8 @@
 
 package com.github.ajasmin.telususagewidget;
 
+import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
+
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -101,17 +103,17 @@ public class ConfigureActivity extends Activity {
 	private void obtainIntentExtras() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        String email = null;
         if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            email = extras.getString(this.getPackageName() + ".email");
         }
 
         // If they gave us an intent without the widget id, just bail.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
-        
+
+        PreferencesData prefs = TelusWidgetPreferences.getPreferences(appWidgetId);
+		String email = prefs.email;
         if (email != null) {
         	emailView.setText(email);
         }
