@@ -25,6 +25,7 @@ package com.github.ajasmin.telususagewidget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.provider.OpenableColumns;
 
 public class TelusWidgetProvider extends AppWidgetProvider {
 	@Override
@@ -38,6 +39,12 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 	public void onDeleted(Context context, int[] appWidgetIds) {
 		for (int appWidgetId : appWidgetIds) {
 	        TelusWidgetPreferences.deletePreferences(appWidgetId);
+	        
+	        try {
+	        	context.getFileStreamPath(""+appWidgetId).delete();
+	        } catch (Exception e) {
+				// The file may not exists and that's okay
+			}
 		}
 	}
 }
