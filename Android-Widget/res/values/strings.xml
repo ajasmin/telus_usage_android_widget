@@ -34,13 +34,16 @@ THE SOFTWARE.
     <string name="data_label">\u2022 DATA</string>
     <string name="text_label">\u2022 TEXT</string>
     
-   <!-- Calling cards layout -->
-   <string name="current_balance_label">\u2022 Balance</string>
-   <string name="balance_expires_label">\u2022 Expires</string>
+	<!-- Calling cards layout -->
+	<string name="current_balance_label">\u2022 Balance</string>
+    <string name="balance_expires_label">\u2022 Expires</string>
+   
+    <!-- Loading -->
+    <string name="loading_title">LOADING</string>
+    <string name="loading_message">Fetching Data...</string>
     
     <!-- Messages -->
-    <string name="widget_loading">Fetching Data...</string>
-    <string name="widget_error">Error retrieving Telus data</string>
+    <string name="widget_network_error">Error retrieving Telus data.\n\nUnable to connect</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
     <string name="widget_parse_credentials_error">Unable to display your usage data.</string>
