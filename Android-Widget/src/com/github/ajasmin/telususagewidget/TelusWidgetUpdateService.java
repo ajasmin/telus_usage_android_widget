@@ -96,16 +96,20 @@ public class TelusWidgetUpdateService extends IntentService {
             Log.e("TelusWebScraper", "No presenter found for " + prefData.email);
             return unrecognizedDataRemoteViews(prefData);
         }
-		RemoteViews updateViews = dataPresenter.buildUpdate(this, data);
+        
+		return normalRemoteView(prefData, data, dataPresenter);
+    }
+
+    private RemoteViews normalRemoteView(PreferencesData prefData, Map<String, Map<String, String>> data, DataPresenter dataPresenter) {
+        RemoteViews updateViews = dataPresenter.buildUpdate(this, data);
 
         // When user clicks on widget, visit mobile.telus.com
         String uriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
         String uri = String.format(uriTemplate, Uri.encode(prefData.email), Uri.encode(prefData .password));
         Log.i("TELUS_URL", uri);
         Intent defineIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* no requestCode */, defineIntent, 0 /* no flags */);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
-
         return updateViews;
     }
 
@@ -125,9 +129,9 @@ public class TelusWidgetUpdateService extends IntentService {
         RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_invalid_credentials_error);
         
         Intent defineIntent = new Intent(this, ConfigureActivity.class);
-        defineIntent.setAction(getPackageName()+".CONFIG_"+prefData.appWidgetId);
+        defineIntent.setAction(getPackageName()+".CONFIG");
         defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
         return updateViews;
@@ -139,9 +143,9 @@ public class TelusWidgetUpdateService extends IntentService {
 		
 		// Submit error report on touch
 		Intent defineIntent = new Intent(this, ReportAccountErrorActivity.class);
-		defineIntent.setAction(getPackageName()+".REPORT_"+prefData.appWidgetId);
+		defineIntent.setAction(getPackageName()+".UNRECOGNIZED");
 		defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, defineIntent, 0);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
 		return updateViews;
