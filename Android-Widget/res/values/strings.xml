@@ -44,6 +44,7 @@ THE SOFTWARE.
     
     <!-- Messages -->
     <string name="widget_network_error">Error retrieving Telus data.\n\nUnable to connect</string>
+    <string name="widget_network_error_tap">Tap to retry now</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
     <string name="widget_parse_credentials_error">Unable to display your usage data.</string>

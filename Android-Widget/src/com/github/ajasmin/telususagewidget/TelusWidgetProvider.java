@@ -31,6 +31,7 @@ public class TelusWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		for (int appWidgetId : appWidgetIds) {
+		    // To prevent any ANR timeouts, we perform the update in a service
 			TelusWidgetUpdateService.updateWidget(context, appWidgetId);
 		}
 	}

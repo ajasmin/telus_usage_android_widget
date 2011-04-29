@@ -38,7 +38,8 @@ import android.widget.RemoteViews;
 import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWidgetUpdateService extends IntentService {
-	public static final String ACTION_UPDATE_WIDGET = "UPDATE_WIDGET";
+	public static final String ACTION_UPDATE_WIDGET =
+	        MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
 
 	public TelusWidgetUpdateService() {
 		super(TelusWidgetUpdateService.class.getName());
@@ -51,7 +52,7 @@ public class TelusWidgetUpdateService extends IntentService {
 			
 			// Get intent extras
 			Bundle extra = intent.getExtras();
-			int appWidgetId = extra.getInt(context.getPackageName() + ".appWidgetId");
+			int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
 			PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
 
 			AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -84,7 +85,7 @@ public class TelusWidgetUpdateService extends IntentService {
         	return configRemoteViews(prefData);
         } catch (IOException e) {
         	Log.e("TelusWebScraper", "IOException scraping mobile.telus.com for " + prefData.email, e);
-        	return new RemoteViews(getPackageName(), R.layout.widget_network_error);
+        	return networkErrorRemoteViews(prefData);
         } catch (Exception e) {
             Log.e("TelusWebScraper", "Error parsing data for " + prefData.email, e);
             return unrecognizedDataRemoteViews(prefData);
@@ -103,6 +104,18 @@ public class TelusWidgetUpdateService extends IntentService {
         Log.i("TELUS_URL", uri);
         Intent defineIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* no requestCode */, defineIntent, 0 /* no flags */);
+        updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+        return updateViews;
+    }
+
+    private RemoteViews networkErrorRemoteViews(PreferencesData prefData) {
+        RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_network_error);
+        
+        Intent defineIntent = new Intent(this, TelusWidgetUpdateService.class);
+        defineIntent.setAction(ACTION_UPDATE_WIDGET);
+        defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
+        PendingIntent pendingIntent = PendingIntent.getService(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
         return updateViews;
@@ -135,10 +148,9 @@ public class TelusWidgetUpdateService extends IntentService {
 	}
 
 	public static void updateWidget(Context context, int appWidgetId) {
-		// To prevent any ANR timeouts, we perform the update in a service
 		Intent intent = new Intent(context, TelusWidgetUpdateService.class);
 		intent.setAction(ACTION_UPDATE_WIDGET);
-		intent.putExtra(context.getPackageName() + ".appWidgetId", appWidgetId);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		context.startService(intent);
 	}
 }
