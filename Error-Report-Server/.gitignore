@@ -1,0 +1,11 @@
+.metadata
+.DS_Store
+*.tmp
+*.bak
+*.swp
+*~.nib
+Thumbs.db
+Desktop.ini
+*~
+/war/WEB-INF/appengine-generated
+/war/WEB-INF/classes
