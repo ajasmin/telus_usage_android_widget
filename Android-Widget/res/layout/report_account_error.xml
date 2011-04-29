@@ -39,7 +39,7 @@
 			<CheckBox android:id="@+id/agree"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content" 
-			android:text="I agree to send the information above to the widget author through a secure SSL connection."></CheckBox>
+			android:text="@string/i_agree_to_send"></CheckBox>
 			<View android:layout_width="fill_parent" android:layout_height="150dp"/>
 		</LinearLayout>
 	</ScrollView>
@@ -55,14 +55,14 @@
 			android:layout_height="wrap_content">	
 			<Button
 				android:id="@+id/button_cancel"
-				android:text="Cancel"
+				android:text="@string/cancel"
 				android:layout_marginTop="5dp"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				/>
 			<Button
 				android:id="@+id/button_send"
-				android:text="Send the information above"
+				android:text="@string/send_data"
 				android:enabled="false"
 				android:layout_marginTop="5dp"
 				android:layout_width="fill_parent"

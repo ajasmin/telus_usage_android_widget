@@ -56,6 +56,14 @@ THE SOFTWARE.
     <string name="password">Password</string>
     <string name="small_print">Your email address and password are never sent to the widget author.&lt;br&gt;&lt;br&gt;The widget will fetch and display data from &lt;a href=\"http://mobile.telus.com\"&gt;mobile.telus.com&lt;/a&gt;. Data from that website may not always be up to date.&lt;br&gt;&lt;br&gt;Changes to the Telus website may prevent the widget from working correctly. Installing updates from the Android Market should fix any such issues.</string>
     <string name="add_widget">Add Widget</string>
-    
+
+    <!-- ReportAccountErrorActivity -->
     <string name="report_account_error">The data from your Telus account page was not recognized. This is probably because the widget author didn\'t have access to an usage report of this type or because Telus changed its site.\n\nYou can opt to securely send the information displayed bellow to the widget author to help improve this widget. The widget author will not disclose personal informations contained in this report to anyone.\n\nScroll down to accept.</string>
+    <string name="i_agree_to_send">I agree to send the information above to the widget author through a secure SSL connection.</string>
+    <string name="cancel">Cancel</string>
+    <string name="send_data">Send the information above</string>
+    <string name="sending_data">Sending data...</string>
+    <string name="unable_to_send_data">Unable to send data</string>
+    <string name="report_sent">Report sent</string>
+    <string name="okay">Okay</string>
 </resources>

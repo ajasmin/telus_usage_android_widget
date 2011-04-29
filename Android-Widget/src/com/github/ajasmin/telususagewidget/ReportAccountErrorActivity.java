@@ -205,16 +205,16 @@ public class ReportAccountErrorActivity extends Activity {
 		switch (postDataThread.result.get()) {
 			case POST_IN_PROGRESS:
 				if (progressDialog == null) {
-					progressDialog = ProgressDialog.show(this, null, "Sending data...");
+					progressDialog = ProgressDialog.show(this, null, getString(R.string.sending_data));
 				}
 				break;
 			case POST_COMPLETE:
 				dismissDialogs();
 				if (completeDialog == null) {
 					completeDialog = new AlertDialog.Builder(this)
-						.setMessage("Report sent")
+						.setMessage(R.string.report_sent)
 						.setCancelable(false)
-						.setPositiveButton("Okay", new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
+						.setPositiveButton(R.string.okay, new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
 						    postDataThreadsMap.remove(appWidgetId);
 							finish();
 						}})
@@ -225,9 +225,9 @@ public class ReportAccountErrorActivity extends Activity {
 				dismissDialogs();
 				if (errorDialog == null) {
 					errorDialog = new AlertDialog.Builder(this)
-						.setMessage("Unable to send data")
+						.setMessage(R.string.unable_to_send_data)
 						.setCancelable(false)
-						.setPositiveButton("Okay", new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
+						.setPositiveButton(R.string.okay, new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
 						    postDataThreadsMap.remove(appWidgetId);
 							dismissDialogs();
 						}})
