@@ -66,7 +66,7 @@ public class ReportAccountErrorActivity extends Activity {
 		@Override
 		public void run() {
 			final DefaultHttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost("http://192.168.0.2:4444");
+			HttpPost httpPost = new HttpPost("https://telus-usage-widget.appspot.com/error_report");
 			httpPost.setEntity(new InputStreamEntity(dataStream, -1));
 			
 			int r = POST_COMPLETE;
