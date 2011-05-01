@@ -35,8 +35,8 @@ THE SOFTWARE.
     <string name="text_label">\u2022 TEXT</string>
     
 	<!-- Calling cards layout -->
-	<string name="current_balance_label">\u2022 Balance</string>
-    <string name="balance_expires_label">\u2022 Expires</string>
+	<string name="current_balance_label">\u2022 BALANCE</string>
+    <string name="balance_expires_label">\u2022 EXPIRES</string>
    
     <!-- Loading -->
     <string name="loading_title">LOADING</string>
