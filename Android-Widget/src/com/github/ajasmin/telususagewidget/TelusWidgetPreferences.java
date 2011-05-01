@@ -39,7 +39,9 @@ public class TelusWidgetPreferences {
         SharedPreferences prefs = context.getSharedPreferences("widget", 0);
         prefData.appWidgetId = appWidgetId;
         prefData.email = prefs.getString(appWidgetId + "_email", null);
-        prefData.password = prefs.getString(appWidgetId + "_password", null);
+        String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
+        if (obfuscatedPassword != null)
+        	prefData.password = PasswordObfuscator.unobfuscate(obfuscatedPassword);
 		return prefData;
 	}
 	
@@ -47,7 +49,8 @@ public class TelusWidgetPreferences {
     	Context context = MyApp.getContext();
         SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
         prefs.putString(appWidgetId + "_email", email);
-        prefs.putString(appWidgetId + "_password", password);
+        String obfuscatedPassword = PasswordObfuscator.obfuscate(password);
+        prefs.putString(appWidgetId + "_password", obfuscatedPassword);
         prefs.commit();
     }
 	

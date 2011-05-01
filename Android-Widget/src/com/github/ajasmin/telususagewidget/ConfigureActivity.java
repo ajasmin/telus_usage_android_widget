@@ -22,8 +22,6 @@
 
 package com.github.ajasmin.telususagewidget;
 
-import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
-
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -32,11 +30,12 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class ConfigureActivity extends Activity {
 	int appWidgetId;

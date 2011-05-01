@@ -25,7 +25,6 @@ package com.github.ajasmin.telususagewidget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.provider.OpenableColumns;
 
 public class TelusWidgetProvider extends AppWidgetProvider {
 	@Override
