@@ -30,6 +30,15 @@ public class TelusWidgetPreferences {
 		public int appWidgetId;
 		public String email;
 		public String password;
+		public long lastUpdateTime;
+		
+		public void markAsUpdatedNow() {
+			lastUpdateTime = System.currentTimeMillis();
+			Context context = MyApp.getContext();
+			SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
+			prefs.putLong(appWidgetId + "_lastUpdateTime", lastUpdateTime);
+			prefs.commit();
+		}
 	}
 	
 	public static PreferencesData getPreferences(int appWidgetId) {
@@ -42,6 +51,7 @@ public class TelusWidgetPreferences {
         String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
         if (obfuscatedPassword != null)
         	prefData.password = PasswordObfuscator.unobfuscate(obfuscatedPassword);
+        prefData.lastUpdateTime = prefs.getLong(appWidgetId + "_lastUpdateTime", 0);
 		return prefData;
 	}
 	
@@ -59,6 +69,7 @@ public class TelusWidgetPreferences {
 		SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
 		prefs.remove(appWidgetId + "_email");
 		prefs.remove(appWidgetId + "_password");
+		prefs.remove(appWidgetId + "_lastUpdateTime");
 		prefs.commit();
 	}
 }

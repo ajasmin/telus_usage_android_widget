@@ -55,17 +55,21 @@ import android.util.Log;
 import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWebScraper {
+	private static final long CACHE_LIFETIME = 1 /*hour*/ * 60 * 60 * 1000;
+	
 	@SuppressWarnings("serial")
 	public static class ScrapException extends Exception { }
 	
 	@SuppressWarnings("serial")
 	public static class InvalidCredentialsException extends Exception { }
 
-	public static Map<String, Map<String, String>> retriveUsageSummaryData(final PreferencesData prefs) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
-		final DefaultHttpClient httpclient = new DefaultHttpClient();
-		enableAuto302Redirects(httpclient);
-		InputStream summaryHtmlStream = fetchUsageSummaryPage(httpclient, prefs);
+	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
+		if (System.currentTimeMillis() - prefs.lastUpdateTime > CACHE_LIFETIME)
+			fetchFromTelusSite(prefs);
 		
+		String fileName = Integer.toString(prefs.appWidgetId);
+		InputStream summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
+
 		// Just strip ampersands from input. We don't care about the
 		// parts of the document containing character entities anyways
 		InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
@@ -81,6 +85,17 @@ public class TelusWebScraper {
 			throw new InvalidCredentialsException();
 		}
 		
+		return handler.getData();
+	}
+
+	private static void fetchFromTelusSite(final PreferencesData prefs) throws IOException {
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
+		enableAuto302Redirects(httpclient);
+		
+		fetchUsageSummaryPage(httpclient, prefs);
+		
+		prefs.markAsUpdatedNow();
+
 		// Log out to avoid session limit
 		// on background thread to avoid extra delay
 		new Thread(new Runnable() {	public void run() {
@@ -91,10 +106,8 @@ public class TelusWebScraper {
 				Log.e("TelusWebScraper", "Couldn't fetch logout page for " + prefs.email, e);
 			}
 		}}).run();
-
-		return handler.getData();
 	}
-
+	
 	private static void enableAuto302Redirects(DefaultHttpClient httpclient) {
 		httpclient.setRedirectHandler(new RedirectHandler() {
 			@Override
@@ -114,7 +127,7 @@ public class TelusWebScraper {
 		});
 	}
 
-	private static InputStream fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws IOException {
+	private static void fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws IOException {
 		final String url = "https://mobile.telus.com/login.htm";
 		HttpPost httpPost = new HttpPost(url);
 
@@ -131,13 +144,11 @@ public class TelusWebScraper {
 		HttpEntity responseEntity = response.getEntity();
 
 		// Save the page so that we can report errors later on
+		// or use a cached version
 		String fileName = Integer.toString(prefs.appWidgetId);
 		FileOutputStream fileOutput = MyApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
 		responseEntity.writeTo(fileOutput);
 		fileOutput.close();
-		
-		InputStream fileInput = MyApp.getContext().openFileInput(fileName);
-		return fileInput;
 	}
 	
 	private static void fetchLogOutPage(DefaultHttpClient httpclient) throws IOException {
