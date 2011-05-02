@@ -48,7 +48,10 @@ THE SOFTWARE.
 	    <activity android:name="ReportAccountErrorActivity" android:noHistory="true"/>
     </application>
     
-	
+    <supports-screens android:resizeable="true" android:smallScreens="true"
+    		android:normalScreens="true" android:largeScreens="true"
+			android:xlargeScreens="true" android:anyDensity="true"/>
+    		 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-sdk android:minSdkVersion="3" />
     
