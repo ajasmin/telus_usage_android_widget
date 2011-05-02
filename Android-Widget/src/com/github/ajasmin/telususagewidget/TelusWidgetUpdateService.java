@@ -82,6 +82,9 @@ public class TelusWidgetUpdateService extends IntentService {
         } catch (TelusWebScraper.InvalidCredentialsException e) {
         	Log.e("TelusWebScraper", "Invalid credentials for " + prefData.email, e);
         	
+        	// Don't cache the response in this case 
+        	getFileStreamPath(""+prefData.appWidgetId).delete();
+        	
         	return configRemoteViews(prefData);
         } catch (IOException e) {
         	Log.e("TelusWebScraper", "IOException scraping mobile.telus.com for " + prefData.email, e);
