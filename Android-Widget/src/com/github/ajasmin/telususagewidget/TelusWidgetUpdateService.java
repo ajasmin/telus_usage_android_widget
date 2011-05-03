@@ -54,6 +54,10 @@ public class TelusWidgetUpdateService extends IntentService {
 			Bundle extra = intent.getExtras();
 			int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
 			PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
+			
+			// Don't proceed unless the widget was configured
+			if (prefData.email == null)
+				return;   
 
 			AppWidgetManager manager = AppWidgetManager.getInstance(this);
 			showLoadingMessage(context, appWidgetId, manager);
