@@ -64,10 +64,14 @@ public class TelusWebScraper {
 	public static class InvalidCredentialsException extends Exception { }
 
 	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
-		if (System.currentTimeMillis() - prefs.lastUpdateTime > CACHE_LIFETIME)
-			fetchFromTelusSite(prefs);
-		
+		Context context = MyApp.getContext();
 		String fileName = Integer.toString(prefs.appWidgetId);
+		
+		if (!context.getFileStreamPath(fileName).exists() || 
+				System.currentTimeMillis() - prefs.lastUpdateTime > CACHE_LIFETIME) {
+						fetchFromTelusSite(prefs);
+		}
+		
 		InputStream summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
 
 		// Just strip ampersands from input. We don't care about the
