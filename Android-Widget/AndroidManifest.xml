@@ -46,6 +46,13 @@ THE SOFTWARE.
 		</activity>
 		
 	    <activity android:name="ReportAccountErrorActivity" android:noHistory="true"/>
+
+		<activity android:name="HowToAddWidgetActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.INFO" />
+			</intent-filter>
+		</activity>
     </application>
     
     <supports-screens android:resizeable="true" android:smallScreens="true"
