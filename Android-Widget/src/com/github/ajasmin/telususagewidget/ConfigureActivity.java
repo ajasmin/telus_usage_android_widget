@@ -38,6 +38,9 @@ import android.widget.TextView;
 import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class ConfigureActivity extends Activity {
+	public static final String ACTION_EDIT_CONFIG
+		= MyApp.getContext().getPackageName()+".ACTION_EDIT_CONFIG";
+	
 	int appWidgetId;
 	
 	EditText emailView;
@@ -84,6 +87,16 @@ public class ConfigureActivity extends Activity {
     }
 
     private void prefillEmail() {
+    	// I had a case where after closing the emulator an
+    	// old widget ID was reused when adding a new widget.
+    	// This caused the email address to be prefilled
+    	// even though I was adding a new widget instance.
+    	//
+    	// To avoid that only prefil the email address
+    	// when "editing" the config.
+    	if (!ACTION_EDIT_CONFIG.equals(getIntent().getAction()))
+    		return;
+    	
         PreferencesData prefs = TelusWidgetPreferences.getPreferences(appWidgetId);
         String email = prefs.email;
         if (email != null) {

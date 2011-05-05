@@ -136,7 +136,7 @@ public class TelusWidgetUpdateService extends IntentService {
         RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_invalid_credentials_error);
         
         Intent defineIntent = new Intent(this, ConfigureActivity.class);
-        defineIntent.setAction(getPackageName()+".CONFIG");
+        defineIntent.setAction(ConfigureActivity.ACTION_EDIT_CONFIG);
         defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
