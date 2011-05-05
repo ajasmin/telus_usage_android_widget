@@ -50,10 +50,13 @@ public class HowToAddWidgetActivity extends Activity {
 	private long movieStart;
 	private ImageView animated_image;
 	protected Handler animate_handler;
+	private boolean isAnimating;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		isAnimating = false;
 		
 		setContentView(R.layout.how_to_add_widget);
 		
@@ -73,15 +76,29 @@ public class HowToAddWidgetActivity extends Activity {
         }
         if (savedInstanceState != null)
         	movieStart = savedInstanceState.getLong("movieStart");
-        animate_handler = new Handler();
-        animate_handler.postDelayed(animate, 30);
     }
 	
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putLong("movieStart", movieStart);
 	};
 	
+	protected void onResume() {
+		super.onResume();
+		
+		isAnimating = true;
+        animate_handler = new Handler();
+        animate_handler.postDelayed(animate, 30);
+	}
+
+	protected void onPause() {
+	    super.onPause();
+	    
+	    isAnimating = false;
+	}
+	
 	Runnable animate = new Runnable() { public void run() {
+		if (!isAnimating)
+			return;
         Bitmap offscreenBmp = Bitmap.createBitmap(240, 320, Bitmap.Config.ARGB_8888);
         long now = android.os.SystemClock.uptimeMillis();
         if (movieStart == 0) {   // first time
