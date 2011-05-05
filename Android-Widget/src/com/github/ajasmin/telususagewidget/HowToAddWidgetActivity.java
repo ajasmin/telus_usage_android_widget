@@ -50,6 +50,7 @@ public class HowToAddWidgetActivity extends Activity {
 	private long movieStart;
 	private ImageView animated_image;
 	protected Handler animate_handler;
+	Bitmap animationFrame = Bitmap.createBitmap(240, 320, Bitmap.Config.ARGB_8888);
 	private boolean isAnimating;
 	
 	@Override
@@ -99,7 +100,6 @@ public class HowToAddWidgetActivity extends Activity {
 	Runnable animate = new Runnable() { public void run() {
 		if (!isAnimating)
 			return;
-        Bitmap offscreenBmp = Bitmap.createBitmap(240, 320, Bitmap.Config.ARGB_8888);
         long now = android.os.SystemClock.uptimeMillis();
         if (movieStart == 0) {   // first time
             movieStart = now;
@@ -111,8 +111,8 @@ public class HowToAddWidgetActivity extends Activity {
             }
             int relTime = (int)((now - movieStart) % dur);
             movie.setTime(relTime);
-            movie.draw(new Canvas(offscreenBmp), 0, 0);
-            animated_image.setImageBitmap(offscreenBmp);
+            movie.draw(new Canvas(animationFrame), 0, 0);
+            animated_image.setImageBitmap(animationFrame);
         }
         animate_handler = new Handler();
         animate_handler.postDelayed(animate, 30);
