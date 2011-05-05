@@ -32,11 +32,13 @@ import android.graphics.Canvas;
 import android.graphics.Movie;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
@@ -57,6 +59,11 @@ public class HowToAddWidgetActivity extends Activity {
 		
 		TextView howToAddText = (TextView) findViewById(R.id.how_to_add_text);
         howToAddText.setText(Html.fromHtml(getString(R.string.how_to_add)));
+        
+        Button okButton = (Button) findViewById(R.id.ok_button);
+        okButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) {
+        	finish();
+		}});
         
         animated_image = (ImageView) findViewById(R.id.animated_image);
 
