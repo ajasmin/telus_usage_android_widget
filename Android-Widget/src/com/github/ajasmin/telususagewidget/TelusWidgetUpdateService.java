@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+
 import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWidgetUpdateService extends IntentService {
@@ -90,10 +91,10 @@ public class TelusWidgetUpdateService extends IntentService {
         	getFileStreamPath(""+prefData.appWidgetId).delete();
         	
         	return configRemoteViews(prefData);
-        } catch (IOException e) {
-        	Log.e("TelusWebScraper", "IOException scraping mobile.telus.com for " + prefData.email, e);
+        } catch (TelusWebScraper.NetworkErrorException e) {
+        	Log.e("TelusWebScraper", "Network error scraping mobile.telus.com for " + prefData.email, e);
         	return networkErrorRemoteViews(prefData);
-        } catch (Exception e) {
+        } catch (TelusWebScraper.ParsingDataException e) {
             Log.e("TelusWebScraper", "Error parsing data for " + prefData.email, e);
             return unrecognizedDataRemoteViews(prefData);
         }

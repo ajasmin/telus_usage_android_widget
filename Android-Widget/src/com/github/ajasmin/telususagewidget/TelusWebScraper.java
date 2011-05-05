@@ -22,6 +22,7 @@
 
 package com.github.ajasmin.telususagewidget;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ProtocolException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -56,14 +58,24 @@ import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesDat
 
 public class TelusWebScraper {
 	private static final long CACHE_LIFETIME = 1 /*hour*/ * 60 * 60 * 1000;
-	
-	@SuppressWarnings("serial")
-	public static class ScrapException extends Exception { }
-	
 	@SuppressWarnings("serial")
 	public static class InvalidCredentialsException extends Exception { }
+	
+	@SuppressWarnings("serial")
+	public static class NetworkErrorException extends Exception {
+		public NetworkErrorException(String string, Throwable e) {
+			super(string, e);
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	public static class ParsingDataException extends Exception {
+		public ParsingDataException(String string, Throwable e) {
+			super(string, e);
+		}
+	}	
 
-	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws IOException, ParserConfigurationException, SAXException, InvalidCredentialsException {
+	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException {
 		Context context = MyApp.getContext();
 		String fileName = Integer.toString(prefs.appWidgetId);
 		
@@ -72,19 +84,26 @@ public class TelusWebScraper {
 						fetchFromTelusSite(prefs);
 		}
 		
-		InputStream summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
+		InputStream summaryHtmlStream;
+		try {
+			summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
+		} catch (FileNotFoundException e) {	throw new Error(e);	}
 
 		// Just strip ampersands from input. We don't care about the
 		// parts of the document containing character entities anyways
 		InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
 		
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		SAXParser parser = spf.newSAXParser();
 		TelusSaxHandler handler = new TelusSaxHandler();
 		InputSource inputSource = new InputSource(stripAmpersandsInputStream);
 		inputSource.setEncoding("UTF-8");
-		parser.parse(inputSource, handler);
 		
+		SAXParser parser = getSAXParserInstance();
+		try {
+			parser.parse(inputSource, handler);
+		} catch (Exception e) {
+			throw new ParsingDataException("Error parsing data", e);
+		}
+			
 		if (handler.isLoginError()) {
 			throw new InvalidCredentialsException();
 		}
@@ -92,7 +111,7 @@ public class TelusWebScraper {
 		return handler.getData();
 	}
 
-	private static void fetchFromTelusSite(final PreferencesData prefs) throws IOException {
+	private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		enableAuto302Redirects(httpclient);
 		
@@ -131,28 +150,32 @@ public class TelusWebScraper {
 		});
 	}
 
-	private static void fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws IOException {
-		final String url = "https://mobile.telus.com/login.htm";
-		HttpPost httpPost = new HttpPost(url);
-
-		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-		formparams.add(new BasicNameValuePair("username", prefs.email));
-		formparams.add(new BasicNameValuePair("password", prefs.password));
-		formparams.add(new BasicNameValuePair("_rememberMe", "on"));
-		formparams.add(new BasicNameValuePair("forwardAction", "/index.htm?lang=en"));
-
-		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
-		httpPost.setEntity(entity);
-
-		HttpResponse response = httpclient.execute(httpPost);
-		HttpEntity responseEntity = response.getEntity();
-
-		// Save the page so that we can report errors later on
-		// or use a cached version
-		String fileName = Integer.toString(prefs.appWidgetId);
-		FileOutputStream fileOutput = MyApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
-		responseEntity.writeTo(fileOutput);
-		fileOutput.close();
+	private static void fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException {
+		try {
+			final String url = "https://mobile.telus.com/login.htm";
+			HttpPost httpPost = new HttpPost(url);
+	
+			List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+			formparams.add(new BasicNameValuePair("username", prefs.email));
+			formparams.add(new BasicNameValuePair("password", prefs.password));
+			formparams.add(new BasicNameValuePair("_rememberMe", "on"));
+			formparams.add(new BasicNameValuePair("forwardAction", "/index.htm?lang=en"));
+	
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
+			httpPost.setEntity(entity);
+	
+			HttpResponse response = httpclient.execute(httpPost);
+			HttpEntity responseEntity = response.getEntity();
+	
+			// Save the page so that we can report errors later on
+			// or use a cached version
+			String fileName = Integer.toString(prefs.appWidgetId);
+			FileOutputStream fileOutput = MyApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+			responseEntity.writeTo(fileOutput);
+			fileOutput.close();
+		} catch (IOException e) {
+			throw new NetworkErrorException("Error fetching data from Telus website", e);
+		}
 	}
 	
 	private static void fetchLogOutPage(DefaultHttpClient httpclient) throws IOException {
@@ -163,5 +186,14 @@ public class TelusWebScraper {
 		HttpEntity responseEntity = response.getEntity();
 		// fetch the contents
 		responseEntity.getContent().close();
+	}
+	
+	private static SAXParser getSAXParserInstance() {
+		try {
+			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+			return parser;
+		} catch (Exception e) {
+			throw new Error(e);
+		}
 	}
 }
