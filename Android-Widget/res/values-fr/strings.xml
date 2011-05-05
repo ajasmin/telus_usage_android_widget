@@ -44,7 +44,7 @@ THE SOFTWARE.
     
     <!-- Messages -->
     <string name="widget_network_error">Erreur.\n\nServeur Telus injoignable</string>
-    <string name="widget_network_error_tap">Touchez pour réessayer maintenant</string>
+    <string name="widget_network_error_tap">Touchez pour réessayer</string>
     <string name="widget_invalid_credentials_error">Email ou mot de passe est incorrect</string>
     <string name="widget_invalid_credentials_tap">Touchez pour changer</string>
     <string name="widget_parse_credentials_error">Impossible d\'afficher les données.</string>
