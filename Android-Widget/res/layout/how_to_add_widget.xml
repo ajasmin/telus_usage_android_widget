@@ -37,7 +37,6 @@ THE SOFTWARE.
 		  		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		  		android:padding="5dp"/>
 		  		<ImageView android:id="@+id/animated_image"
-		  		android:src="@drawable/how_to_add_anim_gif" 
 		  		android:layout_width="180dp" android:layout_height="240dp"
 		  		android:layout_gravity="center_horizontal"/>
 				<View android:layout_width="fill_parent" android:layout_height="60dp"/>
