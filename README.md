@@ -39,7 +39,7 @@ You can obtain a copy from the [download section on github][4] or pay a cents on
 
 Scan this QR Code to install from the Market:
 
-![QR Code](http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=https%3A//market.android.com/details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
+![QR Code](http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
 
 
 
