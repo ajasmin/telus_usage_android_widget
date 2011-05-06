@@ -22,30 +22,18 @@
 
 package com.github.ajasmin.telususagewidget;
 
-import java.io.InputStream;
-
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Movie;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 public class HowToAddWidgetActivity extends Activity {
 	int framePos = 0;

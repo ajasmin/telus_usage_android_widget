@@ -22,7 +22,6 @@
 
 package com.github.ajasmin.telususagewidget;
 
-import java.io.IOException;
 import java.util.Map;
 
 import android.app.IntentService;
@@ -34,7 +33,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
-
 
 import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
 
