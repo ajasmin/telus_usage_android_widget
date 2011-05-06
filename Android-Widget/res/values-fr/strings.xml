@@ -25,7 +25,17 @@ THE SOFTWARE.
     <string name="app_name">Widget Sommaire de l\'utilisation Telus</string>
     <string name="widget_name">Sommaire de l\'utilisation Telus</string>
     
-    <string name="widget_title">Usage Telus</string>
+    <string name="widget_title">USAGE TELUS</string>
+    
+    <string name="how_to_add">
+    	&lt;p&gt;Ceci n\'est pas une application mais un &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp; qui peut être ajouté à votre écran d\'accueil. Pour l\'ajouter:&lt;/p&gt;
+    	&lt;p&gt;\u2022 Appuyer longuement sur le fond de l\'écran d\'accueil pour ouvrir le menu &lt;i&gt;\"Ajouter à l\'écran d\'accueil\"&lt;/i&gt;&amp;nbsp;&lt;/p&gt;
+		&lt;p&gt;\u2022 A partir de ce menu, sélectionnez:&lt;br&gt;
+		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
+		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Sommaire de l\'utilisation Telus&lt;/p&gt;
+		&lt;p&gt;\u2022 Entrez les détails de votre compte TELUS&lt;/p&gt;
+		&lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
+	</string>
     
     <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>
