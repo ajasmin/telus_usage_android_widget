@@ -28,13 +28,13 @@ THE SOFTWARE.
     <string name="widget_title">TELUS USAGE</string>
     
     <string name="how_to_add">
-    	&lt;p&gt;This is not an application but an &lt;i&gt;Home Screen Widget&lt;/i&gt;. To add this widget to your home screen:&lt;/p&gt;
+    	&lt;p&gt;This is not an application but a &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp;that can be added to your home screen. In order to add it:&lt;/p&gt;
     	&lt;p&gt;\u2022 Long press the home screen background to open the &lt;i&gt;\"Add to home screen\"&lt;/i&gt;&amp;nbsp;&amp;nbsp;menu&lt;/p&gt;
 		&lt;p&gt;\u2022 From this menu select:&lt;br&gt;
 		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
 		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Telus Usage Summary&lt;/p&gt;
 		&lt;p&gt;\u2022 Enter your Telus account details&lt;/p&gt;
-		&lt;b&gt;Demonstration:&lt;/b&gt;&lt;br&gt;
+		&lt;b&gt;Video Demonstration:&lt;/b&gt;&lt;br&gt;
 	</string>
     
     <!-- Smart phone layout -->
