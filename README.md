@@ -29,8 +29,20 @@ Source code
 
       Server that receive error reports. Runs on App Engine for Java
 
+Installing
+----------
+
+You can obtain a copy from the [download section on github][4] or pay a cents on the [Android Market][5].
+
+Scan this QR Code to install from the Market:
+
+![QR Code](http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3D&chld=H|0)
+
+
 Both of these include an Eclipse project.
 
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
   [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
+  [4]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
+  [5]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
