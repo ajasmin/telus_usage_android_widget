@@ -35,13 +35,17 @@ Both of these include an Eclipse project.
 Installing
 ----------
 
-You can obtain a copy from the [download section on github][4] or pay a cents on the [Android Market][5].
+You can obtain a copy from the [download section on github][4] or buy it for a dollar on the [Android Market][5].
 
-Scan this QR Code to install from the Market:
+Scan this QR Code to buy the Widget on the Android Market (and get notified of future updates):
 
-![QR Code](http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
+![QR Code Market](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
 
 
+Scan this QR Code to download the current version directly:
+*Note: Your phone must be configured to accept downloads from unknown sources*:
+
+![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-1.apk&chld=H|0)
 
 
   [1]: http://www.telusmobility.com/ "Telus Website"
