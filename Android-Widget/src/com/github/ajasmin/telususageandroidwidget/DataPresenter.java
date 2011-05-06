@@ -20,41 +20,37 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.widget.RemoteViews;
 
-public class CallingCardsPresenter extends DataPresenter {
-
-	private static final HashMap<String, List<String>> requiredData;
-	static {
-		requiredData = new HashMap<String, List<String>>();
-		requiredData.put("Account Activity", Arrays.asList(new String[] {"Current Balance", "Balance Expires"}));
+public abstract class DataPresenter {
+	private static final DataPresenter[] presenters = { new SmartPhonePresenter(), new CallingCardsPresenter()};
+	
+	public static DataPresenter getPresenterFor(Map<String, Map<String, String>> data) {
+		for (DataPresenter p : presenters) {
+			if (p.appliesTo(data))
+				return p;
+		}
+		return null;
 	}
 	
-	@Override
-	protected Map<String, List<String>> getRequiredData() {
-		return requiredData;
+	private boolean appliesTo(Map<String, Map<String, String>> data) {
+		for (Entry<String, List<String>> e : getRequiredData().entrySet()) {
+			Map<String, String> section = data.get(e.getKey());
+			if (section == null)
+				return false;
+			if (!section.keySet().containsAll(e.getValue()))
+				return false;
+		}
+		return true;
 	}
 	
-	@Override
-	public RemoteViews buildUpdate(Context context, Map<String, Map<String, String>> data) {
-        // Build an update that holds the updated widget contents
-        RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_calling_cards_layout);
-    
-    	Map<String, String> accountActivity = data.get("Account Activity");
-		String currentBalance = accountActivity.get("Current Balance");
-		String balanceExpires = accountActivity.get("Balance Expires");
-    	
-        updateViews.setTextViewText(R.id.current_balance, currentBalance);
-        updateViews.setTextViewText(R.id.balance_expires, balanceExpires);
-    
-        return updateViews;
-	}
+	protected abstract Map<String, List<String>> getRequiredData();
+	public abstract RemoteViews buildUpdate(Context context, Map<String, Map<String, String>> data);
 }

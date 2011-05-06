@@ -20,37 +20,31 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.widget.RemoteViews;
 
-public abstract class DataPresenter {
-	private static final DataPresenter[] presenters = { new SmartPhonePresenter(), new CallingCardsPresenter()};
-	
-	public static DataPresenter getPresenterFor(Map<String, Map<String, String>> data) {
-		for (DataPresenter p : presenters) {
-			if (p.appliesTo(data))
-				return p;
+public class TelusWidgetProvider extends AppWidgetProvider {
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		for (int appWidgetId : appWidgetIds) {
+		    // To prevent any ANR timeouts, we perform the update in a service
+			TelusWidgetUpdateService.updateWidget(context, appWidgetId);
 		}
-		return null;
 	}
-	
-	private boolean appliesTo(Map<String, Map<String, String>> data) {
-		for (Entry<String, List<String>> e : getRequiredData().entrySet()) {
-			Map<String, String> section = data.get(e.getKey());
-			if (section == null)
-				return false;
-			if (!section.keySet().containsAll(e.getValue()))
-				return false;
+
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
+		for (int appWidgetId : appWidgetIds) {
+	        TelusWidgetPreferences.deletePreferences(appWidgetId);
+	        
+	        try {
+	        	context.getFileStreamPath(""+appWidgetId).delete();
+	        } catch (Exception e) {
+				// The file may not exists and that's okay
+			}
 		}
-		return true;
 	}
-	
-	protected abstract Map<String, List<String>> getRequiredData();
-	public abstract RemoteViews buildUpdate(Context context, Map<String, Map<String, String>> data);
 }

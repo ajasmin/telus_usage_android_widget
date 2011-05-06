@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
 import java.io.IOException;
 import java.io.InputStream;

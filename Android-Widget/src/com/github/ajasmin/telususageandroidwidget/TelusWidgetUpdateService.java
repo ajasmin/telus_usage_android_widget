@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
 import java.util.Map;
 
@@ -34,7 +34,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
+import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWidgetUpdateService extends IntentService {
 	public static final String ACTION_UPDATE_WIDGET =

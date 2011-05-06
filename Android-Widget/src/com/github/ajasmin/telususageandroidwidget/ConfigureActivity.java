@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -35,7 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
+import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
 public class ConfigureActivity extends Activity {
 	public static final String ACTION_EDIT_CONFIG

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;

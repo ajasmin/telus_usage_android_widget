@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
 import android.content.Context;
 import android.util.Log;
 
-import com.github.ajasmin.telususagewidget.TelusWidgetPreferences.PreferencesData;
+import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWebScraper {
 	private static final long CACHE_LIFETIME = 1 /*hour*/ * 60 * 60 * 1000;

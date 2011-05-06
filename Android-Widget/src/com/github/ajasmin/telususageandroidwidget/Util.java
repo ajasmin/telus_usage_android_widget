@@ -20,31 +20,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.ajasmin.telususagewidget;
+package com.github.ajasmin.telususageandroidwidget;
 
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.Context;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-public class TelusWidgetProvider extends AppWidgetProvider {
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		for (int appWidgetId : appWidgetIds) {
-		    // To prevent any ANR timeouts, we perform the update in a service
-			TelusWidgetUpdateService.updateWidget(context, appWidgetId);
-		}
-	}
-
-	@Override
-	public void onDeleted(Context context, int[] appWidgetIds) {
-		for (int appWidgetId : appWidgetIds) {
-	        TelusWidgetPreferences.deletePreferences(appWidgetId);
-	        
-	        try {
-	        	context.getFileStreamPath(""+appWidgetId).delete();
-	        } catch (Exception e) {
-				// The file may not exists and that's okay
-			}
-		}
-	}
+public class Util {
+    public static byte[] readStream(InputStream in) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        int count;
+        while ((count = in.read(buf)) > 0)
+                byteArrayOutputStream.write(buf, 0, count);
+        in.close();
+        return byteArrayOutputStream.toByteArray();
+    }
 }
