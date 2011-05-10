@@ -12,7 +12,17 @@
 	limitations under the License.
 */
 
-package com.commonsware.cwac.wakeful;
+/***** NOTICE *****
+ * This file was modified to work on Android versions < 2.0
+ * 
+ * The original version is available at:
+ * https://github.com/commonsguy/cwac-wakeful/blob/v0.4.2/src/com/commonsware/cwac/wakeful/WakefulIntentService.java 
+ */
+
+package com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -29,6 +39,11 @@ abstract public class WakefulIntentService extends IntentService {
 	
 	private static final String LOCK_NAME_STATIC="com.commonsware.cwac.wakeful.WakefulIntentService";
 	private static volatile PowerManager.WakeLock lockStatic=null;
+	private static Method setIntentRedeliveryReflect;
+	
+	static {
+		initCompatibility();
+	}
 	
 	synchronized private static PowerManager.WakeLock getLock(Context context) {
 		if (lockStatic==null) {
@@ -53,7 +68,17 @@ abstract public class WakefulIntentService extends IntentService {
 	
 	public WakefulIntentService(String name) {
 		super(name);
-		setIntentRedelivery(true);
+		
+		setIntentRedeliveryCompat(true);
+	}
+
+	@Override
+	public void onStart(Intent intent, int startId) {
+		if (!getLock(this).isHeld()) {	// on 2.0+ onStart will have done this alredy
+			getLock(this).acquire();
+		}
+		
+		super.onStart(intent, startId);
 	}
 	
 	@Override
@@ -62,7 +87,7 @@ abstract public class WakefulIntentService extends IntentService {
 			getLock(this).acquire();
 		}
 
-		super.onStartCommand(intent, flags, startId);
+		onStart(intent, startId);
 		
 		return(START_REDELIVER_INTENT);
 	}
@@ -76,4 +101,25 @@ abstract public class WakefulIntentService extends IntentService {
 			getLock(this).release();
 		}
 	}
+	
+
+   private static void initCompatibility() {
+       try {
+    	   setIntentRedeliveryReflect = WakefulIntentService.class.getMethod(
+                   "setIntentRedelivery", new Class[] { boolean.class } );
+           /* success, this is a newer device */
+       } catch (NoSuchMethodException nsme) {
+           /* failure, must be older device */
+       }
+   }
+   
+   private void setIntentRedeliveryCompat(boolean b) throws Error {
+	   if (setIntentRedeliveryReflect != null) {
+		   try {
+			   setIntentRedeliveryReflect.invoke(this, b);
+		   } catch (Exception e) {
+			   throw new Error(e);
+		   }
+	   }
+   }
 }
