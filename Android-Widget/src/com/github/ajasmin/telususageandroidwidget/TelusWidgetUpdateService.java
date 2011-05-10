@@ -35,8 +35,9 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
+import com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful.WakefulIntentService;
 
-public class TelusWidgetUpdateService extends IntentService {
+public class TelusWidgetUpdateService extends WakefulIntentService {
 	public static final String ACTION_UPDATE_WIDGET =
 	        MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
 
@@ -45,7 +46,7 @@ public class TelusWidgetUpdateService extends IntentService {
 	}
 	
 	@Override
-	protected void onHandleIntent(Intent intent) {
+	protected void doWakefulWork(Intent intent) {
 		if (intent.getAction().equals(ACTION_UPDATE_WIDGET)) {
 			Context context = MyApp.getContext();
 			
@@ -161,6 +162,6 @@ public class TelusWidgetUpdateService extends IntentService {
 		Intent intent = new Intent(context, TelusWidgetUpdateService.class);
 		intent.setAction(ACTION_UPDATE_WIDGET);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		context.startService(intent);
+		WakefulIntentService.sendWakefulWork(context, intent);
 	}
 }
