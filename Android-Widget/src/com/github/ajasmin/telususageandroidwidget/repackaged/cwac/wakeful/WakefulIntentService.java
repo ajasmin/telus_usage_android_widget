@@ -21,18 +21,12 @@
 
 package com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 abstract public class WakefulIntentService extends IntentService {
 	abstract protected void doWakefulWork(Intent intent);

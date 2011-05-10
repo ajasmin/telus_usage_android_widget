@@ -24,7 +24,6 @@ package com.github.ajasmin.telususageandroidwidget;
 
 import java.util.Map;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
