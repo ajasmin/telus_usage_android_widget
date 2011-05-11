@@ -54,11 +54,15 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
 			int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
 			PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
 			
-			// Don't proceed unless the widget was configured
-			if (prefData.email == null)
-				return;   
-
 			AppWidgetManager manager = AppWidgetManager.getInstance(this);
+			
+			// Don't proceed unless the widget was configured
+			if (prefData.email == null) {
+				RemoteViews updateViews = unconfiguredRemoteViews(prefData);
+				manager.updateAppWidget(appWidgetId, updateViews);
+				return;   
+			}
+
 			showLoadingMessage(context, appWidgetId, manager);
 			RemoteViews updateViews = buildUpdate(prefData);
 			manager.updateAppWidget(appWidgetId, updateViews);
@@ -88,7 +92,7 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
         	// Don't cache the response in this case 
         	getFileStreamPath(""+prefData.appWidgetId).delete();
         	
-        	return configRemoteViews(prefData);
+        	return invalidCredentialsRemoteViews(prefData);
         } catch (TelusWebScraper.NetworkErrorException e) {
         	Log.e("TelusWebScraper", "Network error scraping mobile.telus.com for " + prefData.email, e);
         	return networkErrorRemoteViews(prefData);
@@ -131,7 +135,7 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
         return updateViews;
     }
 
-    private RemoteViews configRemoteViews(PreferencesData prefData) {
+    private RemoteViews invalidCredentialsRemoteViews(PreferencesData prefData) {
         RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_invalid_credentials_error);
         
         Intent defineIntent = new Intent(this, ConfigureActivity.class);
@@ -142,6 +146,19 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
 
         return updateViews;
     }
+    
+    private RemoteViews unconfiguredRemoteViews(PreferencesData prefData) {
+        RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_not_configured);
+        
+        Intent defineIntent = new Intent(this, ConfigureActivity.class);
+        defineIntent.setAction(ConfigureActivity.ACTION_EDIT_CONFIG);
+        defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+        return updateViews;
+    }
+
 
 	private RemoteViews unrecognizedDataRemoteViews(PreferencesData prefData) {
 		RemoteViews updateViews;
