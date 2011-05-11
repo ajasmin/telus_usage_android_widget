@@ -13,46 +13,49 @@
 */
 
 /***** NOTICE *****
- * This file was modified to work on Android versions < 2.0
+ * This file was modified
  * 
  * The original version is available at:
- * https://github.com/commonsguy/cwac-wakeful/blob/v0.4.2/src/com/commonsware/cwac/wakeful/WakefulIntentService.java 
+ * https://github.com/commonsguy/cwac-wakeful/blob/v0.4.2/src/com/commonsware/cwac/wakeful/WakefulIntentService.java
+ * 
+ *  Changes:
+ *  	- Attempt to maintain compatibility with Android < 2.0
+ *  	  calling setIntentRedelivery() seems unnecessary as
+ *        onStartCommand() is overridden.
+ *  	- Fix possible issue with if (!getLock(this).isHeld())
+ *        when restarting more than one intent after a service kill
+ *        it seems the wakeLock was acquired twice but released once
+ *        causing a crash. Check for START_FLAG_REDELIVERY instead.
+ *      - Initialise wakeLock in a static block.
  */
 
 package com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful;
 
-import java.lang.reflect.Method;
-
+import com.github.ajasmin.telususageandroidwidget.MyApp;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 
 abstract public class WakefulIntentService extends IntentService {
+
 	abstract protected void doWakefulWork(Intent intent);
 	
-	private static final String LOCK_NAME_STATIC="com.commonsware.cwac.wakeful.WakefulIntentService";
-	private static volatile PowerManager.WakeLock lockStatic=null;
-	private static Method setIntentRedeliveryReflect;
+	private static final String LOCK_NAME_STATIC="com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful.WakefulIntentService";
+	private static final PowerManager.WakeLock lockStatic;
 	
 	static {
-		initCompatibility();
+		PowerManager mgr=(PowerManager)MyApp.getContext().getSystemService(Context.POWER_SERVICE);
+		lockStatic=mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOCK_NAME_STATIC);
+		lockStatic.setReferenceCounted(true);
 	}
 	
-	synchronized private static PowerManager.WakeLock getLock(Context context) {
-		if (lockStatic==null) {
-			PowerManager mgr=(PowerManager)context.getSystemService(Context.POWER_SERVICE);
-			
-			lockStatic=mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-														LOCK_NAME_STATIC);
-			lockStatic.setReferenceCounted(true);
-		}
-		
-		return(lockStatic);
+	public WakefulIntentService(String name) {
+		super(name);
 	}
 	
 	public static void sendWakefulWork(Context ctxt, Intent i) {
-		getLock(ctxt).acquire();
+		lockStatic.acquire();
 		ctxt.startService(i);
 	}
 	
@@ -60,30 +63,15 @@ abstract public class WakefulIntentService extends IntentService {
 		sendWakefulWork(ctxt, new Intent(ctxt, clsService));
 	}
 	
-	public WakefulIntentService(String name) {
-		super(name);
-		
-		setIntentRedeliveryCompat(true);
-	}
-
-	@Override
-	public void onStart(Intent intent, int startId) {
-		if (!getLock(this).isHeld()) {	// on 2.0+ onStart will have done this alredy
-			getLock(this).acquire();
-		}
-		
-		super.onStart(intent, startId);
-	}
-	
 	@Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-		if (!getLock(this).isHeld()) {	// fail-safe for crash restart
-			getLock(this).acquire();
+		if ((flags | START_FLAG_REDELIVERY) != 0) {	// fail-safe for crash restart
+			lockStatic.acquire();
 		}
 
 		onStart(intent, startId);
 		
-		return(START_REDELIVER_INTENT);
+		return START_REDELIVER_INTENT;
 	}
 	
 	@Override
@@ -92,28 +80,7 @@ abstract public class WakefulIntentService extends IntentService {
 			doWakefulWork(intent);
 		}
 		finally {
-			getLock(this).release();
+			lockStatic.release();
 		}
 	}
-	
-
-   private static void initCompatibility() {
-       try {
-    	   setIntentRedeliveryReflect = WakefulIntentService.class.getMethod(
-                   "setIntentRedelivery", new Class[] { boolean.class } );
-           /* success, this is a newer device */
-       } catch (NoSuchMethodException nsme) {
-           /* failure, must be older device */
-       }
-   }
-   
-   private void setIntentRedeliveryCompat(boolean b) throws Error {
-	   if (setIntentRedeliveryReflect != null) {
-		   try {
-			   setIntentRedeliveryReflect.invoke(this, b);
-		   } catch (Exception e) {
-			   throw new Error(e);
-		   }
-	   }
-   }
 }
