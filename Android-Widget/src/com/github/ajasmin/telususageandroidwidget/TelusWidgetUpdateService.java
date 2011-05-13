@@ -23,50 +23,57 @@
 package com.github.ajasmin.telususageandroidwidget;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
-import com.github.ajasmin.telususageandroidwidget.repackaged.cwac.wakeful.WakefulIntentService;
 
-public class TelusWidgetUpdateService extends WakefulIntentService {
-	public static final String ACTION_UPDATE_WIDGET =
-	        MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
+public class TelusWidgetUpdateService extends Service {
+	public static final String ACTION_UPDATE_WIDGET
+			= MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
+	
+	public static final ConcurrentMap<Integer, Thread> widgetThreads 
+			= new ConcurrentHashMap<Integer, Thread>();
+	
+	
+	private static final String LOCK_NAME 
+			= MyApp.getContext().getPackageName()+".WakefulIntentService";
+	
+	private static final PowerManager.WakeLock wakeLock = initLock();
 
+	
 	public TelusWidgetUpdateService() {
-		super(TelusWidgetUpdateService.class.getName());
+		super();
 	}
 	
-	@Override
-	protected void doWakefulWork(Intent intent) {
-		if (intent.getAction().equals(ACTION_UPDATE_WIDGET)) {
-			Context context = MyApp.getContext();
-			
-			// Get intent extras
-			Bundle extra = intent.getExtras();
-			int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-			PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
-			
-			AppWidgetManager manager = AppWidgetManager.getInstance(this);
-			
-			// Don't proceed unless the widget was configured
-			if (prefData.email == null) {
-				RemoteViews updateViews = unconfiguredRemoteViews(prefData);
-				manager.updateAppWidget(appWidgetId, updateViews);
-				return;   
-			}
-
-			showLoadingMessage(context, appWidgetId, manager);
-			RemoteViews updateViews = buildUpdate(prefData);
+	protected void updateWidget(int appWidgetId) {
+		Context context = MyApp.getContext();
+		
+		AppWidgetManager manager = AppWidgetManager.getInstance(this);
+		
+		// Don't proceed unless the widget was configured
+		PreferencesData prefData = TelusWidgetPreferences.getPreferences(appWidgetId);
+		if (prefData.email == null) {
+			RemoteViews updateViews = unconfiguredRemoteViews(prefData);
 			manager.updateAppWidget(appWidgetId, updateViews);
+			return;   
 		}
+
+		showLoadingMessage(context, appWidgetId, manager);
+		RemoteViews updateViews = buildUpdate(prefData);
+		manager.updateAppWidget(appWidgetId, updateViews);
 	}
 
 	private void showLoadingMessage(Context context, int appWidgetId, AppWidgetManager manager) {
@@ -173,11 +180,64 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
 
 		return updateViews;
 	}
+		
+	static private PowerManager.WakeLock initLock() {
+		PowerManager mgr=(PowerManager)MyApp.getContext().getSystemService(Context.POWER_SERVICE);
+		PowerManager.WakeLock wakeLock=mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOCK_NAME);
+		wakeLock.setReferenceCounted(true);
+		return wakeLock; 
+	}
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, final int startId) {
+		if (!intent.getAction().equals(ACTION_UPDATE_WIDGET)) {
+			stopSelf(startId);
+			return 0;
+		}
+		
+		// fail-safe for crash restart
+		if ((flags & START_FLAG_REDELIVERY) != 0) {
+			wakeLock.acquire();
+		}
+		
+		// Get intent extras
+		Bundle extra = intent.getExtras();
+		final int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+
+		// Start widget thread if it doesn't exists
+		Thread thread = new Thread(TelusWidgetUpdateService.class.toString() + appWidgetId) {
+			public void run() {
+				try {
+					updateWidget(appWidgetId);
+					stopSelf(startId);
+				} finally {
+					widgetThreads.remove(appWidgetId);
+					wakeLock.release();
+				}
+			}
+		};
+		
+		Thread previousThread = widgetThreads.putIfAbsent(appWidgetId, thread);
+		if (previousThread == null) {
+			thread.start();
+		}
+
+		// Redeliver the intent in case of failure
+		return START_REDELIVER_INTENT;
+	}
 
 	public static void updateWidget(Context context, int appWidgetId) {
 		Intent intent = new Intent(context, TelusWidgetUpdateService.class);
 		intent.setAction(ACTION_UPDATE_WIDGET);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		WakefulIntentService.sendWakefulWork(context, intent);
+		
+		wakeLock.acquire();
+		
+		context.startService(intent);
 	}
 }
