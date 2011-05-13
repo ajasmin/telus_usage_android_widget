@@ -76,4 +76,8 @@ THE SOFTWARE.
     <string name="unable_to_send_data">Impossible d\'envoyer les données</string>
     <string name="report_sent">Rapport envoyé</string>
     <string name="okay">Okay</string>
+    
+    
+    <string name="not_configured">Non configuré</string>
+    <string name="tap">Appuyez</string>
 </resources>

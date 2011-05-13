@@ -44,7 +44,7 @@ THE SOFTWARE.
         android:layout_marginTop="12dip"
         android:padding="2dip"
         android:gravity="center"
-        android:text="Not configured"
+        android:text="@string/not_configured"
         style="@style/Text.Message" />
 
     <TextView  
@@ -53,7 +53,7 @@ THE SOFTWARE.
         android:layout_height="wrap_content"
         android:padding="2dip"
         android:gravity="center"
-        android:text="Tap"
+        android:text="@string/tap"
         style="@style/Text.Tap" />
 
 </LinearLayout>
