@@ -24,9 +24,9 @@ alexandre.jasmin@gmail.com or [report an issue][3] on github.
 
 Screenshots
 -----------
-![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-1.png)
-![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-2.png)
-![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-3.png)
+![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-1-small.png)
+![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-2-small.png)
+![Screenshot](https://github.com/ajasmin/telus_usage_android_widget/raw/master/market/screenshot-3-small.png)
 
 
 Source code
