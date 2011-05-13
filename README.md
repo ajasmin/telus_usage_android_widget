@@ -45,7 +45,7 @@ Scan this QR Code to buy the Widget on the Android Market (and get notified of f
 Scan this QR Code to download the current version directly:
 *Note: Your phone must be configured to accept downloads from unknown sources*:
 
-![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-2.apk&chld=H|0)
+![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-3.apk&chld=H|0)
 
 
   [1]: http://www.telusmobility.com/ "Telus Website"
