@@ -126,10 +126,10 @@ public class TelusWidgetUpdateService extends WakefulIntentService {
     private RemoteViews networkErrorRemoteViews(PreferencesData prefData) {
         RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget_network_error);
         
-        Intent defineIntent = new Intent(this, TelusWidgetUpdateService.class);
-        defineIntent.setAction(ACTION_UPDATE_WIDGET);
-        defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getService(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent defineIntent = new Intent(this, TelusWidgetProvider.class);
+        defineIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { prefData.appWidgetId });
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
         return updateViews;
