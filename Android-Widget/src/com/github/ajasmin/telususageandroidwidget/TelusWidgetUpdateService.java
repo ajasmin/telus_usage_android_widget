@@ -20,6 +20,11 @@
  * THE SOFTWARE.
  */
 
+/*
+ * Part of this was inspired by WakefulIntentService:
+ * https://github.com/commonsguy/cwac-wakeful/blob/v0.4.2/src/com/commonsware/cwac/wakeful/WakefulIntentService.java 
+ */
+
 package com.github.ajasmin.telususageandroidwidget;
 
 import java.util.Map;
