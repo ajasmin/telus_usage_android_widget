@@ -199,15 +199,10 @@ public class TelusWidgetUpdateService extends Service {
 	}
 	
 	@Override
-	public int onStartCommand(Intent intent, int flags, final int startId) {
+	public void onStart(Intent intent, final int startId) {
 		if (!intent.getAction().equals(ACTION_UPDATE_WIDGET)) {
 			stopSelf(startId);
-			return 0;
-		}
-		
-		// fail-safe for crash restart
-		if ((flags & START_FLAG_REDELIVERY) != 0) {
-			wakeLock.acquire();
+			return;
 		}
 		
 		// Get intent extras
@@ -231,6 +226,16 @@ public class TelusWidgetUpdateService extends Service {
 		if (previousThread == null) {
 			thread.start();
 		}
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, final int startId) {
+		// fail-safe for crash restart
+		if ((flags & START_FLAG_REDELIVERY) != 0) {
+			wakeLock.acquire();
+		}
+		
+		onStart(intent, startId);
 
 		// Redeliver the intent in case of failure
 		return START_REDELIVER_INTENT;
