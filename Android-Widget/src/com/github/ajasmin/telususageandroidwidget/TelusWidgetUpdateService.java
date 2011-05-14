@@ -27,9 +27,8 @@
 
 package com.github.ajasmin.telususageandroidwidget;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -45,12 +44,13 @@ import android.widget.RemoteViews;
 
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
-public class TelusWidgetUpdateService extends Service {
-	public static final String ACTION_UPDATE_WIDGET
+public class TelusWidgetUpdateService<E> extends Service {
+	private static final String ACTION_UPDATE_WIDGET
 			= MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
 	
-	public static final ConcurrentMap<Integer, Thread> widgetThreads 
-			= new ConcurrentHashMap<Integer, Thread>();
+	private Map<Integer, Thread> widgetThreads = new HashMap<Integer, Thread>();
+	private int lastTaskId;
+	private int taskCount = 0;
 	
 	
 	private static final String LOCK_NAME 
@@ -208,25 +208,19 @@ public class TelusWidgetUpdateService extends Service {
 		// Get intent extras
 		Bundle extra = intent.getExtras();
 		final int appWidgetId = extra.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-
-		// Start widget thread if it doesn't exists
-		Thread thread = new Thread(TelusWidgetUpdateService.class.toString() + appWidgetId) {
-			public void run() {
-				try {
-					updateWidget(appWidgetId);
-					stopSelf(startId);
-				} finally {
-					widgetThreads.remove(appWidgetId);
-					wakeLock.release();
-				}
-			}
-		};
 		
-		Thread previousThread = widgetThreads.putIfAbsent(appWidgetId, thread);
-		if (previousThread == null) {
-			thread.start();
+		synchronized (this) {
+			lastTaskId = startId;
+			// There's no need to spawn more than one thread per widgetId
+			if (!widgetThreads.containsKey(appWidgetId)) {
+				Thread thread = createWidgetThread(appWidgetId);
+				widgetThreads.put(appWidgetId, thread);
+				taskCount++;
+				thread.start();
+			}
 		}
 	}
+
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, final int startId) {
@@ -241,6 +235,31 @@ public class TelusWidgetUpdateService extends Service {
 		return START_REDELIVER_INTENT;
 	}
 
+	private Thread createWidgetThread(final int appWidgetId) {
+		Thread thread = new Thread(TelusWidgetUpdateService.class.toString() + " " + appWidgetId) {
+			public void run() {
+				try {
+					updateWidget(appWidgetId);
+					
+					// We have to pass the last tasks to stopSelf()
+					// when were're done or we risk the service
+					// being killed early.
+					synchronized (TelusWidgetUpdateService.this) {
+						taskCount--;
+						if (taskCount == 0)
+							stopSelf(lastTaskId);
+					}
+				} finally {
+					synchronized (TelusWidgetUpdateService.this) {
+						widgetThreads.remove(appWidgetId);
+					}
+					wakeLock.release();
+				}
+			}
+		};
+		return thread;
+	}
+	
 	public static void updateWidget(Context context, int appWidgetId) {
 		Intent intent = new Intent(context, TelusWidgetUpdateService.class);
 		intent.setAction(ACTION_UPDATE_WIDGET);
