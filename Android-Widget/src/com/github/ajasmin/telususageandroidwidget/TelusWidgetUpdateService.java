@@ -42,6 +42,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.github.ajasmin.telususageandroidwidget.TelusWebScraper.AccountException;
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
 public class TelusWidgetUpdateService<E> extends Service {
@@ -105,6 +106,8 @@ public class TelusWidgetUpdateService<E> extends Service {
         	getFileStreamPath(""+prefData.appWidgetId).delete();
         	
         	return invalidCredentialsRemoteViews(prefData);
+        } catch (AccountException e) {
+        	return accountErrorRemoteViews(prefData, e.getMessage());
         } catch (TelusWebScraper.NetworkErrorException e) {
         	Log.e("TelusWebScraper", "Network error scraping mobile.telus.com for " + prefData.email, e);
         	return networkErrorRemoteViews(prefData);
@@ -157,6 +160,22 @@ public class TelusWidgetUpdateService<E> extends Service {
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
         return updateViews;
+    }
+
+    private RemoteViews accountErrorRemoteViews(PreferencesData prefData, String message) {
+		RemoteViews updateViews;
+		updateViews = new RemoteViews(getPackageName(), R.layout.widget_unrecognized_data_error);
+		
+		// Show details about the account error on touch
+		Intent defineIntent = new Intent(this, AccountErrorDetailsActivity.class);
+		defineIntent.setAction(getPackageName()+".ACCOUNT_ERROR_DETAILS");
+		defineIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, prefData.appWidgetId);
+		defineIntent.putExtra(AccountErrorDetailsActivity.ERROR_MESSAGE, message);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+		return updateViews;
+
     }
     
     private RemoteViews unconfiguredRemoteViews(PreferencesData prefData) {

@@ -46,6 +46,8 @@ THE SOFTWARE.
 		</activity>
 		
 	    <activity android:name="ReportAccountErrorActivity" android:noHistory="true"/>
+	    
+	    <activity android:name="AccountErrorDetailsActivity"/>
 
 		<activity android:name="com.github.ajasmin.telususageandroidwidget.HowToAddWidgetActivity">
 			<intent-filter>

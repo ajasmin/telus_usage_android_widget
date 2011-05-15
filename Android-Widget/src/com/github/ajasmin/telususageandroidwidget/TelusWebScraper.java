@@ -59,6 +59,13 @@ public class TelusWebScraper {
 	public static class InvalidCredentialsException extends Exception { }
 	
 	@SuppressWarnings("serial")
+	public static class AccountException extends Exception {
+		public AccountException(String string) {
+			super(string);
+		}
+	}
+	
+	@SuppressWarnings("serial")
 	public static class NetworkErrorException extends Exception {
 		public NetworkErrorException(String string, Throwable e) {
 			super(string, e);
@@ -72,7 +79,7 @@ public class TelusWebScraper {
 		}
 	}	
 
-	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException {
+	public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException, AccountException {
 		Context context = MyApp.getContext();
 		String fileName = Integer.toString(prefs.appWidgetId);
 		
@@ -103,6 +110,11 @@ public class TelusWebScraper {
 			
 		if (handler.isLoginError()) {
 			throw new InvalidCredentialsException();
+		}
+		
+		String accountError = handler.getAccountError();
+		if (accountError != null) {
+			throw new AccountException(accountError);
 		}
 		
 		return handler.getData();
