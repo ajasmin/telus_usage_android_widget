@@ -53,7 +53,7 @@ THE SOFTWARE.
     <string name="loading_message">Fetching Data...</string>
     
     <!-- Messages -->
-    <string name="widget_network_error">Error retrieving Telus data.\n\nUnable to connect</string>
+    <string name="widget_network_error">Error.\n\nUnable to connect</string>
     <string name="widget_network_error_tap">Tap to retry now</string>
     <string name="widget_invalid_credentials_error">Invalid email or password</string>
     <string name="widget_invalid_credentials_tap">Tap to change</string>
