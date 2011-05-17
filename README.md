@@ -41,6 +41,12 @@ Source code
 
       Server that receive error reports. Runs on App Engine for Java
 
+
+ - Error-Report-Downloader/
+
+      Client app for retriving the reports stored on App Engine
+
+
 Both of these include an Eclipse project.
 
 
