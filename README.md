@@ -47,7 +47,7 @@ Source code
       Client app for retriving the reports stored on App Engine
 
 
-Both of these include an Eclipse project.
+All of these include an Eclipse project.
 
 
 Installing
