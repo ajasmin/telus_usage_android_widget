@@ -12,7 +12,7 @@ Note that *Alexandre Jasmin* the author of this program **is not affiliated with
 Known issues
 ------------
 
-As of **May 19 2011** https://mobile.telus.com seems to be having issues. Users of this widget and myself have been
+ - As of **May 19 2011** https://mobile.telus.com seems to be having issues. Users of this widget and myself have been
 **unable to access the site** for a few days. This means that **the widget may not currently work**. The exact error
 message seems to vary but often states that *"usage information is currently unavailable"*:
 
@@ -21,16 +21,16 @@ message seems to vary but often states that *"usage information is currently una
 **Please make sure that you can access the site before installing this widget and feel free to email me if you have information
 about this issue.**
 
+ - Accounts with more than one phone are not currently supported [Issue 1][3]
 
-
-With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
+ - With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
 after the bonus minutes are depleted. As far as I can tell usage of these initial bonus minutes is not reported
 anywhere on the Telus website.
 
-Since the author of this program doesn't have access to all types of Telus Mobility accounts the widget may not
+ - Since the author of this program doesn't have access to all types of Telus Mobility accounts the widget may not
 work in some cases. If the data from the website is not recognized you will be given the option to review and
 securely send a copy of your account data to the author for review. You can also contact the author
-alexandre.jasmin@gmail.com or [report an issue][3] on github.
+alexandre.jasmin@gmail.com or [report an issue][4] on github.
 
 
 Screenshots
@@ -64,7 +64,7 @@ All of these include an Eclipse project.
 Installing
 ----------
 
-You can obtain a copy from the [download section on github][4] or buy it for a dollar on the [Android Market][5].
+You can obtain a copy from the [download section on github][5] or buy it for a dollar on the [Android Market][6].
 
 Scan this QR Code to download the current version directly:
 *Note: Your phone must be configured to accept downloads from unknown sources*:
@@ -79,6 +79,7 @@ Scan this QR Code to buy the Widget on the Android Market (and get notified of f
 
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
-  [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
-  [4]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
-  [5]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
+  [3]: https://github.com/ajasmin/telus_usage_android_widget/issues/1
+  [4]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
+  [5]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
+  [6]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
