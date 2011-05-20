@@ -21,6 +21,9 @@ message seems to vary but often states that *"usage information is currently una
 **Please make sure that you can access the site before installing this widget and feel free to email me if you have information
 about this issue.**
 
+ - Beta-3 has issues with more than one widget instance and breaks compatibility with Android < 2.0
+fixes are committed but I'm waiting for the service to come back online before uploading a new build.
+
  - Accounts with more than one phone are not currently supported [Issue 1][3]
 
  - With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
