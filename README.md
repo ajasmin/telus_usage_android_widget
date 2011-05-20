@@ -44,7 +44,7 @@ Source code
 
  - Error-Report-Downloader/
 
-      Client app for retriving the reports stored on App Engine
+      Client app for retrieving the reports stored on App Engine
 
 
 All of these include an Eclipse project.
