@@ -12,6 +12,17 @@ Note that *Alexandre Jasmin* the author of this program **is not affiliated with
 Known issues
 ------------
 
+As of **May 19 2011** https://mobile.telus.com seems to be having issues. Users of this widget and myself have been
+**unable to access the site** for a few days. This means that **the widget may not currently work**. The exact error
+message seems to vary but often states that *"usage information is currently unavailable"*:
+
+![site error](https://github.com/ajasmin/telus_usage_android_widget/raw/master/media/currently_unavailable.png)
+
+**Please make sure that you can access the site before installing this widget and feel free to email me if you have information
+about this issue.**
+
+
+
 With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
 after the bonus minutes are depleted. As far as I can tell usage of these initial bonus minutes is not reported
 anywhere on the Telus website.
