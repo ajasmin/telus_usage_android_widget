@@ -81,14 +81,4 @@ THE SOFTWARE.
     
     <string name="not_configured">Not configured</string>
     <string name="tap">Tap</string>
-    
-    <!--  AccountErrorDetailsActivity -->
-    <string name="account_error_details1">There was an error accessing the Telus website:</string>
-    <string name="account_error_details2">This may be a temporary problem with the site or an issue with your account.</string>
-    <string name="account_error_details3">If you were able to use this widget previously it should work again soon. If not make sure you can access the site directly by using the link bellow.</string>
-    <string name="account_error_details4">You may have to wait a bit after making a few unsuccessful login attempts.</string>
-    <string name="open_site">Open https://mobile.telus.com in the browser</string>
-    <string name="refresh_widget">Refresh the widget now</string>
-    <string name="email_developer">Email the widget developer</string>
-    <string name="leave_screen">Leave this screen</string>
 </resources>

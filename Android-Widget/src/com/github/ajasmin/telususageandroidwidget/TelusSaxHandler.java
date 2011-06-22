@@ -39,7 +39,6 @@ public class TelusSaxHandler extends DefaultHandler2 {
 	private boolean isLoginError;
 	
     private StringBuilder builder;
-	private String accountError;
 
 	@Override
 	public void startDocument() throws SAXException {
@@ -67,10 +66,6 @@ public class TelusSaxHandler extends DefaultHandler2 {
 		} else if (localName.equals("div")) {
 			if (trimedText.equals("The email or password you entered is invalid.  Please try again.")) {
 				isLoginError = true;
-			} else if (trimedText.equals("There is a problem with your telusmobility.com account. Please call TELUS Mobility Client Care at phone number at 1 877 735 7171.")) {
-				accountError = trimedText;
-			} else if (trimedText.equals("Problem with login")) {
-				accountError = trimedText;
 			}
 		} else if (localName.equals("td")) {
 			columns.add(trimedText);
@@ -99,9 +94,5 @@ public class TelusSaxHandler extends DefaultHandler2 {
     
     public boolean isLoginError() {
     	return isLoginError;
-    }
-    
-    public String getAccountError() {
-    	return accountError;
     }
 }
