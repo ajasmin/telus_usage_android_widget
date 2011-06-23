@@ -23,6 +23,7 @@
 package com.github.ajasmin.telususageandroidwidget;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -53,9 +54,11 @@ public class HowToAddWidgetActivity extends Activity {
 		TextView howToAddText = (TextView) findViewById(R.id.how_to_add_text);
         howToAddText.setText(Html.fromHtml(getString(R.string.how_to_add)));
         
-        Button okButton = (Button) findViewById(R.id.ok_button);
+        Button okButton = (Button) findViewById(R.id.return_to_home_button);
         okButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) {
-        	finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
 		}});
         
         animated_image = (ImageView) findViewById(R.id.animated_image);

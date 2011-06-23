@@ -46,8 +46,8 @@ THE SOFTWARE.
 	android:layout_height="54dip" 
 	android:layout_alignParentBottom="true"
 	android:background="@android:drawable/bottom_bar">
-		<Button android:id="@+id/ok_button" android:text="OK"
-		android:layout_width="150dp" android:layout_height="wrap_content"
+		<Button android:id="@+id/return_to_home_button" android:text="@string/return_to_home_screen"
+		android:layout_width="200dp" android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_centerVertical="true" />
 	</RelativeLayout>
