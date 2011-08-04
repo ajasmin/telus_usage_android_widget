@@ -9,6 +9,11 @@ Touching the widget opens your account in the browser.
 Note that *Alexandre Jasmin* the author of this program **is not affiliated with Telus in any way.**
 
 
+Please DO NOT PURCHASE THIS APP right now
+-----------------------------------------
+
+**As of 3 Aug 2011 the site https://mobile.telus.com is down and the widget CAN'T LOG IN ON THE SITE. I can't do anything about it. Call Telus if you want them to fix the problem.** 
+
 Known issues
 ------------
 
