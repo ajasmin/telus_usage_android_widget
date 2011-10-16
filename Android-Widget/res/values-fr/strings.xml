@@ -24,35 +24,35 @@ THE SOFTWARE.
 <resources>
     <string name="app_name">Widget Sommaire de l\'utilisation Telus</string>
     <string name="widget_name">Sommaire de l\'utilisation Telus</string>
-    
+
     <string name="widget_title">USAGE TELUS</string>
-    
+
     <string name="how_to_add">
-    	&lt;p&gt;Ceci n\'est pas une application mais un &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp; qui peut être ajouté à votre écran d\'accueil. Pour l\'ajouter:&lt;/p&gt;
-    	&lt;p&gt;\u2022 Appuyer longuement sur le fond de l\'écran d\'accueil pour ouvrir le menu &lt;i&gt;\"Ajouter à l\'écran d\'accueil\"&lt;/i&gt;&amp;nbsp;&lt;/p&gt;
-		&lt;p&gt;\u2022 A partir de ce menu, sélectionnez:&lt;br&gt;
-		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
-		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Sommaire de l\'utilisation Telus&lt;/p&gt;
-		&lt;p&gt;\u2022 Entrez les détails de votre compte TELUS&lt;/p&gt;
-		&lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
-	</string>
-	<string name="return_to_home_screen">Retourer à l\'écran d\'accueil</string>
-    
+        &lt;p&gt;Ceci n\'est pas une application mais un &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp; qui peut être ajouté à votre écran d\'accueil. Pour l\'ajouter:&lt;/p&gt;
+        &lt;p&gt;\u2022 Appuyer longuement sur le fond de l\'écran d\'accueil pour ouvrir le menu &lt;i&gt;\"Ajouter à l\'écran d\'accueil\"&lt;/i&gt;&amp;nbsp;&lt;/p&gt;
+        &lt;p&gt;\u2022 A partir de ce menu, sélectionnez:&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Sommaire de l\'utilisation Telus&lt;/p&gt;
+        &lt;p&gt;\u2022 Entrez les détails de votre compte TELUS&lt;/p&gt;
+        &lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
+    </string>
+    <string name="return_to_home_screen">Retourer à l\'écran d\'accueil</string>
+
     <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>
     <string name="airtime_remaining">%1$s/%2$s left</string>
     <string name="airtime_chargeable">Facturées: %s</string>
     <string name="data_label">\u2022 DATA</string>
     <string name="text_label">\u2022 TEXTO</string>
-    
-	<!-- Calling cards layout -->
-	<string name="current_balance_label">\u2022 SOLDE</string>
+
+    <!-- Calling cards layout -->
+    <string name="current_balance_label">\u2022 SOLDE</string>
     <string name="balance_expires_label">\u2022 EXPIRATION</string>
-   
+
     <!-- Loading -->
     <string name="loading_title">LOADING</string>
     <string name="loading_message">Charge les données...</string>
-    
+
     <!-- Messages -->
     <string name="widget_network_error">Erreur.\n\nServeur Telus injoignable</string>
     <string name="widget_network_error_tap">Touchez pour réessayer</string>
@@ -60,7 +60,7 @@ THE SOFTWARE.
     <string name="widget_invalid_credentials_tap">Touchez pour changer</string>
     <string name="widget_parse_credentials_error">Impossible d\'afficher les données.</string>
     <string name="widget_parse_credentials_tap">Appuyez pour plus d\'infos</string>
-    
+
     <!-- Configure Activity -->
     <string name="enter_credentials">Entrez l\'adresse email et le mot de passe que vous utilisez pour vous connecter au site web de Telus Mobilité.</string>
     <string name="email_address">Email Address</string>
@@ -77,8 +77,8 @@ THE SOFTWARE.
     <string name="unable_to_send_data">Impossible d\'envoyer les données</string>
     <string name="report_sent">Rapport envoyé</string>
     <string name="okay">Okay</string>
-    
-    
+
+
     <string name="not_configured">Non configuré</string>
     <string name="tap">Appuyez</string>
 </resources>

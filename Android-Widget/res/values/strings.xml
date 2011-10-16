@@ -24,35 +24,35 @@ THE SOFTWARE.
 <resources>
     <string name="app_name">Telus usage summary widget</string>
     <string name="widget_name">Telus usage summary</string>
-    
+
     <string name="widget_title">TELUS USAGE</string>
-    
+
     <string name="how_to_add">
-    	&lt;p&gt;This is not an application but a &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp;that can be added to your home screen. In order to add it:&lt;/p&gt;
-    	&lt;p&gt;\u2022 Long press the home screen background to open the &lt;i&gt;\"Add to home screen\"&lt;/i&gt;&amp;nbsp;&amp;nbsp;menu&lt;/p&gt;
-		&lt;p&gt;\u2022 From this menu select:&lt;br&gt;
-		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
-		&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Telus Usage Summary&lt;/p&gt;
-		&lt;p&gt;\u2022 Enter your Telus account details&lt;/p&gt;
-		&lt;b&gt;Video Demonstration:&lt;/b&gt;&lt;br&gt;
-	</string>
-	<string name="return_to_home_screen">Return to Home Screen</string>
-    
+        &lt;p&gt;This is not an application but a &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp;that can be added to your home screen. In order to add it:&lt;/p&gt;
+        &lt;p&gt;\u2022 Long press the home screen background to open the &lt;i&gt;\"Add to home screen\"&lt;/i&gt;&amp;nbsp;&amp;nbsp;menu&lt;/p&gt;
+        &lt;p&gt;\u2022 From this menu select:&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Widgets&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Telus Usage Summary&lt;/p&gt;
+        &lt;p&gt;\u2022 Enter your Telus account details&lt;/p&gt;
+        &lt;b&gt;Video Demonstration:&lt;/b&gt;&lt;br&gt;
+    </string>
+    <string name="return_to_home_screen">Return to Home Screen</string>
+
     <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>
     <string name="airtime_remaining">%1$s/%2$s left</string>
     <string name="airtime_chargeable">Charged: %s</string>
     <string name="data_label">\u2022 DATA</string>
     <string name="text_label">\u2022 TEXT</string>
-    
-	<!-- Calling cards layout -->
-	<string name="current_balance_label">\u2022 BALANCE</string>
+
+    <!-- Calling cards layout -->
+    <string name="current_balance_label">\u2022 BALANCE</string>
     <string name="balance_expires_label">\u2022 EXPIRES</string>
-   
+
     <!-- Loading -->
     <string name="loading_title">LOADING</string>
     <string name="loading_message">Fetching Data...</string>
-    
+
     <!-- Messages -->
     <string name="widget_network_error">Error.\n\nUnable to connect</string>
     <string name="widget_network_error_tap">Tap to retry now</string>
@@ -60,7 +60,7 @@ THE SOFTWARE.
     <string name="widget_invalid_credentials_tap">Tap to change</string>
     <string name="widget_parse_credentials_error">Unable to display your usage data.</string>
     <string name="widget_parse_credentials_tap">Tap for more info</string>
-    
+
     <!-- Configure Activity -->
     <string name="enter_credentials">Enter the email address and password that you use to log on to the Telus Mobility website.</string>
     <string name="email_address">Email Address</string>
@@ -77,9 +77,9 @@ THE SOFTWARE.
     <string name="unable_to_send_data">Unable to send data</string>
     <string name="report_sent">Report sent</string>
     <string name="okay">Okay</string>
-    
-    
-    
+
+
+
     <string name="not_configured">Not configured</string>
     <string name="tap">Tap</string>
 </resources>

@@ -26,10 +26,10 @@ THE SOFTWARE.
     <style name="WidgetBackground">
         <item name="android:background">@drawable/background</item>
     </style>
-    
+
     <style name="Text">
     </style>
-    
+
     <style name="Text.Message">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@android:color/black</item>
@@ -53,12 +53,12 @@ THE SOFTWARE.
         <item name="android:textColor">@color/telus_violet</item>
         <item name="android:typeface">sans</item>
     </style>
-    
+
     <style name="Text.Data">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
-    
+
     <style name="Text.SmallPrint">
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">#cccccc</item>

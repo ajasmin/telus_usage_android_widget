@@ -28,28 +28,28 @@ THE SOFTWARE.
     android:padding="3dip"
     android:focusable="true"
     style="@style/WidgetBackground">
-    
+
     <TextView
         android:id="@+id/widget_title"
         android:text="@string/widget_title"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         style="@style/Text.WidgetTitle" />
-    
+
     <TextView
         android:id="@+id/voice_label"
         android:text="@string/voice_label"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_title"
         style="@style/Text.Label" />
-    
+
     <TextView
         android:id="@+id/airtime_remaining"
         android:text="@string/airtime_remaining"
         android:includeFontPadding="false"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/voice_label"
@@ -58,7 +58,7 @@ THE SOFTWARE.
     <TextView
         android:id="@+id/airtime_chargeable"
         android:text="@string/airtime_chargeable"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/airtime_remaining"
@@ -67,17 +67,17 @@ THE SOFTWARE.
     <TextView
         android:id="@+id/data_label"
         android:text="@string/data_label"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
         android:layout_toRightOf="@id/text_label"
         android:layout_alignBaseline="@id/text_label"
         style="@style/Text.Label" />
-        
+
     <TextView
         android:id="@+id/data"
-		android:includeFontPadding="false"
-        android:layout_width="wrap_content" 
+        android:includeFontPadding="false"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_alignLeft="@id/data_label"
@@ -86,33 +86,33 @@ THE SOFTWARE.
 
     <TextView
         android:id="@+id/data_amount"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_alignLeft="@id/data_label"
         android:layout_alignBaseline="@id/text_amount"
         android:layout_below="@id/data"
-        style="@style/Text.Data" />        
+        style="@style/Text.Data" />
 
     <TextView
         android:id="@+id/text_label"
         android:text="@string/text_label"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/text_label"
         style="@style/Text.Data" />
-         
+
     <TextView
         android:id="@+id/text_amount"
-        android:layout_width="wrap_content" 
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/text"
