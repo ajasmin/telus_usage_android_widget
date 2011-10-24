@@ -86,8 +86,9 @@ public class TelusWebScraper {
             summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
         } catch (FileNotFoundException e) { throw new Error(e); }
 
-        // Just strip ampersands from input. We don't care about the
-        // parts of the document containing character entities anyways
+        // The HTML is valid XHTML except for that one ampersand (&)
+        // So we just strip out ampersands from the file. We don't care
+        // about the parts of the document containing character entities anyways.
         InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
 
         TelusSaxHandler handler = new TelusSaxHandler();
@@ -164,8 +165,7 @@ public class TelusWebScraper {
             HttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
 
-            // Save the page so that we can report errors later on
-            // or use a cached version
+            // Save the page to disk
             String fileName = Integer.toString(prefs.appWidgetId);
             FileOutputStream fileOutput = MyApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             responseEntity.writeTo(fileOutput);
