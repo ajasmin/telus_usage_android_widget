@@ -22,12 +22,14 @@
 
 package com.github.ajasmin.telususageandroidwidget;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,19 +83,21 @@ public class TelusWebScraper {
                         fetchFromTelusSite(prefs);
         }
 
-        InputStream summaryHtmlStream;
+        String usageData;
         try {
-            summaryHtmlStream = MyApp.getContext().openFileInput(fileName);
-        } catch (FileNotFoundException e) { throw new Error(e); }
+            Reader rdr = new InputStreamReader(MyApp.getContext().openFileInput(fileName), Charset.forName("UTF-8"));
+            usageData = Util.readString(rdr);
+        } catch (Exception e) { throw new Error(e); }
 
-        // The HTML is valid XHTML except for that one ampersand (&)
-        // So we just strip out ampersands from the file. We don't care
-        // about the parts of the document containing character entities anyways.
-        InputStream stripAmpersandsInputStream = new StripAmpersandInputStream(summaryHtmlStream);
+
+        // Remove char entities we don't care about
+        usageData = usageData.replaceAll("&bull;", "");
+
+        // The HTML is valid XHTML except for that one ampersand (&). Remove it
+        usageData = usageData.replaceAll("&", "");
 
         TelusSaxHandler handler = new TelusSaxHandler();
-        InputSource inputSource = new InputSource(stripAmpersandsInputStream);
-        inputSource.setEncoding("UTF-8");
+        InputSource inputSource = new InputSource(new StringReader(usageData));
 
         SAXParser parser = getSAXParserInstance();
         try {

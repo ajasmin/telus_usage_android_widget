@@ -25,6 +25,7 @@ package com.github.ajasmin.telususageandroidwidget;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 public class Util {
     public static byte[] readStream(InputStream in) throws IOException {
@@ -32,8 +33,18 @@ public class Util {
         byte[] buf = new byte[1024];
         int count;
         while ((count = in.read(buf)) > 0)
-                byteArrayOutputStream.write(buf, 0, count);
+            byteArrayOutputStream.write(buf, 0, count);
         in.close();
         return byteArrayOutputStream.toByteArray();
+    }
+
+    public static String readString(Reader rdr) throws IOException {
+        StringBuffer buffer = new StringBuffer();
+        char[] buf = new char[1024];
+        int count;
+        while ((count = rdr.read(buf)) > 0)
+            buffer.append(buf, 0, count);
+        rdr.close();
+        return buffer.toString();
     }
 }
