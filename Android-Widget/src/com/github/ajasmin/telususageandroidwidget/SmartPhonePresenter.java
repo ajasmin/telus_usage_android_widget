@@ -68,7 +68,6 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> dataUsage = data.get("Data Usage");
             String usage = dataUsage.get("Usage");
-            usage = usage.replace("Kilobytes", "K");
             String amount = dataUsage.get("Amount");
 
             updateViews.setTextViewText(R.id.data, usage);
