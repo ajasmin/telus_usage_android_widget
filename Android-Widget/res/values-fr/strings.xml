@@ -51,7 +51,7 @@ THE SOFTWARE.
 
     <!-- Loading -->
     <string name="loading_title">LOADING</string>
-    <string name="loading_message">Charge les données...</string>
+    <string name="loading_message">Charge les données&#8230;</string>
 
     <!-- Messages -->
     <string name="widget_network_error">Erreur.\n\nServeur Telus injoignable</string>
@@ -73,7 +73,7 @@ THE SOFTWARE.
     <string name="i_agree_to_send">Je suis d\'accord pour envoyer les informations ci-dessus à l\'auteur du widget via une connexion sécurisée HTTPS.</string>
     <string name="cancel">Annuler</string>
     <string name="send_data">Envoyer les informations ci-dessus</string>
-    <string name="sending_data">Envoi de données en cours...</string>
+    <string name="sending_data">Envoi de données en cours&#8230;</string>
     <string name="unable_to_send_data">Impossible d\'envoyer les données</string>
     <string name="report_sent">Rapport envoyé</string>
     <string name="okay">Okay</string>

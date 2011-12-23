@@ -51,7 +51,7 @@ THE SOFTWARE.
 
     <!-- Loading -->
     <string name="loading_title">LOADING</string>
-    <string name="loading_message">Fetching Data...</string>
+    <string name="loading_message">Fetching Data&#8230;</string>
 
     <!-- Messages -->
     <string name="widget_network_error">Error.\n\nUnable to connect</string>
@@ -73,7 +73,7 @@ THE SOFTWARE.
     <string name="i_agree_to_send">I agree to send the information above to the widget author through a secure HTTPS connection.</string>
     <string name="cancel">Cancel</string>
     <string name="send_data">Send the information above</string>
-    <string name="sending_data">Sending data...</string>
+    <string name="sending_data">Sending data&#8230;</string>
     <string name="unable_to_send_data">Unable to send data</string>
     <string name="report_sent">Report sent</string>
     <string name="okay">Okay</string>
