@@ -48,7 +48,7 @@ public class TelusWidgetUpdateService<E> extends Service {
     private static final String ACTION_UPDATE_WIDGET
             = MyApp.getContext().getPackageName()+".UPDATE_WIDGET";
 
-    private Map<Integer, Thread> widgetThreads = new HashMap<Integer, Thread>();
+    private final Map<Integer, Thread> widgetThreads = new HashMap<Integer, Thread>();
     private int lastTaskId;
     private int taskCount = 0;
 
@@ -97,7 +97,7 @@ public class TelusWidgetUpdateService<E> extends Service {
         Map<String, Map<String, String>> data = null;
         try {
             // Try fetching data from https://mobile.telus.com
-            data = TelusWebScraper.retriveUsageSummaryData(prefData);
+            data = TelusWebScraper.retriveUsageSummaryData(prefData.appWidgetId);
         } catch (TelusWebScraper.InvalidCredentialsException e) {
             Log.e("TelusWebScraper", "Invalid credentials for " + prefData.email, e);
 

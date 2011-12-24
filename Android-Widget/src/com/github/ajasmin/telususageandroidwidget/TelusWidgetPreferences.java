@@ -30,12 +30,21 @@ public class TelusWidgetPreferences {
         public int appWidgetId;
         public String email;
         public String password;
+        public String subscriber;
         public long lastUpdateTime;
 
         public void markAsUpdatedNow() {
             lastUpdateTime = System.currentTimeMillis();
+            save();
+        }
+
+        public void save() {
             Context context = MyApp.getContext();
             SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
+            prefs.putString(appWidgetId + "_email", email);
+            String obfuscatedPassword = PasswordObfuscator.obfuscate(password);
+            prefs.putString(appWidgetId + "_password", obfuscatedPassword);
+            prefs.putString(appWidgetId + "_subscriber", subscriber);
             prefs.putLong(appWidgetId + "_lastUpdateTime", lastUpdateTime);
             prefs.commit();
         }
@@ -51,11 +60,12 @@ public class TelusWidgetPreferences {
         String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
         if (obfuscatedPassword != null)
             prefData.password = PasswordObfuscator.unobfuscate(obfuscatedPassword);
+        prefData.subscriber = prefs.getString(appWidgetId + "_subscriber", null);
         prefData.lastUpdateTime = prefs.getLong(appWidgetId + "_lastUpdateTime", 0);
         return prefData;
     }
 
-    public static void savePreferences(int appWidgetId, String email, String password) {
+    public static void createPreferences(int appWidgetId, String email, String password) {
         Context context = MyApp.getContext();
         SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
         prefs.putString(appWidgetId + "_email", email);
@@ -69,6 +79,7 @@ public class TelusWidgetPreferences {
         SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
         prefs.remove(appWidgetId + "_email");
         prefs.remove(appWidgetId + "_password");
+        prefs.remove(appWidgetId + "_subscriber");
         prefs.remove(appWidgetId + "_lastUpdateTime");
         prefs.commit();
     }

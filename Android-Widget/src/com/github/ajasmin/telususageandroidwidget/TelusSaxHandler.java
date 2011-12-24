@@ -54,32 +54,44 @@ public class TelusSaxHandler extends DefaultHandler2 {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         builder.setLength(0);
+
+        if (localName.equals("select") && "subscriber".equals(attributes.getValue("", "name"))) {
+            currentHeading = "subscribers";
+        }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         String trimedText = builder.toString().trim();
-        if (localName.equals("b")) {
-            currentHeading = trimedText;
-        } else if (localName.equals("table")) {
-            currentHeading = "";
-        } else if (localName.equals("div")) {
+        if (localName.equals("div")) {
             if (trimedText.equals("The email or password you entered is invalid.  Please try again.")) {
                 isLoginError = true;
             }
+        } else if (localName.equals("b")) {
+            currentHeading = trimedText;
         } else if (localName.equals("td")) {
             columns.add(trimedText);
         } else if (localName.equals("tr")) {
             if (columns.size() > 0) {
-                Map<String, String> underHeading = data.get(currentHeading);
-                if (underHeading == null) {
-                    underHeading = new HashMap<String, String>();
-                    data.put(currentHeading, underHeading);
-                }
-                underHeading.put(columns.get(0), columns.size() > 1 ? columns.get(1) : "");
+                addData(columns.get(0), columns.size() > 1 ? columns.get(1) : "");
             }
             columns.clear();
+        } else if (currentHeading.equals("subscribers")) {
+            if (localName.equals("option")) {
+                addData(trimedText, trimedText);
+            } else if (localName.equals("select")) {
+                currentHeading = "";
+            }
         }
+    }
+
+    private void addData(String k, String v) {
+        Map<String, String> underHeading = data.get(currentHeading);
+        if (underHeading == null) {
+            underHeading = new HashMap<String, String>();
+            data.put(currentHeading, underHeading);
+        }
+        underHeading.put(k, v);
     }
 
     @Override

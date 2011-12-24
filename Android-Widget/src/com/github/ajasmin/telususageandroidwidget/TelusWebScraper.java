@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +38,11 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ProtocolException;
-import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HttpContext;
 import org.xml.sax.InputSource;
 
 import android.content.Context;
@@ -74,9 +69,11 @@ public class TelusWebScraper {
         }
     }
 
-    public static Map<String, Map<String, String>> retriveUsageSummaryData(PreferencesData prefs) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException {
+    public static Map<String, Map<String, String>> retriveUsageSummaryData(int appWidgetId) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException {
         Context context = MyApp.getContext();
-        String fileName = Integer.toString(prefs.appWidgetId);
+        String fileName = "" + appWidgetId;
+
+        TelusWidgetPreferences.PreferencesData prefs = TelusWidgetPreferences.getPreferences(appWidgetId);
 
         if (!context.getFileStreamPath(fileName).exists() ||
                 System.currentTimeMillis() - prefs.lastUpdateTime > CACHE_LIFETIME) {
@@ -115,15 +112,15 @@ public class TelusWebScraper {
 
     private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException {
         final DefaultHttpClient httpclient = new DefaultHttpClient();
-        enableAuto302Redirects(httpclient);
-
+        logIn(httpclient, prefs);
         fetchUsageSummaryPage(httpclient, prefs);
 
         prefs.markAsUpdatedNow();
 
         // Log out to avoid session limit
         // on background thread to avoid extra delay
-        new Thread(new Runnable() { public void run() {
+        new Thread(new Runnable() { @Override
+        public void run() {
             try {
                 fetchLogOutPage(httpclient);
                 Log.i("TelusWebScraper", "Logged out " + prefs.email);
@@ -133,26 +130,7 @@ public class TelusWebScraper {
         }}).run();
     }
 
-    private static void enableAuto302Redirects(DefaultHttpClient httpclient) {
-        httpclient.setRedirectHandler(new RedirectHandler() {
-            @Override
-            public boolean isRedirectRequested(HttpResponse response, HttpContext context) {
-                if (response.getStatusLine().getStatusCode() == 302)
-                    return true;
-                return false;
-            }
-            @Override
-            public URI getLocationURI(HttpResponse response, HttpContext context) throws ProtocolException {
-                try {
-                    return new URI(response.getFirstHeader("Location").getValue());
-                } catch (URISyntaxException e) {
-                    throw new Error(e);
-                }
-            }
-        });
-    }
-
-    private static void fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException {
+    private static void logIn(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException {
         try {
             final String url = "https://mobile.telus.com/login.htm";
             HttpPost httpPost = new HttpPost(url);
@@ -162,6 +140,27 @@ public class TelusWebScraper {
             formparams.add(new BasicNameValuePair("password", prefs.password));
             formparams.add(new BasicNameValuePair("_rememberMe", "on"));
             formparams.add(new BasicNameValuePair("forwardAction", "/index.htm?lang=en"));
+
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
+            httpPost.setEntity(entity);
+
+            HttpResponse response = httpclient.execute(httpPost);
+            HttpEntity responseEntity = response.getEntity();
+            responseEntity.getContent().close();
+        } catch (IOException e) {
+            throw new NetworkErrorException("Error logging in", e);
+        }
+    }
+
+    private static void fetchUsageSummaryPage(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException {
+        try {
+            final String url = "https://mobile.telus.com/index.htm";
+            HttpPost httpPost = new HttpPost(url);
+
+            List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+            if (prefs.subscriber != null) {
+                formparams.add(new BasicNameValuePair("subscriber", prefs.subscriber));
+            }
 
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, "UTF-8");
             httpPost.setEntity(entity);
