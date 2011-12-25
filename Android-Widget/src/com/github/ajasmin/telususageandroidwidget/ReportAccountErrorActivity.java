@@ -28,8 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
@@ -60,8 +58,8 @@ public class ReportAccountErrorActivity extends Activity {
     static private class PostDataThread extends Thread {
         public InputStream dataStream;
 
-        public AtomicReference<Handler> postCompletedHandler = new AtomicReference<Handler>();
-        public AtomicInteger result = new AtomicInteger(POST_IN_PROGRESS);
+        public volatile Handler postCompletedHandler;
+        public volatile int result = POST_IN_PROGRESS;
         @Override
         public void run() {
             final DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -75,8 +73,8 @@ public class ReportAccountErrorActivity extends Activity {
                 r = POST_ERROR;
             }
 
-            result.set(r);
-            Handler handler = postCompletedHandler.get();
+            result = r;
+            Handler handler = postCompletedHandler;
             if (handler != null)
                 handler.sendEmptyMessage(0);
         }
@@ -192,16 +190,16 @@ public class ReportAccountErrorActivity extends Activity {
                 showPostState();
             }
         };
-        postDataThread.postCompletedHandler.set(handler);
+        postDataThread.postCompletedHandler = handler;
     }
 
     private void unregisterPostCompletedHandler() {
         if (postDataThread != null)
-            postDataThread.postCompletedHandler.set(null);
+            postDataThread.postCompletedHandler = null;
     }
 
     private void showPostState() {
-        switch (postDataThread.result.get()) {
+        switch (postDataThread.result) {
             case POST_IN_PROGRESS:
                 if (progressDialog == null) {
                     progressDialog = ProgressDialog.show(this, null, getString(R.string.sending_data));
