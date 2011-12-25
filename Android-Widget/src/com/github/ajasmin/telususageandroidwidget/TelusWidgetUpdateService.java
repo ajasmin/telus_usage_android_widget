@@ -39,6 +39,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -126,10 +127,34 @@ public class TelusWidgetUpdateService<E> extends Service {
         RemoteViews updateViews = dataPresenter.buildUpdate(this, data);
 
         // When user clicks on widget, visit mobile.telus.com
-        String uriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
-        String uri = String.format(uriTemplate, Uri.encode(prefData.email), Uri.encode(prefData .password));
+        String loginUriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
+        String loginUri = String.format(loginUriTemplate, Uri.encode(prefData.email), Uri.encode(prefData .password));
+
+        String uri;
+        if (prefData.subscriber != null) {
+            // Trick to login and redirect to the proper subscriber page
+            String indexUri = "https://mobile.telus.com/index.htm?subscriber=" + Uri.encode(prefData.subscriber);
+            String htmlTemplate = "<iframe src=\"%s\" onload=\"location.href=%s\" width=\"0\" height=\"0\" style=\"border: 0\"></iframe>"
+                    + "Please wait&#133;";
+            try {
+                String html = String.format(htmlTemplate, TextUtils.htmlEncode(loginUri), TextUtils.htmlEncode(JS.string(indexUri)));
+                uri = "data:text/html;charset=UTF-8;base64," + Base64.encodeBytes(html.getBytes("UTF-8"));
+
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        } else {
+            uri = loginUri;
+        }
+
         Log.i("TELUS_URL", uri);
-        Intent defineIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+
+
+        Intent defineIntent = new Intent();
+        defineIntent.setData(Uri.parse(uri));
+        defineIntent.setAction(Intent.ACTION_VIEW);
+        defineIntent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
         return updateViews;
