@@ -43,6 +43,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.xml.sax.InputSource;
 
 import android.content.Context;
@@ -103,14 +104,10 @@ public class TelusWebScraper {
             throw new ParsingDataException("Error parsing data", e);
         }
 
-        if (handler.isLoginError()) {
-            throw new InvalidCredentialsException();
-        }
-
         return handler.getData();
     }
 
-    private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException {
+    private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException, InvalidCredentialsException {
         final DefaultHttpClient httpclient = new DefaultHttpClient();
         logIn(httpclient, prefs);
         fetchUsageSummaryPage(httpclient, prefs);
@@ -130,7 +127,7 @@ public class TelusWebScraper {
         }}).run();
     }
 
-    private static void logIn(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException {
+    private static void logIn(DefaultHttpClient httpclient, PreferencesData prefs) throws NetworkErrorException, InvalidCredentialsException {
         try {
             final String url = "https://mobile.telus.com/login.htm";
             HttpPost httpPost = new HttpPost(url);
@@ -146,7 +143,10 @@ public class TelusWebScraper {
 
             HttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
-            responseEntity.getContent().close();
+            String str = new String(EntityUtils.toByteArray(responseEntity), "UTF-8");
+            if (str.contains("The email or password you entered is invalid.")) {
+                throw new InvalidCredentialsException();
+            }
         } catch (IOException e) {
             throw new NetworkErrorException("Error logging in", e);
         }

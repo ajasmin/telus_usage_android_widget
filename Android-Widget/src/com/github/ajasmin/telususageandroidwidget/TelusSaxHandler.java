@@ -36,8 +36,6 @@ public class TelusSaxHandler extends DefaultHandler2 {
     private List<String> columns;
     private String currentHeading;
 
-    private boolean isLoginError;
-
     private StringBuilder builder;
 
     @Override
@@ -45,8 +43,6 @@ public class TelusSaxHandler extends DefaultHandler2 {
         data = new HashMap<String, Map<String,String>>();
         columns = new ArrayList<String>();
         currentHeading = "";
-
-        isLoginError = false;
 
         builder = new StringBuilder();
     }
@@ -63,11 +59,7 @@ public class TelusSaxHandler extends DefaultHandler2 {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         String trimedText = builder.toString().trim();
-        if (localName.equals("div")) {
-            if (trimedText.equals("The email or password you entered is invalid.  Please try again.")) {
-                isLoginError = true;
-            }
-        } else if (localName.equals("b")) {
+        if (localName.equals("b")) {
             currentHeading = trimedText;
         } else if (localName.equals("td")) {
             columns.add(trimedText);
@@ -102,9 +94,5 @@ public class TelusSaxHandler extends DefaultHandler2 {
 
     public Map<String, Map<String, String>> getData() {
         return data;
-    }
-
-    public boolean isLoginError() {
-        return isLoginError;
     }
 }
