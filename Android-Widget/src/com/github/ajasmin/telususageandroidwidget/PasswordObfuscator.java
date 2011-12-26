@@ -48,6 +48,7 @@ public class PasswordObfuscator {
      * @return obfuscated password
      */
     public static String obfuscate(String password) {
+        if (password == null) {return null;}
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -65,6 +66,7 @@ public class PasswordObfuscator {
      * @return
      */
     public static String unobfuscate(String obfuscated) {
+        if (obfuscated == null) {return null;}
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
