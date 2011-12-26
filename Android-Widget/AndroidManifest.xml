@@ -23,8 +23,8 @@ THE SOFTWARE.
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.ajasmin.telususageandroidwidget"
-    android:versionCode="4"
-    android:versionName="BETA-4">
+    android:versionCode="5"
+    android:versionName="BETA-5">
 
     <supports-screens android:resizeable="true" android:smallScreens="true"
             android:normalScreens="true" android:largeScreens="true"
