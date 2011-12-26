@@ -279,6 +279,8 @@ public class ConfigureActivity extends Activity {
                         .setMessage(scraperThread.errorMessage)
                         .setCancelable(false)
                         .setPositiveButton(R.string.okay, new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
+                            TelusWidgetPreferences.deletePreferences(appWidgetId);
+
                             scraperThreadsMap.remove(appWidgetId);
                             dismissDialogs();
                         }})
