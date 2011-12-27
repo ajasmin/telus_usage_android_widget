@@ -9,27 +9,8 @@ Touching the widget opens your account in the browser.
 Note that *Alexandre Jasmin* the author of this program **is not affiliated with Telus in any way.**
 
 
-Please DO NOT INSTALL THIS APP right now
-----------------------------------------
-
-**As of 3 Aug 2011 the site https://mobile.telus.com is down and the widget CAN'T LOG IN ON THE SITE. I can't do anything about it. Call Telus if you want them to fix the problem.** 
-
 Known issues
 ------------
-
- - As of **May 19 2011** https://mobile.telus.com seems to be having issues. Users of this widget and myself have been
-**unable to access the site** for a few days. This means that **the widget may not currently work**. The exact error
-message seems to vary but often states that *"usage information is currently unavailable"*:
-
-![site error](https://github.com/ajasmin/telus_usage_android_widget/raw/master/media/currently_unavailable.png)
-
-**Please make sure that you can access the site before installing this widget and feel free to email me if you have information
-about this issue.**
-
- - Beta-3 has issues with more than one widget instance and breaks compatibility with Android < 2.0
-fixes are committed but I'm waiting for the service to come back online before uploading a new build.
-
- - Accounts with more than one phone are not currently supported [Issue 1][3]
 
  - With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
 after the bonus minutes are depleted. As far as I can tell usage of these initial bonus minutes is not reported
@@ -74,14 +55,15 @@ Installing
 
 You can obtain a copy from the [download section on github][5] or buy it for a dollar on the [Android Market][6].
 
+Scan this QR Code to install the Widget on the Android Market (and get notified of future updates):
+
+![QR Code Market](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
+
 Scan this QR Code to download the current version directly:
 *Note: Your phone must be configured to accept downloads from unknown sources*:
 
-![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-3.apk&chld=H|0)
+![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-5.apk&chld=H|0)
 
-Scan this QR Code to buy the Widget on the Android Market (and get notified of future updates):
-
-![QR Code Market](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
 
 
 
