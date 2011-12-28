@@ -19,7 +19,7 @@ anywhere on the Telus website.
  - Since the author of this program doesn't have access to all types of Telus Mobility accounts the widget may not
 work in some cases. If the data from the website is not recognized you will be given the option to review and
 securely send a copy of your account data to the author for review. You can also contact the author
-alexandre.jasmin@gmail.com or [report an issue][4] on github.
+alexandre.jasmin@gmail.com or [report an issue][3] on github.
 
 
 Screenshots
@@ -53,7 +53,7 @@ All of these include an Eclipse project.
 Installing
 ----------
 
-You can obtain a copy from the [download section on github][5] or buy it for a dollar on the [Android Market][6].
+You can obtain a copy from the [download section on github][4] or buy it for a dollar on the [Android Market][5].
 
 Scan this QR Code to install the Widget on the Android Market (and get notified of future updates):
 
@@ -69,7 +69,6 @@ Scan this QR Code to download the current version directly:
 
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
-  [3]: https://github.com/ajasmin/telus_usage_android_widget/issues/1
-  [4]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
-  [5]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
-  [6]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
+  [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
+  [4]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
+  [5]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
