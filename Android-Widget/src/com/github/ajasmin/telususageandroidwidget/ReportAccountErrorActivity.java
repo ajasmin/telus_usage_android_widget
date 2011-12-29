@@ -62,8 +62,11 @@ public class ReportAccountErrorActivity extends Activity {
         public volatile int result = POST_IN_PROGRESS;
         @Override
         public void run() {
+            String url = "https://telus-widget-error-reports.appspot.com/error_report"
+                    + "?versionCode=" + Util.getVersionCode();
+
             final DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("https://telus-widget-error-reports.appspot.com/error_report");
+            HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new InputStreamEntity(dataStream, -1));
 
             int r = POST_COMPLETE;

@@ -47,6 +47,13 @@ public class ErrorReportServlet extends HttpServlet {
         report.setProperty("html", postData);
         report.setProperty("timeStamp", new Date());
         report.setProperty("address", req.getRemoteAddr());
+        
+        String versionCodeStr = req.getParameter("versionCode");
+        int versionCode = 0;
+        if (versionCodeStr != null) {
+            versionCode = Integer.parseInt(versionCodeStr);
+        }
+        report.setProperty("versionCode", versionCode);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(report);
