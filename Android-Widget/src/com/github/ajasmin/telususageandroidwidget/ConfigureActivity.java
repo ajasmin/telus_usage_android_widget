@@ -56,7 +56,7 @@ public class ConfigureActivity extends Activity {
         public volatile Handler scraperCompletedHandler;
         public volatile int result = SCRAPE_IN_PROGRESS;
         public volatile Map<String, String> subscribers;
-        public volatile String errorMessage;
+        public volatile int errorMessageId;
         @Override
         public void run() {
             int r = SCRAPE_COMPLETE;
@@ -65,13 +65,13 @@ public class ConfigureActivity extends Activity {
                 subscribers = data.get("subscribers");
             } catch (TelusWebScraper.InvalidCredentialsException e) {
                 r = SCRAPE_ERROR;
-                errorMessage = "Invalid credentials";
+                errorMessageId = R.string.invalid_credentials;
             } catch (TelusWebScraper.NetworkErrorException e) {
                 r = SCRAPE_ERROR;
-                errorMessage = "Network error";
+                errorMessageId = R.string.network_error;
             } catch (TelusWebScraper.ParsingDataException e) {
                 r = SCRAPE_ERROR;
-                errorMessage = "There was an error";
+                errorMessageId = R.string.parsing_error;
             }
 
             result = r;
@@ -245,7 +245,7 @@ public class ConfigureActivity extends Activity {
         switch (scraperThread.result) {
             case SCRAPE_IN_PROGRESS:
                 if (progressDialog == null) {
-                    progressDialog = ProgressDialog.show(this, null, getString(R.string.loading_message));
+                    progressDialog = ProgressDialog.show(this, null, getString(R.string.configure_loading));
                 }
                 break;
             case SCRAPE_COMPLETE:
@@ -254,7 +254,7 @@ public class ConfigureActivity extends Activity {
                     if (pickSubscriberDialog == null) {
                         final String[] phoneNumbers = scraperThread.subscribers.values().toArray(new String[0]);
                         pickSubscriberDialog = new AlertDialog.Builder(this)
-                            .setTitle("Pick phone number")
+                            .setTitle(R.string.pick_phone_number)
                             .setCancelable(false)
                             .setItems(phoneNumbers,
                                     new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int item) {
@@ -276,7 +276,8 @@ public class ConfigureActivity extends Activity {
                 dismissDialogs();
                 if (errorDialog == null) {
                     errorDialog = new AlertDialog.Builder(this)
-                        .setMessage(scraperThread.errorMessage)
+                        .setTitle(R.string.unable_to_add_widget)
+                        .setMessage(scraperThread.errorMessageId)
                         .setCancelable(false)
                         .setPositiveButton(R.string.okay, new AlertDialog.OnClickListener() { public void onClick(DialogInterface dialog, int which) {
                             TelusWidgetPreferences.deletePreferences(appWidgetId);

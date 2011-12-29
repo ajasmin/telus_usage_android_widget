@@ -67,6 +67,12 @@ THE SOFTWARE.
     <string name="password">Mot de passe</string>
     <string name="small_print">Votre adresse email et mot de passe ne sont jamais envoyées à l\'auteur du widget.&lt;br&gt;&lt;br&gt;Le widget va recueillir et afficher des données provenant &lt;a href=\"http://mobile.telus.com\"&gt;mobile.telus.com&lt;/a&gt;. Les données de ce site Web ne sont pas toujours à jour.&lt;br&gt;&lt;br&gt;Les modifications apportées au site Web de TELUS peuvent empêcher le widget de fonctionner correctement. L\'installation de mises à jour sur l\'Android Market peut résoudre ce problème.</string>
     <string name="add_widget">Ajouter le Widget</string>
+    <string name="configure_loading">Chargement des données&#8230;</string>
+    <string name="unable_to_add_widget">Impossible d\'ajouter le Widget</string>
+    <string name="invalid_credentials">Le email ou le mot de passe saisi est erroné.</string>
+    <string name="network_error">Erreur de réseau.</string>
+    <string name="parsing_error">Il y a un problème.</string>
+    <string name="pick_phone_number">Choisissez le numéro</string>
 
     <!-- ReportAccountErrorActivity -->
     <string name="report_account_error">Les données sur la page de votre compte Telus n\'ont pas été reconnues. C\'est probablement parce que l\'auteur du widget n\'a pas accès à un rapport d\'utilisation de ce type ou parce que Telus a changé son site.\n\nVous pouvez choisir d\'envoyer en toute sécurité les informations affichées ci-dessous à l\'auteur du widget pour l\'aider à améliorer ce widget. L\'auteur du widget promet de ne pas exploiter ou de divulguer les informations contenues dans ce rapport.\n\nFaites défiler jusqu\'en bas pour accepter.</string>
