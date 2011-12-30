@@ -39,6 +39,7 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -102,8 +103,16 @@ public class ReportAccountErrorActivity extends Activity {
 
         setContentView(R.layout.report_account_error);
 
+        looksBetterOnIceCream();
+
         configureEventHandlers();
         setupWebView();
+    }
+
+    private void looksBetterOnIceCream() {
+        if (Integer.valueOf(android.os.Build.VERSION.SDK) >= 11) {
+            findViewById(R.id.bottom_pane).setBackgroundColor(Color.BLACK);
+        }
     }
 
     private void retriveAppWidgetId() {

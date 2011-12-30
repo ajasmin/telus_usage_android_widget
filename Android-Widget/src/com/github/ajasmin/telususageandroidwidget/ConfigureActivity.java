@@ -31,6 +31,7 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -112,10 +113,18 @@ public class ConfigureActivity extends Activity {
         setContentView(R.layout.configure);
         findViews();
 
+        looksBetterOnIceCream();
+
         prefillEmail();
         configureEventHandlers();
         setupValidation();
         prepareSmallPrintTextWithLink();
+    }
+
+    private void looksBetterOnIceCream() {
+        if (Integer.valueOf(android.os.Build.VERSION.SDK) >= 11) {
+            findViewById(R.id.bottom_pane).setBackgroundColor(Color.BLACK);
+        }
     }
 
     private void retriveAppWidgetId() {
