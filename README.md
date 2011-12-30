@@ -70,4 +70,5 @@ Scan this QR Code to download the current version directly:
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
   [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
-  [
+  [4]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
+  [5]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
