@@ -66,12 +66,12 @@ public class TelusWidgetPreferences {
     }
 
     public static void createPreferences(int appWidgetId, String email, String password) {
-        Context context = MyApp.getContext();
-        SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
-        prefs.putString(appWidgetId + "_email", email);
-        String obfuscatedPassword = PasswordObfuscator.obfuscate(password);
-        prefs.putString(appWidgetId + "_password", obfuscatedPassword);
-        prefs.commit();
+        PreferencesData prefData = new PreferencesData();
+
+        prefData.appWidgetId = appWidgetId;
+        prefData.email = email;
+        prefData.password = password;
+        prefData.save();
     }
 
     public static void deletePreferences(int appWidgetId) {
