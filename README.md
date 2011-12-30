@@ -53,7 +53,7 @@ All of these include an Eclipse project.
 Installing
 ----------
 
-You can obtain a copy from the [download section on github][4] or buy it for a dollar on the [Android Market][5].
+You can install this widget from the [Android Market][4] or download the .apk from [download section on github][5].
 
 Scan this QR Code to install the Widget on the Android Market (and get notified of future updates):
 
@@ -70,5 +70,4 @@ Scan this QR Code to download the current version directly:
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
   [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
-  [4]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
-  [5]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
+  [
