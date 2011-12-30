@@ -24,6 +24,7 @@ package com.github.ajasmin.telususageandroidwidget;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -38,8 +39,13 @@ public class HowToAddWidgetActivity extends Activity {
 
         setContentView(R.layout.how_to_add_widget);
 
+        looksBetterOnIceCream();
+
+        int rStrId = (Integer.valueOf(android.os.Build.VERSION.SDK) >= 14)
+                ? R.string.how_to_add_14
+                : R.string.how_to_add;
         TextView howToAddText = (TextView) findViewById(R.id.how_to_add_text);
-        howToAddText.setText(Html.fromHtml(getString(R.string.how_to_add)));
+        howToAddText.setText(Html.fromHtml(getString(rStrId)));
 
         Button returnToHomeButton = (Button) findViewById(R.id.return_to_home_button);
         returnToHomeButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) {
@@ -47,5 +53,11 @@ public class HowToAddWidgetActivity extends Activity {
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
         }});
+    }
+
+    private void looksBetterOnIceCream() {
+        if (Integer.valueOf(android.os.Build.VERSION.SDK) >= 11) {
+            findViewById(R.id.bottom_pane).setBackgroundColor(Color.BLACK);
+        }
     }
 }

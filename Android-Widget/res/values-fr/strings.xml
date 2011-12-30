@@ -36,7 +36,11 @@ THE SOFTWARE.
         &lt;p&gt;\u2022 Entrez les détails de votre compte TELUS&lt;/p&gt;
         &lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
     </string>
-    <string name="return_to_home_screen">Retourer à l\'écran d\'accueil</string>
+    <string name="how_to_add_14">
+        &lt;p&gt;Ceci n\'est pas une application mais un &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp; que vous pouvez glisser sur votre écran d\'accueil.&lt;/p&gt;
+        &lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
+    </string>
+    <string name="return_to_home_screen">Retour à l\'écran d\'accueil</string>
 
     <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>

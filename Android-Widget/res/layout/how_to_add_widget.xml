@@ -45,12 +45,13 @@ THE SOFTWARE.
                 <View android:layout_width="fill_parent" android:layout_height="60dp"/>
         </LinearLayout>
     </ScrollView>
-    <RelativeLayout android:layout_width="fill_parent"
+    <RelativeLayout android:id="@+id/bottom_pane"
+    android:layout_width="fill_parent"
     android:layout_height="54dip"
     android:layout_alignParentBottom="true"
     android:background="@android:drawable/bottom_bar">
         <Button android:id="@+id/return_to_home_button" android:text="@string/return_to_home_screen"
-        android:layout_width="200dp" android:layout_height="wrap_content"
+        android:layout_width="230dp" android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
     </RelativeLayout>
