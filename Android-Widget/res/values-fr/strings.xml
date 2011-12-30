@@ -78,7 +78,7 @@ THE SOFTWARE.
     <string name="report_account_error">Les données sur la page de votre compte Telus n\'ont pas été reconnues. C\'est probablement parce que l\'auteur du widget n\'a pas accès à un rapport d\'utilisation de ce type ou parce que Telus a changé son site.\n\nVous pouvez choisir d\'envoyer en toute sécurité les informations affichées ci-dessous à l\'auteur du widget pour l\'aider à améliorer ce widget. L\'auteur du widget promet de ne pas exploiter ou de divulguer les informations contenues dans ce rapport.\n\nFaites défiler jusqu\'en bas pour accepter.</string>
     <string name="i_agree_to_send">Je suis d\'accord pour envoyer les informations ci-dessus à l\'auteur du widget via une connexion sécurisée HTTPS.</string>
     <string name="cancel">Annuler</string>
-    <string name="send_data">Envoyer les informations ci-dessus</string>
+    <string name="send_data">Envoyer les informations</string>
     <string name="sending_data">Envoi de données en cours&#8230;</string>
     <string name="unable_to_send_data">Impossible d\'envoyer les données</string>
     <string name="report_sent">Rapport envoyé</string>
