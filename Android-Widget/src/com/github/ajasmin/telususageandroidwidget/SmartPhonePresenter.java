@@ -68,7 +68,23 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> dataUsage = data.get("Data Usage");
             String usage = dataUsage.get("Usage");
-            usage = usage.replace(" MB", "M");
+            int mbs = 0;
+            if (usage.matches("\\d+,\\d\\d\\d\\.\\d\\d MB")) {
+                for (int i=0; i < usage.length(); i++) {
+                    char c = usage.charAt(i);
+                    if (c == '.') {
+                        if (usage.charAt(i+1) >= '5') {
+                            mbs++;
+                        }
+                        break;
+                    } else if (c >= '0' && c <= '9') {
+                        mbs = mbs*10 + (c - '0');
+                    }
+                }
+                usage = mbs/1000 + " " + mbs%1000 + " M";
+            } else {
+                usage = usage.replace(" MB", " M");
+            }
             String amount = dataUsage.get("Amount");
 
             updateViews.setTextViewText(R.id.data, usage);
