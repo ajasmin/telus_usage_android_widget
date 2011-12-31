@@ -21,7 +21,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="3dip">
+
+<LinearLayout
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -59,3 +64,5 @@ THE SOFTWARE.
         style="@style/Text.Message" />
 
 </LinearLayout>
+
+</FrameLayout>

@@ -21,20 +21,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="2dip">
+
+
+<RelativeLayout
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="3dip"
+    android:paddingBottom="2dip"
+    android:paddingTop="3dip"
     android:focusable="true"
     style="@style/WidgetBackground">
 
     <TextView
         android:id="@+id/widget_title"
         android:text="@string/widget_title"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="2dp"
         style="@style/Text.WidgetTitle" />
 
     <TextView
@@ -43,6 +51,8 @@ THE SOFTWARE.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_title"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="1dp"
         style="@style/Text.Label" />
 
     <TextView
@@ -69,6 +79,7 @@ THE SOFTWARE.
         android:text="@string/data_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
@@ -94,6 +105,7 @@ THE SOFTWARE.
         android:text="@string/text_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
         android:layout_below="@id/data_amount"
         style="@style/Text.Label" />
 
@@ -113,3 +125,4 @@ THE SOFTWARE.
         android:layout_below="@id/text"
         style="@style/Text.Data" />
 </RelativeLayout>
+</FrameLayout>

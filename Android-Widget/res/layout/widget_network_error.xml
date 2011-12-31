@@ -21,12 +21,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="3dip">
+
+<LinearLayout
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="3dip"
+    android:paddingBottom="2dip"
+    android:paddingTop="3dip"
     style="@style/WidgetBackground">
 
     <TextView
@@ -35,6 +41,7 @@ THE SOFTWARE.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
         style="@style/Text.WidgetTitle" />
 
     <TextView
@@ -56,3 +63,5 @@ THE SOFTWARE.
         android:text="@string/widget_network_error_tap"
         style="@style/Text.Tap" />
 </LinearLayout>
+
+</FrameLayout>

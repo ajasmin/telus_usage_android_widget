@@ -41,7 +41,7 @@ THE SOFTWARE.
     </style>
 
     <style name="Text.WidgetTitle">
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">10.5sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:typeface">sans</item>

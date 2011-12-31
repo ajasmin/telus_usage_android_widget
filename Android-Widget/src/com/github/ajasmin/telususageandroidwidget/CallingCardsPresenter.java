@@ -53,7 +53,7 @@ public class CallingCardsPresenter extends DataPresenter {
         String balanceExpires = "";
         for (String s : accountActivity.keySet()) {
             if (s.startsWith("Balance Expires")) {
-                balanceExpires = s.substring(15);
+                balanceExpires = s.substring(16);
             }
         }
 
