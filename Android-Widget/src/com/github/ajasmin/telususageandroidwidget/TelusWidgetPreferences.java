@@ -47,10 +47,14 @@ public class TelusWidgetPreferences {
             SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
             prefs.putString(appWidgetId + "_email", email);
             String obfuscatedPassword;
-            try {
-                obfuscatedPassword = Base64.encodeBytes(password.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new Error(e);
+            if (password != null) {
+                try {
+                    obfuscatedPassword = Base64.encodeBytes(password.getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new Error(e);
+                }
+            } else {
+                obfuscatedPassword = null;
             }
             prefs.putString(appWidgetId + "_password", obfuscatedPassword);
             prefs.putString(appWidgetId + "_subscriber", subscriber);
