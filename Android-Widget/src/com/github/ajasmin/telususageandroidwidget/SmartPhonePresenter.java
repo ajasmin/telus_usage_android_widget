@@ -22,9 +22,12 @@
 
 package com.github.ajasmin.telususageandroidwidget;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -68,23 +71,7 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> dataUsage = data.get("Data Usage");
             String usage = dataUsage.get("Usage");
-            int mbs = 0;
-            if (usage.matches("\\d+,\\d\\d\\d\\.\\d\\d MB")) {
-                for (int i=0; i < usage.length(); i++) {
-                    char c = usage.charAt(i);
-                    if (c == '.') {
-                        if (usage.charAt(i+1) >= '5') {
-                            mbs++;
-                        }
-                        break;
-                    } else if (c >= '0' && c <= '9') {
-                        mbs = mbs*10 + (c - '0');
-                    }
-                }
-                usage = mbs/1000 + " " + mbs%1000 + " M";
-            } else {
-                usage = usage.replace(" MB", " M");
-            }
+            usage = formatMbUsageForCompactness(usage);
             String amount = dataUsage.get("Amount");
 
             updateViews.setTextViewText(R.id.data, usage);
@@ -102,5 +89,27 @@ public class SmartPhonePresenter extends DataPresenter {
         }
 
         return updateViews;
+    }
+
+    /**
+     * Make the data usage string smaller by replacing " MB" by "M"
+     * and rounding off some of the decimals
+     */
+    private String formatMbUsageForCompactness(String usage) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator(' ');
+        symbols.setDecimalSeparator('.');
+        if (usage.matches("\\d\\d\\d(\\.\\d+)? MB")) {
+            // Round to 1 decimal place
+            String s = usage.replace(" MB", "");
+            double d = Double.parseDouble(s);
+            usage = new DecimalFormat("#0.#", symbols).format(d) + "M";
+        } else if (usage.matches("\\d+,\\d\\d\\d(\\.\\d+)? MB")) {
+            // Round of 0 decimal places
+            String s = usage.replace(",", "").replace(" MB", "");
+            double d = Double.parseDouble(s);
+            usage = new DecimalFormat("#,###", symbols).format(d) + "M";
+        }
+        return usage;
     }
 }
