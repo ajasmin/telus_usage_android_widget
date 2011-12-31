@@ -49,7 +49,7 @@ public class AnimationView extends View {
     private static final String ns = "https://github.com/ajasmin/telus_usage_android_widget";
 
     private int frameIndex = 0;
-    private int animationResource;
+    private final int animationResource;
     DataInputStream animationStream;
     int width;
     int height;

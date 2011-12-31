@@ -22,10 +22,14 @@
 
 package com.github.ajasmin.telususageandroidwidget;
 
+import java.io.UnsupportedEncodingException;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
 public class TelusWidgetPreferences {
+    private final static int VERSION = 1;
+
     public static class PreferencesData {
         public int appWidgetId;
         public String email;
@@ -42,10 +46,16 @@ public class TelusWidgetPreferences {
             Context context = MyApp.getContext();
             SharedPreferences.Editor prefs = context.getSharedPreferences("widget", 0).edit();
             prefs.putString(appWidgetId + "_email", email);
-            String obfuscatedPassword = PasswordObfuscator.obfuscate(password);
+            String obfuscatedPassword;
+            try {
+                obfuscatedPassword = Base64.encodeBytes(password.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
             prefs.putString(appWidgetId + "_password", obfuscatedPassword);
             prefs.putString(appWidgetId + "_subscriber", subscriber);
             prefs.putLong(appWidgetId + "_lastUpdateTime", lastUpdateTime);
+            prefs.putInt(appWidgetId + "_prefVer", VERSION);
             prefs.commit();
         }
     }
@@ -57,11 +67,27 @@ public class TelusWidgetPreferences {
         SharedPreferences prefs = context.getSharedPreferences("widget", 0);
         prefData.appWidgetId = appWidgetId;
         prefData.email = prefs.getString(appWidgetId + "_email", null);
-        String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
-        if (obfuscatedPassword != null)
-            prefData.password = PasswordObfuscator.unobfuscate(obfuscatedPassword);
         prefData.subscriber = prefs.getString(appWidgetId + "_subscriber", null);
         prefData.lastUpdateTime = prefs.getLong(appWidgetId + "_lastUpdateTime", 0);
+
+        // Old obfuscation scheme caused random crashes
+        // and was too complex for a mild obfuscation
+        if (prefs.getInt(appWidgetId + "_prefVer", 0) == 0) {
+            String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
+            if (obfuscatedPassword != null)
+                prefData.password = PasswordObfuscator.unobfuscate(obfuscatedPassword);
+            prefData.save();
+        } else {
+            String obfuscatedPassword = prefs.getString(appWidgetId + "_password", null);
+            if (obfuscatedPassword != null) {
+                try {
+                    prefData.password = new String(Base64.decode(obfuscatedPassword), "UTF-8");
+                } catch (Exception e) {
+                    throw new Error(e);
+                }
+            }
+        }
+
         return prefData;
     }
 
@@ -81,6 +107,7 @@ public class TelusWidgetPreferences {
         prefs.remove(appWidgetId + "_password");
         prefs.remove(appWidgetId + "_subscriber");
         prefs.remove(appWidgetId + "_lastUpdateTime");
+        prefs.remove(appWidgetId + "_prefVer");
         prefs.commit();
     }
 }
