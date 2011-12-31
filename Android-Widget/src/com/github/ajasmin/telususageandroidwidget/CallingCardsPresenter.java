@@ -35,7 +35,7 @@ public class CallingCardsPresenter extends DataPresenter {
     private static final HashMap<String, List<String>> requiredData;
     static {
         requiredData = new HashMap<String, List<String>>();
-        requiredData.put("Account Activity", Arrays.asList(new String[] {"Current Balance", "Balance Expires"}));
+        requiredData.put("Account summary", Arrays.asList(new String[] {"Current Balance"}));
     }
 
     @Override
@@ -48,9 +48,14 @@ public class CallingCardsPresenter extends DataPresenter {
         // Build an update that holds the updated widget contents
         RemoteViews updateViews = new RemoteViews(context.getPackageName(), R.layout.widget_calling_cards_layout);
 
-        Map<String, String> accountActivity = data.get("Account Activity");
+        Map<String, String> accountActivity = data.get("Account summary");
         String currentBalance = accountActivity.get("Current Balance");
-        String balanceExpires = accountActivity.get("Balance Expires");
+        String balanceExpires = "";
+        for (String s : accountActivity.keySet()) {
+            if (s.startsWith("Balance Expires")) {
+                balanceExpires = s.substring(15);
+            }
+        }
 
         updateViews.setTextViewText(R.id.current_balance, currentBalance);
         updateViews.setTextViewText(R.id.balance_expires, balanceExpires);
