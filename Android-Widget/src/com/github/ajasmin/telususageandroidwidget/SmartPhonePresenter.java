@@ -25,8 +25,7 @@ package com.github.ajasmin.telususageandroidwidget;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,16 +34,11 @@ import android.widget.RemoteViews;
 
 public class SmartPhonePresenter extends DataPresenter {
 
-    private static final HashMap<String, List<String>> requiredData;
-    static {
-        requiredData = new HashMap<String, List<String>>();
-        requiredData.put("Airtime Usage", Arrays.asList(new String[] {"Included Minutes", "Remaining Minutes", "Chargeable Minutes"}));
-        requiredData.put("Data Usage", Arrays.asList(new String[] {"Usage", "Amount"}));
-        requiredData.put("Text Usage", Arrays.asList(new String[] {"Usage", "Amount"}));
-    }
+    private static final Collection<String> requiredData
+        = Arrays.asList(new String[]{"Airtime Usage", "Data Usage", "Text Usage"});
 
     @Override
-    protected Map<String, List<String>> getRequiredData() {
+    protected Collection<String> getRequiredData() {
         return requiredData;
     }
 
@@ -56,8 +50,11 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> airtimeUsage = data.get("Airtime Usage");
             String includedMinutes = airtimeUsage.get("Included Minutes");
+            if (includedMinutes == null) { includedMinutes = "--"; }
             String remainingMinutes = airtimeUsage.get("Remaining Minutes");
+            if (remainingMinutes == null) { remainingMinutes = "--"; }
             String chargeableMinutes = airtimeUsage.get("Chargeable Minutes");
+            if (chargeableMinutes == null) { chargeableMinutes = "--"; }
 
             String airtimeRemainingMinutes = context.getString(R.string.airtime_remaining);
             airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, remainingMinutes, includedMinutes);
@@ -71,8 +68,13 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> dataUsage = data.get("Data Usage");
             String usage = dataUsage.get("Usage");
-            usage = formatMbUsageForCompactness(usage);
+            if (usage != null) {
+                usage = formatMbUsageForCompactness(usage);
+            } else {
+                usage = "--";
+            }
             String amount = dataUsage.get("Amount");
+            if (amount == null) { amount = "--"; }
 
             updateViews.setTextViewText(R.id.data, usage);
             updateViews.setTextViewText(R.id.data_amount, amount);
@@ -81,8 +83,13 @@ public class SmartPhonePresenter extends DataPresenter {
         {
             Map<String, String> textUsage = data.get("Text Usage");
             String usage = textUsage.get("Usage");
-            usage = usage.replace("Messages", "Msg");
+            if (usage != null) {
+                usage = usage.replace("Messages", "Msg");
+            } else {
+                usage = "--";
+            }
             String amount = textUsage.get("Amount");
+            if (amount == null) { amount = "--"; }
 
             updateViews.setTextViewText(R.id.text, usage);
             updateViews.setTextViewText(R.id.text_amount, amount);

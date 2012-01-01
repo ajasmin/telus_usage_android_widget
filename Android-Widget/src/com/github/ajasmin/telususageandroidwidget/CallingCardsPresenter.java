@@ -23,8 +23,7 @@
 package com.github.ajasmin.telususageandroidwidget;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import android.content.Context;
@@ -32,14 +31,11 @@ import android.widget.RemoteViews;
 
 public class CallingCardsPresenter extends DataPresenter {
 
-    private static final HashMap<String, List<String>> requiredData;
-    static {
-        requiredData = new HashMap<String, List<String>>();
-        requiredData.put("Account summary", Arrays.asList(new String[] {"Current Balance"}));
-    }
+    private static final Collection<String> requiredData
+        = Arrays.asList(new String[]{"Account summary"});
 
     @Override
-    protected Map<String, List<String>> getRequiredData() {
+    protected Collection<String> getRequiredData() {
         return requiredData;
     }
 
@@ -50,7 +46,8 @@ public class CallingCardsPresenter extends DataPresenter {
 
         Map<String, String> accountActivity = data.get("Account summary");
         String currentBalance = accountActivity.get("Current Balance");
-        String balanceExpires = "";
+        if (currentBalance == null) { currentBalance = "--"; }
+        String balanceExpires = "--";
         for (String s : accountActivity.keySet()) {
             if (s.startsWith("Balance Expires")) {
                 balanceExpires = s.substring(16);

@@ -61,6 +61,7 @@ public class TelusSaxHandler extends DefaultHandler2 {
         String trimedText = builder.toString().trim();
         if (localName.equals("b")) {
             currentHeading = trimedText;
+            addData("", "");
         } else if (localName.equals("td")) {
             columns.add(trimedText);
         } else if (localName.equals("tr")) {

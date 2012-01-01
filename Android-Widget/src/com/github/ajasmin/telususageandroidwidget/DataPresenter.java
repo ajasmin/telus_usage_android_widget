@@ -22,9 +22,8 @@
 
 package com.github.ajasmin.telususageandroidwidget;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import android.content.Context;
 import android.widget.RemoteViews;
@@ -41,16 +40,9 @@ public abstract class DataPresenter {
     }
 
     private boolean appliesTo(Map<String, Map<String, String>> data) {
-        for (Entry<String, List<String>> e : getRequiredData().entrySet()) {
-            Map<String, String> section = data.get(e.getKey());
-            if (section == null)
-                return false;
-            if (!section.keySet().containsAll(e.getValue()))
-                return false;
-        }
-        return true;
+        return data.keySet().containsAll(getRequiredData());
     }
 
-    protected abstract Map<String, List<String>> getRequiredData();
+    protected abstract Collection<String> getRequiredData();
     public abstract RemoteViews buildUpdate(Context context, Map<String, Map<String, String>> data);
 }
