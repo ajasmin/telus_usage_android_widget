@@ -94,6 +94,10 @@ public class TelusWebScraper {
         // The HTML is valid XHTML except for that one ampersand (&). Remove it
         usageData = usageData.replaceAll("&", "");
 
+        // Strange unclosed span we see from time to time
+        // Should really consider switching to a permissive HTML parser
+        usageData = usageData.replace("<span class=\"bodytext0\">", "");
+
         TelusSaxHandler handler = new TelusSaxHandler();
         InputSource inputSource = new InputSource(new StringReader(usageData));
 
