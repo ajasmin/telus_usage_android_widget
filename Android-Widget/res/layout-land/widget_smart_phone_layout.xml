@@ -60,7 +60,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_below="@id/voice_label"
         style="@style/Text.Data" />
 
@@ -69,7 +69,7 @@ THE SOFTWARE.
         android:text="@string/airtime_chargeable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_below="@id/airtime_remaining"
         style="@style/Text.Data" />
 
@@ -78,7 +78,7 @@ THE SOFTWARE.
         android:text="@string/data_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="48dp"
+        android:layout_marginLeft="47dp"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
@@ -87,7 +87,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_alignLeft="@id/data_label"
         android:layout_alignBaseline="@id/text"
         style="@style/Text.Data" />
@@ -96,7 +96,7 @@ THE SOFTWARE.
         android:id="@+id/data_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_alignLeft="@id/data_label"
         android:layout_alignBaseline="@id/text_amount"
         android:layout_below="@id/data"
@@ -114,7 +114,7 @@ THE SOFTWARE.
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_below="@id/text_label"
         style="@style/Text.Data" />
 
@@ -122,7 +122,7 @@ THE SOFTWARE.
         android:id="@+id/text_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
+        android:layout_marginLeft="6dip"
         android:layout_below="@id/text"
         style="@style/Text.Data" />
 </RelativeLayout>
