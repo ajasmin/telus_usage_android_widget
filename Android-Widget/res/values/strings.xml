@@ -93,4 +93,6 @@ THE SOFTWARE.
     <string name="not_configured">Not configured</string>
     <string name="tap">Tap</string>
     <string name="widget_service_unavailable">Service unavailable</string>
+    
+    <string name="unlimited">Unlimited</string>
 </resources>

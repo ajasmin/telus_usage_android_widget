@@ -142,8 +142,13 @@ public class ReportParser {
             String remainingMinutes = getMinutesValue(airtimeUsage, "Remaining Minutes");
             String chargeableMinutes = getMinutesValue(airtimeUsage, "Chargeable Minutes");
 
-            String airtimeRemainingMinutes = context.getString(R.string.airtime_remaining);
-            airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, remainingMinutes, includedMinutes);
+            String airtimeRemainingMinutes;
+            if (includedMinutes.equals("unlimited")) {
+                airtimeRemainingMinutes = context.getString(R.string.unlimited);
+            } else {
+                airtimeRemainingMinutes = context.getString(R.string.airtime_remaining);
+                airtimeRemainingMinutes = String.format(airtimeRemainingMinutes, remainingMinutes, includedMinutes);
+            }
             updateViews.setTextViewText(R.id.airtime_remaining, airtimeRemainingMinutes);
 
             String airtimeChargeableMinutes= context.getString(R.string.airtime_chargeable);
