@@ -241,7 +241,7 @@ public class ReportParser {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setGroupingSeparator(' ');
         symbols.setDecimalSeparator('.');
-        if (usage.matches("\\d\\d\\d(\\.\\d+)? MB")) {
+        if (usage.matches("\\d+(\\.\\d+)? MB")) {
             // Round to 1 decimal place
             String s = usage.replace(" MB", "");
             double d = Double.parseDouble(s);
