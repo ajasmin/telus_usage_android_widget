@@ -95,37 +95,31 @@ public class TelusWidgetUpdateService<E> extends Service {
      * @param email
      */
     public RemoteViews buildUpdate(PreferencesData prefData) {
-        Map<String, Map<String, String>> data = null;
         try {
             // Try fetching data from https://mobile.telus.com
-            data = TelusWebScraper.retriveUsageSummaryData(prefData.appWidgetId);
-        } catch (TelusWebScraper.InvalidCredentialsException e) {
+            TelusReportFetcher.retriveUsageSummaryData(prefData.appWidgetId);
+        } catch (TelusReportFetcher.InvalidCredentialsException e) {
             Log.e("TelusWebScraper", "Invalid credentials for " + prefData.email, e);
-
-            // Don't cache the response in this case
-            getFileStreamPath(""+prefData.appWidgetId).delete();
-
             return invalidCredentialsRemoteViews(prefData);
-        } catch (TelusWebScraper.NetworkErrorException e) {
+        } catch (TelusReportFetcher.NetworkErrorException e) {
             Log.e("TelusWebScraper", "Network error scraping mobile.telus.com for " + prefData.email, e);
             return networkErrorRemoteViews(prefData);
-        } catch (TelusWebScraper.ParsingDataException e) {
+        }
+
+        try {
+            RemoteViews view = ReportParser.buildView(prefData.appWidgetId);
+            return bindURL(prefData,view);
+        } catch (ReportParser.ServiceUnavailableException e) {
+            Log.e("TelusWebScraper", "Service unavailable for " + prefData.email, e);
+            RemoteViews view = ServiceUnavailableRemoteView(prefData);
+            return bindURL(prefData, view);
+        } catch (ReportParser.ParsingError e) {
             Log.e("TelusWebScraper", "Error parsing data for " + prefData.email, e);
             return unrecognizedDataRemoteViews(prefData);
         }
-
-        DataPresenter dataPresenter = DataPresenter.getPresenterFor(data);
-        if (dataPresenter == null) {
-            Log.e("TelusWebScraper", "No presenter found for " + prefData.email);
-            return unrecognizedDataRemoteViews(prefData);
-        }
-
-        return normalRemoteView(prefData, data, dataPresenter);
     }
 
-    private RemoteViews normalRemoteView(PreferencesData prefData, Map<String, Map<String, String>> data, DataPresenter dataPresenter) {
-        RemoteViews updateViews = dataPresenter.buildUpdate(this, data);
-
+    private RemoteViews bindURL(PreferencesData prefData, RemoteViews updateViews) {
         // When user clicks on widget, visit mobile.telus.com
         String loginUriTemplate = "https://mobile.telus.com/login.htm?username=%s&password=%s&_rememberMe=on&forwardAction=/index.htm";
         String loginUri = String.format(loginUriTemplate, Uri.encode(prefData.email), Uri.encode(prefData .password));
@@ -158,6 +152,10 @@ public class TelusWidgetUpdateService<E> extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, prefData.appWidgetId, defineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         updateViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
         return updateViews;
+    }
+
+    private RemoteViews ServiceUnavailableRemoteView(PreferencesData prefData) {
+        return new RemoteViews(getPackageName(), R.layout.widget_service_unavailable);
     }
 
     private RemoteViews networkErrorRemoteViews(PreferencesData prefData) {

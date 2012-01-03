@@ -50,29 +50,32 @@ public class ConfigureActivity extends Activity {
     private static final int SCRAPE_IN_PROGRESS = 0;
     private static final int SCRAPE_COMPLETE = 1;
     private static final int SCRAPE_ERROR = 2;
+    private static final int SCRAPE_PARSING_ERROR = 3;
 
     static private class ScraperThread extends Thread {
         public int appWidgetId;
 
         public volatile Handler scraperCompletedHandler;
         public volatile int result = SCRAPE_IN_PROGRESS;
-        public volatile Map<String, String> subscribers;
+        public volatile String[] subscribers;
         public volatile int errorMessageId;
         @Override
         public void run() {
             int r = SCRAPE_COMPLETE;
             try {
-                Map<String, Map<String, String>> data = TelusWebScraper.retriveUsageSummaryData(appWidgetId);
-                subscribers = data.get("subscribers");
-            } catch (TelusWebScraper.InvalidCredentialsException e) {
+                TelusReportFetcher.retriveUsageSummaryData(appWidgetId);
+                subscribers = ReportParser.subscribers(appWidgetId);
+            } catch (TelusReportFetcher.InvalidCredentialsException e) {
                 r = SCRAPE_ERROR;
                 errorMessageId = R.string.invalid_credentials;
-            } catch (TelusWebScraper.NetworkErrorException e) {
+            } catch (TelusReportFetcher.NetworkErrorException e) {
                 r = SCRAPE_ERROR;
                 errorMessageId = R.string.network_error;
-            } catch (TelusWebScraper.ParsingDataException e) {
+            } catch (ReportParser.ServiceUnavailableException e) {
                 r = SCRAPE_ERROR;
-                errorMessageId = R.string.parsing_error;
+                errorMessageId = R.string.widget_service_unavailable;
+            } catch (ReportParser.ParsingError e) {
+                r = SCRAPE_PARSING_ERROR;
             }
 
             result = r;
@@ -239,7 +242,15 @@ public class ConfigureActivity extends Activity {
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                showScraperState();
+                if (scraperThread.result == SCRAPE_PARSING_ERROR) {
+                    // Submit error report on touch
+                    Intent intent = new Intent(ConfigureActivity.this, ReportAccountErrorActivity.class);
+                    intent.setAction(getPackageName()+".UNRECOGNIZED");
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                    startActivity(intent);
+                } else {
+                    showScraperState();
+                }
             }
         };
         scraperThread.scraperCompletedHandler = handler;
@@ -261,7 +272,7 @@ public class ConfigureActivity extends Activity {
                 dismissDialogs();
                 if (scraperThread.subscribers != null) {
                     if (pickSubscriberDialog == null) {
-                        final String[] phoneNumbers = scraperThread.subscribers.values().toArray(new String[0]);
+                        final String[] phoneNumbers = scraperThread.subscribers;
                         pickSubscriberDialog = new AlertDialog.Builder(this)
                             .setTitle(R.string.pick_phone_number)
                             .setCancelable(false)

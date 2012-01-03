@@ -24,16 +24,8 @@ package com.github.ajasmin.telususageandroidwidget;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -44,14 +36,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.xml.sax.InputSource;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
-public class TelusWebScraper {
+public class TelusReportFetcher {
     private static final long CACHE_LIFETIME = 1 /*hour*/ * 60 * 60 * 1000;
     @SuppressWarnings("serial")
     public static class InvalidCredentialsException extends Exception { }
@@ -63,14 +54,7 @@ public class TelusWebScraper {
         }
     }
 
-    @SuppressWarnings("serial")
-    public static class ParsingDataException extends Exception {
-        public ParsingDataException(String string, Throwable e) {
-            super(string, e);
-        }
-    }
-
-    public static Map<String, Map<String, String>> retriveUsageSummaryData(int appWidgetId) throws InvalidCredentialsException, NetworkErrorException, ParsingDataException {
+    public static void retriveUsageSummaryData(int appWidgetId) throws InvalidCredentialsException, NetworkErrorException {
         Context context = MyApp.getContext();
         String fileName = "" + appWidgetId;
 
@@ -80,35 +64,6 @@ public class TelusWebScraper {
                 System.currentTimeMillis() - prefs.lastUpdateTime > CACHE_LIFETIME) {
                         fetchFromTelusSite(prefs);
         }
-
-        String usageData;
-        try {
-            Reader rdr = new InputStreamReader(MyApp.getContext().openFileInput(fileName), Charset.forName("UTF-8"));
-            usageData = Util.readString(rdr);
-        } catch (Exception e) { throw new Error(e); }
-
-
-        // Remove char entities we don't care about
-        usageData = usageData.replaceAll("&bull;", "");
-
-        // The HTML is valid XHTML except for that one ampersand (&). Remove it
-        usageData = usageData.replaceAll("&", "");
-
-        // Strange unclosed span we see from time to time
-        // Should really consider switching to a permissive HTML parser
-        usageData = usageData.replace("<span class=\"bodytext0\">", "");
-
-        TelusSaxHandler handler = new TelusSaxHandler();
-        InputSource inputSource = new InputSource(new StringReader(usageData));
-
-        SAXParser parser = getSAXParserInstance();
-        try {
-            parser.parse(inputSource, handler);
-        } catch (Exception e) {
-            throw new ParsingDataException("Error parsing data", e);
-        }
-
-        return handler.getData();
     }
 
     private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException, InvalidCredentialsException {
@@ -190,14 +145,5 @@ public class TelusWebScraper {
         HttpEntity responseEntity = response.getEntity();
         // fetch the contents
         responseEntity.getContent().close();
-    }
-
-    private static SAXParser getSAXParserInstance() {
-        try {
-            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-            return parser;
-        } catch (Exception e) {
-            throw new Error(e);
-        }
     }
 }

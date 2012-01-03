@@ -91,4 +91,5 @@ THE SOFTWARE.
 
     <string name="not_configured">Non configuré</string>
     <string name="tap">Appuyez</string>
+    <string name="widget_service_unavailable">Service indisponible</string>
 </resources>
