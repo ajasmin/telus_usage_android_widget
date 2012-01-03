@@ -64,7 +64,7 @@ public class ReportAccountErrorActivity extends Activity {
         @Override
         public void run() {
             String url = "https://telus-widget-error-reports.appspot.com/error_report"
-                    + "?versionCode=" + Util.getVersionCode();
+                    + "?versionCode=" + MyApp.getVersionCode();
 
             final DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);

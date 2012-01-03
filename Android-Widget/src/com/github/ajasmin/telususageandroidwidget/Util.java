@@ -27,9 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 
 public class Util {
     public static byte[] readStream(InputStream in) throws IOException {
@@ -50,15 +47,5 @@ public class Util {
             buffer.append(buf, 0, count);
         rdr.close();
         return buffer.toString();
-    }
-
-    public static int getVersionCode() {
-        Context context = MyApp.getContext();
-        PackageManager p = context.getPackageManager();
-        try {
-            return p.getPackageInfo(context.getPackageName(), 0).versionCode;
-        } catch (NameNotFoundException e) {
-            throw new Error(e);
-        }
     }
 }

@@ -24,6 +24,8 @@ package com.github.ajasmin.telususageandroidwidget;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class MyApp extends Application {
     private static MyApp instance;
@@ -34,5 +36,14 @@ public class MyApp extends Application {
 
     public static Context getContext() {
         return instance;
+    }
+
+    public static int getVersionCode() {
+        PackageManager p = instance.getPackageManager();
+        try {
+            return p.getPackageInfo(instance.getPackageName(), 0).versionCode;
+        } catch (NameNotFoundException e) {
+            throw new Error(e);
+        }
     }
 }
