@@ -182,6 +182,10 @@ public class ReportParser {
             String usage = getValue(textUsage, "Usage");
             String amount = getValue(textUsage, "Amount");
 
+            if (!usage.matches("\\d+ Messages")) {
+                throw new ParsingError("Bad text format.");
+            }
+
             usage = usage.replace("Messages", "Msg");
 
             updateViews.setTextViewText(R.id.text, usage);
@@ -241,8 +245,9 @@ public class ReportParser {
     /**
      * Make the data usage string smaller by replacing " MB" by "M"
      * and rounding off some of the decimals
+     * @throws ParsingError
      */
-    private static String formatMbUsageForCompactness(String usage) {
+    private static String formatMbUsageForCompactness(String usage) throws ParsingError {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setGroupingSeparator(' ');
         symbols.setDecimalSeparator('.');
@@ -250,13 +255,14 @@ public class ReportParser {
             // Round to 1 decimal place
             String s = usage.replace(" MB", "");
             double d = Double.parseDouble(s);
-            usage = new DecimalFormat("#0.#", symbols).format(d) + "M";
+            return new DecimalFormat("#0.#", symbols).format(d) + "M";
         } else if (usage.matches("\\d+,\\d\\d\\d(\\.\\d+)? MB")) {
             // Round of 0 decimal places
             String s = usage.replace(",", "").replace(" MB", "");
             double d = Double.parseDouble(s);
-            usage = new DecimalFormat("#,###", symbols).format(d) + "M";
+            return new DecimalFormat("#,###", symbols).format(d) + "M";
+        } else {
+            throw new ParsingError("Bad MB format");
         }
-        return usage;
     }
 }
