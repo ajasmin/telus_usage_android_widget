@@ -200,7 +200,8 @@ public class ReportParser {
     }
 
     private static boolean isAvailable(Element e) {
-        return e.select("div.usageSmallerFont:contains(currently not available)").isEmpty();
+        return
+          e.select(":contains(currently not available), :contains(currently unavailable").isEmpty();
     }
 
     private static void assertLabels(Element e, String[] labels) throws ParsingError {
