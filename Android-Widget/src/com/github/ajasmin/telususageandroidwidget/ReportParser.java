@@ -226,10 +226,10 @@ public class ReportParser {
         // I hope summing them up is the right thing to do.
         Elements result = element.select("td.labelValueLabel:contains("+label+") ~ td.labelValueValue");
         String text = result.text();
-        if (result.html().matches("\\s*\\d+\\s*((<br />)\\s*\\d+\\s*)*")) {
+        if (result.html().matches("\\s*\\d+(:\\d\\d)?\\s*((<br />)\\s*\\d+(:\\d\\d)?\\s*)*")) {
             int sum = 0;
             String[] values = result.html().split("<br />");
-            for (String v : values) { sum += Integer.parseInt(v); }
+            for (String v : values) { sum += Integer.parseInt(v.split(":")[0]); }
             return "" + sum;
         } else if (text.equals("unlimited") || text.equals("-") | text.equals("")) {
             return result.text();
