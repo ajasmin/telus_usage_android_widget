@@ -100,6 +100,8 @@ public class ReportParser {
             return callingCardView(doc);
         } else if (sectionLabels.equals(Arrays.asList(new String[] {"Usage Summary", "Airtime Usage", "Data Usage", "Text Usage", "Billing"}))) {
             return smartPhoneView(doc);
+        } else if (sectionLabels.equals(Arrays.asList(new String[] {"Bill Details", "Airtime Usage", "Data Usage", "Text Usage"}))) {
+            return smartPhoneView(doc);
         } else {
             throw new ParsingError("Unknown sections");
         }
