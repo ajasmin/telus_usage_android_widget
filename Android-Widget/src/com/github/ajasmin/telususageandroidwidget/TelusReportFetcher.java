@@ -75,8 +75,7 @@ public class TelusReportFetcher {
 
         // Log out to avoid session limit
         // on background thread to avoid extra delay
-        new Thread(new Runnable() { @Override
-        public void run() {
+        new Thread(new Runnable() { @Override public void run() {
             try {
                 fetchLogOutPage(httpclient);
                 Log.i("TelusWebScraper", "Logged out " + prefs.email);
@@ -102,7 +101,7 @@ public class TelusReportFetcher {
 
             HttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
-            String str = new String(EntityUtils.toByteArray(responseEntity), "UTF-8");
+            String str = EntityUtils.toString(responseEntity);
             if (str.contains("The email or password you entered is invalid.")) {
                 throw new InvalidCredentialsException();
             }
