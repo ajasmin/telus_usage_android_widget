@@ -24,6 +24,7 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:focusable="true"
   android:padding="3dip">
 
 <RelativeLayout
@@ -33,7 +34,6 @@ THE SOFTWARE.
     android:paddingLeft="1dip"
     android:paddingBottom="2dip"
     android:paddingTop="3dip"
-    android:focusable="true"
     style="@style/WidgetBackground">
 
     <TextView
