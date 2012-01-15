@@ -24,13 +24,13 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:focusable="true"
   android:padding="3dip">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:focusable="true"
     android:paddingLeft="1dip"
     android:paddingBottom="2dip"
     android:paddingTop="3dip"

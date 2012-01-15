@@ -24,7 +24,6 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:focusable="true"
   android:padding="3dip">
 
 <LinearLayout
@@ -32,6 +31,7 @@ THE SOFTWARE.
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:focusable="true"
     android:padding="3dip"
     style="@style/WidgetBackground">
     <LinearLayout android:orientation="horizontal"

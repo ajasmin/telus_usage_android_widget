@@ -24,7 +24,6 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-    android:focusable="true"
   android:padding="2dip">
 
 
@@ -32,6 +31,7 @@ THE SOFTWARE.
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:focusable="true"
     android:paddingBottom="2dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
