@@ -26,7 +26,7 @@ THE SOFTWARE.
   android:layout_height="match_parent"
   android:padding="3dip">
 
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -41,90 +41,44 @@ THE SOFTWARE.
         android:text="@string/widget_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="2dip"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="3dp"
         style="@style/Text.WidgetTitle" />
 
     <TextView
-        android:id="@+id/voice_label"
-        android:text="@string/voice_label"
+        android:id="@+id/current_balance_label"
+        android:text="@string/current_balance_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         android:layout_below="@id/widget_title"
         style="@style/Text.Label" />
 
     <TextView
-        android:id="@+id/airtime_remaining"
-        android:text="@string/airtime_remaining"
+        android:id="@+id/current_balance"
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_below="@id/voice_label"
+        android:layout_marginLeft="8dip"
+        android:layout_below="@id/current_balance_label"
         style="@style/Text.Data" />
 
     <TextView
-        android:id="@+id/airtime_chargeable"
-        android:text="@string/airtime_chargeable"
+        android:id="@+id/balance_expires_label"
+        android:text="@string/balance_expires_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_below="@id/airtime_remaining"
-        style="@style/Text.Data" />
-
-    <TextView
-        android:id="@+id/data_label"
-        android:text="@string/data_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="47dp"
-        android:layout_below="@id/airtime_chargeable"
+        android:layout_below="@id/current_balance"
         style="@style/Text.Label" />
 
     <TextView
-        android:id="@+id/data"
+        android:id="@+id/balance_expires"
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_alignLeft="@id/data_label"
-        android:layout_alignBaseline="@id/text"
+        android:layout_marginLeft="8dip"
+        android:layout_below="@id/balance_expires_label"
         style="@style/Text.Data" />
 
-    <TextView
-        android:id="@+id/data_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_alignLeft="@id/data_label"
-        android:layout_alignBaseline="@id/text_amount"
-        android:layout_below="@id/data"
-        style="@style/Text.Data" />
-
-    <TextView
-        android:id="@+id/text_label"
-        android:text="@string/text_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/airtime_chargeable"
-        style="@style/Text.Label" />
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_below="@id/text_label"
-        style="@style/Text.Data" />
-
-    <TextView
-        android:id="@+id/text_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_below="@id/text"
-        style="@style/Text.Data" />
 </RelativeLayout>
 
 </FrameLayout>
