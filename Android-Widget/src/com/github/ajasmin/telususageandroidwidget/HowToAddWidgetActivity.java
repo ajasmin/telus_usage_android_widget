@@ -27,7 +27,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -47,6 +49,8 @@ public class HowToAddWidgetActivity extends Activity {
         TextView howToAddText = (TextView) findViewById(R.id.how_to_add_text);
         howToAddText.setText(Html.fromHtml(getString(rStrId)));
 
+        sizeAnimation();
+
         Button returnToHomeButton = (Button) findViewById(R.id.return_to_home_button);
         returnToHomeButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -58,6 +62,20 @@ public class HowToAddWidgetActivity extends Activity {
     private void looksBetterOnIceCream() {
         if (Integer.valueOf(android.os.Build.VERSION.SDK) >= 11) {
             findViewById(R.id.bottom_pane).setBackgroundColor(Color.BLACK);
+        }
+    }
+
+    private void sizeAnimation() {
+        Display display = getWindowManager().getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getHeight();
+
+        // Zoom the animation to 1:1 if it's too small and there's enought space on the screen
+        AnimationView animation = (AnimationView) findViewById(R.id.animated_image);
+        LayoutParams layoutParams = animation.getLayoutParams();
+        if (layoutParams.width < 240 && screenHeight > 300 && screenWidth > 300) {
+            layoutParams.width = 240;
+            layoutParams.height = 320;
         }
     }
 }
