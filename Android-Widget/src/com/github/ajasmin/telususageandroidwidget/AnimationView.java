@@ -91,7 +91,6 @@ public class AnimationView extends View {
             redrawPending = true;
             postDelayed(new Runnable() { public void run() {
                 redrawPending = false;
-                frameIndex++;
                 drawNextFrame();
                 invalidate();
             }}, 66);
@@ -113,17 +112,20 @@ public class AnimationView extends View {
         try {
             switch (animationStream.read()) {
                 case 0: // No change in this frame. Skip it
+                    frameIndex++;
                     return;
                 case -1: // EOF reached. Start over
                     openStream();
+                    frameIndex = 0;
                     drawNextFrame();
                     return;
                 case 1: // Read frame
                     byte[] arr = pixelBuffer.array();
                     animationStream.readFully(arr);
-
                     transparentBitmap.copyPixelsFromBuffer(pixelBuffer);
                     new Canvas(animationFrame).drawBitmap(transparentBitmap, 0, 0, null);
+
+                    frameIndex++;
             }
         } catch (IOException e) {throw new Error(e);};
     }
@@ -144,7 +146,6 @@ public class AnimationView extends View {
         SavedState ss = new SavedState(superState);
 
         ss.frameIndex = this.frameIndex;
-        ss.animationFrame = this.animationFrame;
         return ss;
     }
 
@@ -157,18 +158,16 @@ public class AnimationView extends View {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
 
-        this.frameIndex = ss.frameIndex;
-
         // Get back to where we were
         openStream();
-        for (int i=0; i <= frameIndex; i++) {
+        this.frameIndex = 0;
+        for (int i=0; i <= ss.frameIndex; i++) {
             drawNextFrame();
         }
     }
 
     static class SavedState extends BaseSavedState {
         int frameIndex;
-        Bitmap animationFrame;
 
         SavedState(Parcelable superState) {
             super(superState);
