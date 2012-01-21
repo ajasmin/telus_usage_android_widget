@@ -24,15 +24,18 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="2dip">
+  android:paddingTop="8dip"
+  android:paddingLeft="2dip"
+  android:paddingRight="2dip"
+  android:paddingBottom="8dip">
 
 
 <RelativeLayout
     android:id="@+id/widget"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:focusable="true"
-    android:paddingBottom="2dip"
+    android:paddingBottom="9dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
 
@@ -51,8 +54,8 @@ THE SOFTWARE.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_title"
-        android:layout_marginTop="1dp"
-        android:layout_marginLeft="1dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="2dp"
         style="@style/Text.Label" />
 
     <TextView
@@ -61,6 +64,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/voice_label"
         style="@style/Text.Data" />
@@ -70,6 +74,7 @@ THE SOFTWARE.
         android:text="@string/airtime_chargeable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/airtime_remaining"
         style="@style/Text.Data" />
@@ -79,7 +84,8 @@ THE SOFTWARE.
         android:text="@string/data_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="1dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="2dp"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
@@ -88,6 +94,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/data_label"
         style="@style/Text.Data" />
@@ -96,6 +103,7 @@ THE SOFTWARE.
         android:id="@+id/data_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/data"
         style="@style/Text.Data" />
@@ -105,7 +113,8 @@ THE SOFTWARE.
         android:text="@string/text_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="1dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="2dp"
         android:layout_below="@id/data_amount"
         style="@style/Text.Label" />
 
@@ -113,6 +122,7 @@ THE SOFTWARE.
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/text_label"
         style="@style/Text.Data" />
@@ -121,8 +131,17 @@ THE SOFTWARE.
         android:id="@+id/text_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/text"
         style="@style/Text.Data" />
+    
+    <ImageView
+        android:src="@drawable/logo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 </FrameLayout>

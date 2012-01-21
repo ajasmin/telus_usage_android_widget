@@ -24,15 +24,18 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="3dip">
+  android:paddingTop="8dip"
+  android:paddingLeft="3dip"
+  android:paddingRight="3dip"
+  android:paddingBottom="8dip">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:focusable="true"
     android:paddingLeft="1dip"
-    android:paddingBottom="2dip"
+    android:paddingBottom="13dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
 
@@ -41,7 +44,8 @@ THE SOFTWARE.
         android:text="@string/widget_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:paddingLeft="2dp"
+        android:layout_marginBottom="1dp"
         style="@style/Text.WidgetTitle" />
 
     <TextView
@@ -49,6 +53,8 @@ THE SOFTWARE.
         android:text="@string/current_balance_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="9dp"
         android:layout_below="@id/widget_title"
         style="@style/Text.Label" />
 
@@ -57,6 +63,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/current_balance_label"
         style="@style/Text.Data" />
@@ -66,18 +73,39 @@ THE SOFTWARE.
         android:text="@string/balance_expires_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="7dp"
         android:layout_below="@id/current_balance"
         style="@style/Text.Label" />
 
     <TextView
-        android:id="@+id/balance_expires"
+        android:id="@+id/balance_expires_day"
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
         android:layout_marginLeft="8dip"
         android:layout_below="@id/balance_expires_label"
         style="@style/Text.Data" />
 
+    <TextView
+        android:id="@+id/balance_expires_year"
+        android:includeFontPadding="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:layout_marginLeft="8dip"
+        android:layout_below="@id/balance_expires_day"
+        style="@style/Text.Data" />
+    
+    <ImageView
+        android:src="@drawable/logo1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+    
 </RelativeLayout>
 
 </FrameLayout>

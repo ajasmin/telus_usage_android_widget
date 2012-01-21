@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -123,12 +125,28 @@ public class ReportParser {
         if (result.isEmpty()) {
             throw new ParsingError("No Expires");
         }
-        String balanceExpires = text.substring(16);
+
+        Pattern p = Pattern.compile("Balance Expires (\\w+)\\. (\\d+), (\\d{4})");
+        Matcher m = p.matcher(text.trim());
+        if (!m.matches()) {
+            throw new ParsingError("Unknown date format");
+        }
+        String month = m.group(1), day = m.group(2), year = m.group(3);
+
 
         // Build an update that holds the updated widget contents
         RemoteViews updateViews = new RemoteViews(MyApp.getContext().getPackageName(), R.layout.widget_calling_cards_layout);
         updateViews.setTextViewText(R.id.current_balance, currentBalance);
-        updateViews.setTextViewText(R.id.balance_expires, balanceExpires);
+
+        if (Locale.getDefault().getLanguage().equals("fr")) {
+            String monthName = MonthNames.getFr(month);
+            updateViews.setTextViewText(R.id.balance_expires_day, day + " " + monthName);
+            updateViews.setTextViewText(R.id.balance_expires_year, year);
+        } else {
+            String monthName = MonthNames.get(month);
+            updateViews.setTextViewText(R.id.balance_expires_day, monthName + " " + day + ",");
+            updateViews.setTextViewText(R.id.balance_expires_year, year);
+        }
         return updateViews;
     }
 
