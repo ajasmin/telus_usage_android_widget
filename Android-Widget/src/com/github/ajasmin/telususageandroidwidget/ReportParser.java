@@ -206,7 +206,7 @@ public class ReportParser {
                 throw new ParsingError("Bad text format.");
             }
 
-            usage = usage.replace("Messages", "Msg");
+            usage = usage.replace(" Messages", "");
 
             updateViews.setTextViewText(R.id.text, usage);
             updateViews.setTextViewText(R.id.text_amount, amount);

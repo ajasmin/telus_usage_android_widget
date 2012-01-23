@@ -35,17 +35,24 @@ THE SOFTWARE.
     android:layout_height="fill_parent"
     android:focusable="true"
     android:paddingLeft="1dip"
-    android:paddingBottom="6dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
 
+    <ImageView
+        android:src="@drawable/logo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:paddingBottom="6dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+    
     <TextView
         android:id="@+id/widget_title"
         android:text="@string/widget_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:layout_marginLeft="3dp"
+        android:layout_marginLeft="2dp"
         style="@style/Text.WidgetTitle" />
 
     <TextView
@@ -53,7 +60,8 @@ THE SOFTWARE.
         android:text="@string/voice_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/widget_title"
         style="@style/Text.Label" />
 
@@ -63,8 +71,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_below="@id/voice_label"
         style="@style/Text.Data" />
 
@@ -73,8 +80,7 @@ THE SOFTWARE.
         android:text="@string/airtime_chargeable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_below="@id/airtime_remaining"
         style="@style/Text.Data" />
 
@@ -83,8 +89,9 @@ THE SOFTWARE.
         android:text="@string/data_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:layout_marginLeft="47dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
@@ -93,8 +100,7 @@ THE SOFTWARE.
         android:includeFontPadding="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_alignLeft="@id/data_label"
         android:layout_alignBaseline="@id/text"
         style="@style/Text.Data" />
@@ -103,8 +109,7 @@ THE SOFTWARE.
         android:id="@+id/data_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_alignLeft="@id/data_label"
         android:layout_alignBaseline="@id/text_amount"
         android:layout_below="@id/data"
@@ -115,7 +120,8 @@ THE SOFTWARE.
         android:text="@string/text_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/airtime_chargeable"
         style="@style/Text.Label" />
 
@@ -123,8 +129,7 @@ THE SOFTWARE.
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_below="@id/text_label"
         style="@style/Text.Data" />
 
@@ -132,17 +137,9 @@ THE SOFTWARE.
         android:id="@+id/text_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
-        android:layout_marginLeft="6dip"
+        android:layout_marginLeft="5dip"
         android:layout_below="@id/text"
         style="@style/Text.Data" />
-    
-    <ImageView
-        android:src="@drawable/logo3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 
 </FrameLayout>

@@ -35,10 +35,17 @@ THE SOFTWARE.
     android:layout_height="fill_parent"
     android:focusable="true"
     android:paddingLeft="1dip"
-    android:paddingBottom="6dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
 
+    <ImageView
+        android:src="@drawable/logo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:paddingBottom="6dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+    
     <TextView
         android:id="@+id/widget_title"
         android:text="@string/widget_title"
@@ -97,13 +104,6 @@ THE SOFTWARE.
         android:layout_marginLeft="8dip"
         android:layout_below="@id/balance_expires_day"
         style="@style/Text.Data" />
-    
-    <ImageView
-        android:src="@drawable/logo4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 
 </FrameLayout>

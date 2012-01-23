@@ -24,20 +24,26 @@ THE SOFTWARE.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:paddingTop="8dip"
+  android:paddingTop="3dip"
   android:paddingLeft="3dip"
   android:paddingRight="3dip"
-  android:paddingBottom="8dip">
+  android:paddingBottom="3dip">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:focusable="true"
-    android:paddingLeft="1dip"
-    android:paddingBottom="13dip"
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
+    
+    <ImageView
+        android:src="@drawable/logo1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
 
     <TextView
         android:id="@+id/widget_title"
@@ -97,15 +103,6 @@ THE SOFTWARE.
         android:layout_marginLeft="8dip"
         android:layout_below="@id/balance_expires_day"
         style="@style/Text.Data" />
-    
-    <ImageView
-        android:src="@drawable/logo1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="9dip"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
-    
 </RelativeLayout>
 
 </FrameLayout>
