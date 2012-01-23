@@ -38,6 +38,7 @@ THE SOFTWARE.
     </string>
     <string name="how_to_add_14">
         &lt;p&gt;This is not an application but a &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp;that can be dragged to your home screen.&lt;/p&gt;
+        &lt;p&gt;Note: &lt;i&gt;Due to an issue with the current release of Android 4.0 you may have to reboot your device before the widget appears the list.&lt;/i&gt;&lt;/p&gt;
         &lt;b&gt;Video Demonstration:&lt;/b&gt;&lt;br&gt;
     </string>
     <string name="return_to_home_screen">Return to Home Screen</string>
