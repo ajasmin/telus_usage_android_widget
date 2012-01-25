@@ -38,6 +38,7 @@ THE SOFTWARE.
     </string>
     <string name="how_to_add_14">
         &lt;p&gt;Ceci n\'est pas une application mais un &lt;i&gt;Widget&lt;/i&gt;&amp;nbsp; que vous pouvez glisser sur votre écran d\'accueil.&lt;/p&gt;
+        &lt;p&gt;Note: &lt;i&gt;En raison d\'un problème avec la version actuelle d\'Android 4.0, vous devrez peut-être redémarrer votre appareil avant que le widget s\'affiche dans la liste.&lt;/i&gt;&lt;/p&gt;
         &lt;b&gt;Vidéo de démonstration:&lt;/b&gt;&lt;br&gt;
     </string>
     <string name="return_to_home_screen">Retour à l\'écran d\'accueil</string>
