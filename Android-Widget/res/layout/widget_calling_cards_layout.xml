@@ -37,14 +37,6 @@ THE SOFTWARE.
     android:paddingTop="3dip"
     style="@style/WidgetBackground">
     
-    <ImageView
-        android:src="@drawable/logo1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="6dip"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
-
     <TextView
         android:id="@+id/widget_title"
         android:text="@string/widget_title"
