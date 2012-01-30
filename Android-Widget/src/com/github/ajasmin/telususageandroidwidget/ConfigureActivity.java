@@ -47,35 +47,37 @@ import android.widget.TextView;
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
 
 public class ConfigureActivity extends Activity {
-    private static final int SCRAPE_IN_PROGRESS = 0;
-    private static final int SCRAPE_COMPLETE = 1;
-    private static final int SCRAPE_ERROR = 2;
-    private static final int SCRAPE_PARSING_ERROR = 3;
+    static private enum ScrapeResult {
+        IN_PROGRESS,
+        COMPLETE,
+        ERROR,
+        PARSING_ERROR
+    };
 
     static private class ScraperThread extends Thread {
         public int appWidgetId;
 
         public volatile Handler scraperCompletedHandler;
-        public volatile int result = SCRAPE_IN_PROGRESS;
+        public volatile ScrapeResult result = ScrapeResult.IN_PROGRESS;
         public volatile String[] subscribers;
         public volatile int errorMessageId;
         @Override
         public void run() {
-            int r = SCRAPE_COMPLETE;
+            ScrapeResult r = ScrapeResult.COMPLETE;
             try {
                 TelusReportFetcher.retriveUsageSummaryData(appWidgetId);
                 subscribers = ReportParser.subscribers(appWidgetId);
             } catch (TelusReportFetcher.InvalidCredentialsException e) {
-                r = SCRAPE_ERROR;
+                r = ScrapeResult.ERROR;
                 errorMessageId = R.string.invalid_credentials;
             } catch (TelusReportFetcher.NetworkErrorException e) {
-                r = SCRAPE_ERROR;
+                r = ScrapeResult.ERROR;
                 errorMessageId = R.string.network_error;
             } catch (ReportParser.ServiceUnavailableException e) {
-                r = SCRAPE_ERROR;
+                r = ScrapeResult.ERROR;
                 errorMessageId = R.string.widget_service_unavailable;
             } catch (ReportParser.ParsingError e) {
-                r = SCRAPE_PARSING_ERROR;
+                r = ScrapeResult.PARSING_ERROR;
             }
 
             result = r;
@@ -239,20 +241,12 @@ public class ConfigureActivity extends Activity {
     }
 
     private void registerScraperCompletedHandler() {
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (scraperThread.result == SCRAPE_PARSING_ERROR) {
-                    // Submit error report on touch
-                    Intent intent = new Intent(ConfigureActivity.this, ReportAccountErrorActivity.class);
-                    intent.setAction(getPackageName()+".UNRECOGNIZED");
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                    startActivity(intent);
-                } else {
-                    showScraperState();
-                }
+        Handler handler = new Handler() { public void handleMessage(Message msg) {
+            // See http://dimitar.me/android-displaying-dialogs-from-background-threads/
+            if (!isFinishing()) {
+                showScraperState();
             }
-        };
+        }};
         scraperThread.scraperCompletedHandler = handler;
     }
 
@@ -263,12 +257,12 @@ public class ConfigureActivity extends Activity {
 
     private void showScraperState() {
         switch (scraperThread.result) {
-            case SCRAPE_IN_PROGRESS:
+            case IN_PROGRESS:
                 if (progressDialog == null) {
                     progressDialog = ProgressDialog.show(this, null, getString(R.string.configure_loading));
                 }
                 break;
-            case SCRAPE_COMPLETE:
+            case COMPLETE:
                 dismissDialogs();
                 if (scraperThread.subscribers != null) {
                     if (pickSubscriberDialog == null) {
@@ -292,7 +286,7 @@ public class ConfigureActivity extends Activity {
                     finishOk();
                 }
                 break;
-            case SCRAPE_ERROR:
+            case ERROR:
                 dismissDialogs();
                 if (errorDialog == null) {
                     errorDialog = new AlertDialog.Builder(this)
@@ -307,6 +301,12 @@ public class ConfigureActivity extends Activity {
                         }})
                         .show();
                 }
+                break;
+            case PARSING_ERROR:
+                Intent intent = new Intent(ConfigureActivity.this, ReportAccountErrorActivity.class);
+                intent.setAction(getPackageName()+".UNRECOGNIZED");
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                startActivity(intent);
                 break;
         }
     }

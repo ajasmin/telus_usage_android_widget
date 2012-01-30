@@ -52,15 +52,17 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class ReportAccountErrorActivity extends Activity {
-    private static final int POST_IN_PROGRESS = 0;
-    private static final int POST_COMPLETE = 1;
-    private static final int POST_ERROR = 2;
+    private static enum PostResult {
+        IN_PROGRESS,
+        COMPLETE,
+        ERROR
+    }
 
     static private class PostDataThread extends Thread {
         public InputStream dataStream;
 
         public volatile Handler postCompletedHandler;
-        public volatile int result = POST_IN_PROGRESS;
+        public volatile PostResult result = PostResult.IN_PROGRESS;
         @Override
         public void run() {
             String url = "https://telus-widget-error-reports.appspot.com/error_report"
@@ -70,11 +72,11 @@ public class ReportAccountErrorActivity extends Activity {
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new InputStreamEntity(dataStream, -1));
 
-            int r = POST_COMPLETE;
+            PostResult r = PostResult.COMPLETE;
             try {
                 httpclient.execute(httpPost);
             } catch (Exception e) {
-                r = POST_ERROR;
+                r = PostResult.ERROR;
             }
 
             result = r;
@@ -196,12 +198,12 @@ public class ReportAccountErrorActivity extends Activity {
     }
 
     private void registerPostCompletedHandler() {
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
+        Handler handler = new Handler() { public void handleMessage(Message msg) {
+            // See http://dimitar.me/android-displaying-dialogs-from-background-threads/
+            if (!isFinishing()) {
                 showPostState();
             }
-        };
+        }};
         postDataThread.postCompletedHandler = handler;
     }
 
@@ -212,12 +214,12 @@ public class ReportAccountErrorActivity extends Activity {
 
     private void showPostState() {
         switch (postDataThread.result) {
-            case POST_IN_PROGRESS:
+            case IN_PROGRESS:
                 if (progressDialog == null) {
                     progressDialog = ProgressDialog.show(this, null, getString(R.string.sending_data));
                 }
                 break;
-            case POST_COMPLETE:
+            case COMPLETE:
                 dismissDialogs();
                 if (completeDialog == null) {
                     completeDialog = new AlertDialog.Builder(this)
@@ -230,7 +232,7 @@ public class ReportAccountErrorActivity extends Activity {
                         .show();
                 }
                 break;
-            case POST_ERROR:
+            case ERROR:
                 dismissDialogs();
                 if (errorDialog == null) {
                     errorDialog = new AlertDialog.Builder(this)
