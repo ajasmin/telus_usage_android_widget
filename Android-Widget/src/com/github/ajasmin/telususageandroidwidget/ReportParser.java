@@ -120,33 +120,40 @@ public class ReportParser {
 
     private static RemoteViews callingCardView(Document doc) throws ParsingError {
         String currentBalance = getValue(doc, "Current Balance");
+
+        // Build an update that holds the updated widget contents
+        RemoteViews updateViews = new RemoteViews(MyApp.getContext().getPackageName(), R.layout.widget_calling_cards_layout);
+        updateViews.setTextViewText(R.id.current_balance, currentBalance);
+
         Elements result = doc.select("td.labelValueLabel:contains(Balance Expires)");
         String text = result.text();
         if (result.isEmpty()) {
             throw new ParsingError("No Expires");
         }
 
-        Pattern p = Pattern.compile("Balance Expires (\\w+)\\. (\\d+), (\\d{4})");
-        Matcher m = p.matcher(text.trim());
-        if (!m.matches()) {
+        Pattern p1 = Pattern.compile("Balance Expires (\\w+)\\. (\\d+), (\\d{4})");
+        Matcher m1 = p1.matcher(text.trim());
+
+        Pattern p2 = Pattern.compile("Balance Expires -");
+        Matcher m2 = p2.matcher(text.trim());
+
+        if (m1.matches()) {
+            String month = m1.group(1), day = m1.group(2), year = m1.group(3);
+            if (Locale.getDefault().getLanguage().equals("fr")) {
+                String monthName = MonthNames.getFr(month);
+                updateViews.setTextViewText(R.id.balance_expires_day, day + " " + monthName);
+                updateViews.setTextViewText(R.id.balance_expires_year, year);
+            } else {
+                String monthName = MonthNames.get(month);
+                updateViews.setTextViewText(R.id.balance_expires_day, monthName + " " + day + ",");
+                updateViews.setTextViewText(R.id.balance_expires_year, year);
+            }
+        } else if (m2.matches()) {
+            updateViews.setTextViewText(R.id.balance_expires_day, "-");
+        } else {
             throw new ParsingError("Unknown date format");
         }
-        String month = m.group(1), day = m.group(2), year = m.group(3);
 
-
-        // Build an update that holds the updated widget contents
-        RemoteViews updateViews = new RemoteViews(MyApp.getContext().getPackageName(), R.layout.widget_calling_cards_layout);
-        updateViews.setTextViewText(R.id.current_balance, currentBalance);
-
-        if (Locale.getDefault().getLanguage().equals("fr")) {
-            String monthName = MonthNames.getFr(month);
-            updateViews.setTextViewText(R.id.balance_expires_day, day + " " + monthName);
-            updateViews.setTextViewText(R.id.balance_expires_year, year);
-        } else {
-            String monthName = MonthNames.get(month);
-            updateViews.setTextViewText(R.id.balance_expires_day, monthName + " " + day + ",");
-            updateViews.setTextViewText(R.id.balance_expires_year, year);
-        }
         return updateViews;
     }
 
