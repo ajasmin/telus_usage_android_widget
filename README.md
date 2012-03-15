@@ -53,16 +53,16 @@ All of these include an Eclipse project.
 Installing
 ----------
 
-You can install this widget from the [Android Market][4] or download the .apk from [download section on github][5].
+You can install this widget from [Google Play][4] or download the .apk from the [download section on github][5].
 
-Scan this QR Code to install the Widget on the Android Market (and get notified of future updates):
+Scan this QR Code to install the Widget from Google Play (and get notified of future updates):
 
-![QR Code Market](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
+![Google Play QR Code](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=market%3A//details%3Fid%3Dcom.github.ajasmin.telususageandroidwidget&chld=H|0)
 
 Scan this QR Code to download the current version directly:
 *Note: Your phone must be configured to accept downloads from unknown sources*:
 
-![QR Code APK](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-13.apk&chld=H|0)
+![APK QR Code](https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=https://github.com/downloads/ajasmin/telus_usage_android_widget/Telus-Usage-BETA-13.apk&chld=H|0)
 
 
 
@@ -70,5 +70,5 @@ Scan this QR Code to download the current version directly:
   [1]: http://www.telusmobility.com/ "Telus Website"
   [2]: http://www.android.com/ "Android Website"
   [3]: https://github.com/ajasmin/telus_usage_android_widget/issues "Issues"
-  [4]: https://market.android.com/details?id=com.github.ajasmin.telususageandroidwidget "Market download"
+  [4]: https://play.google.com/store/apps/details?id=com.github.ajasmin.telususageandroidwidget "Google Play download"
   [5]: https://github.com/ajasmin/telus_usage_android_widget/downloads "github downloads"
