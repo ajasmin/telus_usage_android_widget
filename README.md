@@ -6,11 +6,24 @@ This Widget displays your [Telus Mobility][1] account usage data on the home scr
 The data is retrieved from https://mobile.telus.com and displayed in a compact format on your device home screen.
 Touching the widget opens your account in the browser.
 
+The widget contents is updated about every 3 hours.
+
 Note that *Alexandre Jasmin* the author of this program **is not affiliated with Telus in any way.**
+
+Before installing, make sure that you are able to log in on the mobile Telus website:
+https://mobile.telus.com
+
+You need the email address and password used to log on this site to configure this widget. Business and corporate accounts can't access the mobile web site therefore these accounts are not currently supported by the widget.
+
+The email and password are stored on the phone. If your phone gets stolen it would be prudent to change your Telus password.
 
 
 Known issues
 ------------
+
+- Business and corporate accounts are not supported because these don't work with the mobile website from which the data is retrieved (https://mobile.telus.com)
+
+- Data usage for prepaid accounts is not shown because it is not reported on the mobile website at https://mobile.telus.com
 
  - With plans that include bonus minutes only the normal (non-bonus) minutes are shown. Normal minutes are only used
 after the bonus minutes are depleted. As far as I can tell usage of these initial bonus minutes is not reported
