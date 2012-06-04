@@ -45,9 +45,9 @@ THE SOFTWARE.
 
     <!-- Smart phone layout -->
     <string name="voice_label">\u2022 MINUTES</string>
-    <string name="airtime_remaining">%1$s/%2$s left</string>
+    <string name="airtime_remaining">%1$s sur %2$s</string>
     <string name="airtime_chargeable">Facturées: %s</string>
-    <string name="data_label">\u2022 DATA</string>
+    <string name="data_label">\u2022 MEGS</string>
     <string name="text_label">\u2022 TEXTO</string>
 
     <!-- Calling cards layout -->
@@ -55,7 +55,7 @@ THE SOFTWARE.
     <string name="balance_expires_label">\u2022 EXPIRATION</string>
 
     <!-- Loading -->
-    <string name="loading_title">LOADING</string>
+    <string name="loading_title">ATTENTE</string>
     <string name="loading_message">Charge les données&#8230;</string>
 
     <!-- Messages -->
