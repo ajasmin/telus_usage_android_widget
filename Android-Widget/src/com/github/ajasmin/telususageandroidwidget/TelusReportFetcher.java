@@ -35,6 +35,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
@@ -68,6 +69,7 @@ public class TelusReportFetcher {
 
     private static void fetchFromTelusSite(final PreferencesData prefs) throws NetworkErrorException, InvalidCredentialsException {
         final DefaultHttpClient httpclient = new DefaultHttpClient();
+        httpclient.getParams().setParameter(CoreProtocolPNames.USER_AGENT, "ajasmin-widget");
         logIn(httpclient, prefs);
         fetchUsageSummaryPage(httpclient, prefs);
 
