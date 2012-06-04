@@ -44,6 +44,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.PreferencesData;
+import com.github.ajasmin.telususageandroidwidget.TelusWidgetPreferences.Status;
 
 public class TelusWidgetUpdateService<E> extends Service {
     private static final String ACTION_UPDATE_WIDGET
@@ -100,21 +101,31 @@ public class TelusWidgetUpdateService<E> extends Service {
             TelusReportFetcher.retriveUsageSummaryData(prefData.appWidgetId);
         } catch (TelusReportFetcher.InvalidCredentialsException e) {
             Log.e("TelusWebScraper", "Invalid credentials for " + prefData.email, e);
+            prefData.status = Status.INVALID_CREDENTIALS;
+            prefData.save();
             return invalidCredentialsRemoteViews(prefData);
         } catch (TelusReportFetcher.NetworkErrorException e) {
             Log.e("TelusWebScraper", "Network error scraping mobile.telus.com for " + prefData.email, e);
+            prefData.status = Status.NETWORK_ERROR;
+            prefData.save();
             return networkErrorRemoteViews(prefData);
         }
 
         try {
             RemoteViews view = ReportParser.buildView(prefData.appWidgetId);
+            prefData.status = Status.OKAY;
+            prefData.save();
             return bindURL(prefData,view);
         } catch (ReportParser.ServiceUnavailableException e) {
             Log.e("TelusWebScraper", "Service unavailable for " + prefData.email, e);
+            prefData.status = Status.SERVICE_UNAVAILABLE;
+            prefData.save();
             RemoteViews view = ServiceUnavailableRemoteView(prefData);
             return bindURL(prefData, view);
         } catch (ReportParser.ParsingError e) {
             Log.e("TelusWebScraper", "Error parsing data for " + prefData.email, e);
+            prefData.status = Status.PARSING_ERROR;
+            prefData.save();
             return unrecognizedDataRemoteViews(prefData);
         }
     }

@@ -30,12 +30,22 @@ import android.content.SharedPreferences;
 public class TelusWidgetPreferences {
     private final static int VERSION = 1;
 
+    public static enum Status {
+        UNKNOWN,
+        OKAY,
+        INVALID_CREDENTIALS,
+        SERVICE_UNAVAILABLE,
+        NETWORK_ERROR,
+        PARSING_ERROR
+    }
+
     public static class PreferencesData {
         public int appWidgetId;
         public String email;
         public String password;
         public String subscriber;
         public long lastUpdateTime;
+        public Status status;
 
         public void markAsUpdatedNow() {
             lastUpdateTime = System.currentTimeMillis();
@@ -60,6 +70,7 @@ public class TelusWidgetPreferences {
             prefs.putString(appWidgetId + "_subscriber", subscriber);
             prefs.putLong(appWidgetId + "_lastUpdateTime", lastUpdateTime);
             prefs.putInt(appWidgetId + "_prefVer", VERSION);
+            prefs.putString(appWidgetId + "_status", status.name());
             prefs.commit();
         }
     }
@@ -73,6 +84,7 @@ public class TelusWidgetPreferences {
         prefData.email = prefs.getString(appWidgetId + "_email", null);
         prefData.subscriber = prefs.getString(appWidgetId + "_subscriber", null);
         prefData.lastUpdateTime = prefs.getLong(appWidgetId + "_lastUpdateTime", 0);
+        prefData.status = Status.valueOf(prefs.getString(appWidgetId + "_status", "UNKNOWN"));
 
         // Old obfuscation scheme caused random crashes
         // and was too complex for a mild obfuscation
@@ -101,6 +113,7 @@ public class TelusWidgetPreferences {
         prefData.appWidgetId = appWidgetId;
         prefData.email = email;
         prefData.password = password;
+        prefData.status = Status.UNKNOWN;
         prefData.save();
     }
 
@@ -111,6 +124,7 @@ public class TelusWidgetPreferences {
         prefs.remove(appWidgetId + "_password");
         prefs.remove(appWidgetId + "_subscriber");
         prefs.remove(appWidgetId + "_lastUpdateTime");
+        prefs.remove(appWidgetId + "_status");
         prefs.remove(appWidgetId + "_prefVer");
         prefs.commit();
     }

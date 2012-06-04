@@ -39,6 +39,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,6 +72,7 @@ public class ConfigureActivity extends Activity {
                 r = ScrapeResult.ERROR;
                 errorMessageId = R.string.invalid_credentials;
             } catch (TelusReportFetcher.NetworkErrorException e) {
+                Log.e("Telus", "Network Error", e);
                 r = ScrapeResult.ERROR;
                 errorMessageId = R.string.network_error;
             } catch (ReportParser.ServiceUnavailableException e) {

@@ -31,7 +31,8 @@ THE SOFTWARE.
             android:xlargeScreens="true" android:anyDensity="true"/>
     
     <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         
     <uses-sdk android:minSdkVersion="3" android:maxSdkVersion="15" android:targetSdkVersion="11"/>
     
@@ -44,7 +45,13 @@ THE SOFTWARE.
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_telus_usage" />
         </receiver>
-
+        
+    	<receiver android:name=".ConnectivityChangeReceiver">
+    		<intent-filter>
+    			<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+    		</intent-filter>
+    	</receiver>
+    	
         <!-- Service to perform web API queries -->
         <service android:name="com.github.ajasmin.telususageandroidwidget.TelusWidgetUpdateService" />
 
